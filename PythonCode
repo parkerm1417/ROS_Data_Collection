@@ -49,5 +49,6 @@ subprocess.Popen("rosnode kill /talker",shell=True)
 ##                    sub = n
 ##                elif (lines[n][3] == "v"):
 ##                    serv = n
-##            print(pub + sub + serv)
+##           print(pub + sub + serv)
             ##for n in len(lines):
+1234567890-=
