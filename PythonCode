@@ -1,0 +1,53 @@
+#ensure roscore is running before compiling
+from os import listdir
+import subprocess
+import time
+nodes = []
+dellist=[]
+packages = [f for f in listdir('/opt/ros/noetic/share')]
+packages.sort()
+n = 0
+for pack in packages:
+    try:
+        temp = [f for f in listdir('/opt/ros/noetic/lib/' + pack)]
+    except:
+        temp = []
+    q = len(temp)-1
+    while q >= 0:
+        if temp[q][-3:] == ".py":
+            del temp[q]
+        q = q-1
+    nodes.append(temp)
+while n < len(packages):
+    print(str(packages[n]) + " " + str(nodes[n]))
+    n = n + 1
+subprocess.Popen("rosnode list > qwertyuiop.txt",shell=True)
+subprocess.Popen("rosrun roscpp_tutorials talker",shell=True)
+time.sleep(5)
+subprocess.Popen("rosnode kill /talker",shell=True)
+
+
+
+
+
+##for pack in range(len(packages)):
+##    if nodes[pack] != []:
+##        for node in nodes[pack]:
+####            print("rosrun " + packages[pack] + " " + node)
+####            print("rosnode info -q /" + node + " > nodeinfo.txt")
+##            system("rosrun " + packages[pack] + " " + node)
+##            system("rosnode info -q /" + node + " > nodeinfo.txt")
+##            file = open("nodeinfo.txt")
+##            lines = file.readlines()
+##            pub = 0
+##            sub = 0
+##            serv = 0
+##            for n in range(len(lines)):
+##                if (lines[n][3] == "l"):
+##                    pub = n
+##                elif(lines[n][3] == "s"):
+##                    sub = n
+##                elif (lines[n][3] == "v"):
+##                    serv = n
+##            print(pub + sub + serv)
+            ##for n in len(lines):
