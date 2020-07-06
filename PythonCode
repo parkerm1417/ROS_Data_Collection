@@ -1,15 +1,22 @@
-#ensure roscore is running before compiling
-from os import listdir
+from os import listdir,system
 import subprocess
 import time
 
+try:
+    subprocess.Popen("roscore")
+except:
+    pass
+
 nodes = []
+nodeinfo = []
 dellist=[]
+
 
 packages = [f for f in listdir('/opt/ros/noetic/share')]
 packages.sort()
 n = 0
 for pack in packages:
+    nodeinfo.append([])
     try:
         temp = [f for f in listdir('/opt/ros/noetic/lib/' + pack)]
     except:
@@ -24,48 +31,90 @@ for pack in packages:
 ##    print(str(packages[n]) + " " + str(nodes[n]))
 ##    n = n + 1
 
-subprocess.Popen("rosrun roscpp_tutorials talker",shell=True)
-time.sleep(1)
-subprocess.Popen("rosnode info -q /talker > qwertyuiop.txt",shell=True)
-time.sleep(1)
-subprocess.Popen("rosnode kill /talker",shell=True)
+e=0
+for pack in range(len(packages)):
+    if nodes[pack] != []:
+        for node in nodes[pack]:
+            ind = nodes[pack].index(node)
+            run = "rosrun " + packages[pack] + " " + node
+            rnode = "rosnode info -q /" + node + " > nodeinfo.txt"
+            kill = "rosnode kill -a"
+            
+            runner = subprocess.Popen(run,shell=True)
+            time.sleep(1)
+            noder = subprocess.Popen(rnode,shell=True)
+            time.sleep(1)
+            killer = subprocess.Popen(kill,shell=True)
+            time.sleep(1)
 
-file = open("qwertyuiop.txt")
-lines = file.readlines()
-pub = 0
-sub = 0
-serv = 0
+            runner.terminate()
+            noder.terminate()
+            killer.terminate()
+            
+            file = open("nodeinfo.txt")
+            lines = file.readlines()
+            pub = 0
+            sub = 0
+            serv = 0
 
-for n in range(len(lines)):
-    if (lines[n] != "\n"):
-        if (lines[n][3] == "l"):
-            pub = n
-        elif(lines[n][3] == "s"):
-            sub = n
-        elif (lines[n][3] == "v"):
-            serv = n
-print(pub)
-print(sub)
-print(serv)
+            for n in range(len(lines)):
+                if (lines[n] != "\n"):
+                    if (lines[n][3] == "l"):
+                        pub = n
+                    elif(lines[n][3] == "s"):
+                        sub = n
+                    elif (lines[n][3] == "v"):
+                        serv = n
 
+            pubtemp=[]
+            subtemp=[]
+            servtemp=[]
+            nodeinfotemp = []
+
+            for n in range(len(lines)):
+                if (n>pub and n<sub-1):
+                    pubtemp.append(lines[n])
+                elif (n>sub and n<serv-1):
+                    subtemp.append(lines[n])
+                elif (n>serv and n<len(lines)-1):
+                    servtemp.append(lines[n])
+            file.close()
+
+            nodeinfotemp.append(pubtemp)
+            nodeinfotemp.append(subtemp)
+            nodeinfotemp.append(servtemp)
+
+            nodeinfo[pack].append(nodeinfotemp)
+            e = e + 1
+            print(e)
+
+foldermaker = subprocess.Popen("killall -9 rosmaster",shell=True)
+foldermaker.terminate()
+
+##system("cd ~/Desktop")
+##system("rm -r ROS_Info")
+##system("mkdir ROS_Info")
 
 
 ##for pack in range(len(packages)):
-##    if nodes[pack] != []:
-##        for node in nodes[pack]:
-##            system("rosrun " + packages[pack] + " " + node)
-##            system("rosnode info -q /" + node + " > nodeinfo.txt")
-##            file = open("nodeinfo.txt")
-##            lines = file.readlines()
-##            pub = 0
-##            sub = 0
-##            serv = 0
-##            for n in range(len(lines)):
-##                if (lines[n][3] == "l"):
-##                    pub = n
-##                elif(lines[n][3] == "s"):
-##                    sub = n
-##                elif (lines[n][3] == "v"):
-##                    serv = n
-##            print(pub + sub + serv)
-            ##for n in len(lines):
+##    system("cd ~/Desktop")
+##    system("cd ROS_Info")
+##    newpack = "mkdir "+packages[pack]
+##    system(newpack)
+##    packname = "cd " + packages[pack]
+##    system(packname)
+##    for node in range(len(nodes)):
+##        newnode = "mkdir " + nodes[node]
+##        system(newnode)
+##        nodename = "cd " + nodes[node]
+##        system(nodename)
+##        system("touch publishers.txt subscribers.txt services.txt")
+##        for Pubs in nodeinfo[pack][node][0]:
+##            newPub = "echo "+Pubs+" >> publishers.txt"
+##            system(newPub)
+##        for Subs in nodeinfo[pack][node][1]:
+##            newSub = "echo "+Subs+" >> subscribers.txt"
+##            system(newSub)
+##        for Servs in nodeinfo[pack][node][2]:
+##            newServ = "echo "+Servs+" >> services.txt"
+##            system(newServ)
