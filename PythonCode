@@ -36,7 +36,7 @@ for pack in range(len(packages)):
     if nodes[pack] != []:
         for node in nodes[pack]:
             ind = nodes[pack].index(node)
-            run = "rosrun " + packages[pack] + " " + node
+            run = "rosrun " + packages[pack] + " " + node + " __name:="+node
             rnode = "rosnode info -q /" + node + " > nodeinfo.txt"
             kill = "rosnode kill -a"
             
@@ -90,6 +90,55 @@ for pack in range(len(packages)):
 
 foldermaker = subprocess.Popen("killall -9 rosmaster",shell=True)
 foldermaker.terminate()
+
+Complete = {}
+
+for pack in range(len(packages)):
+    NodeDict = {}
+    for node in range(len(nodes[pack])):
+        InfoDict = {
+            "Publications": nodeinfo[pack][node][0],
+            "Subscriptions": nodeinfo[pack][node][1],
+            "Services": nodeinfo[pack][node][2]
+            }
+        NodeDict[nodes[pack][node]] = InfoDict
+    Complete[packages[pack]] = NodeDict
+print(Complete)
+
+Topics = {}
+
+for pack in range(len(packages)):
+    for node in range(len(nodes[pack])):
+        for info in range(len(nodeinfo[pack][node])-1):
+            for x in nodeinfo[pack][node][info]:
+                try:
+                    if(info == 0):
+                        Topics[x]["Publishers"].append(nodes[pack][node])
+                    else:
+                        Topics[x]["Subscribers"].append(nodes[pack][node])
+                except:
+                    if(info == 0):
+                        Topics[x] = {"Publishers": [nodes[pack][node]],
+                                     "Subscribers": []}
+                    else:
+                        Topics[x]= {"Publishers": [],
+                                    "Subscribers": [nodes[pack][node]]}
+print(Topics)
+
+##file1 = open("PackageList.txt","w")
+##for pack in packages:
+##    file1.write(pack+"\n")
+##file1.close()
+##
+##file2 = open("NodeList.txt","w")
+##for node in nodes:
+##    file2.write(str(node)+"\n")
+##file2.close()
+##
+##file3 = open("PubSubServ.txt","w")
+##for x in nodeinfo:
+##    file3.write(str(x)+"\n")
+##file3.close()
 
 ##system("cd ~/Desktop")
 ##system("rm -r ROS_Info")
