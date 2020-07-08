@@ -27,9 +27,6 @@ for pack in packages:
             del temp[q]
         q = q-1
     nodes.append(temp)
-##while n < len(packages):
-##    print(str(packages[n]) + " " + str(nodes[n]))
-##    n = n + 1
 
 e=0
 for pack in range(len(packages)):
@@ -73,11 +70,11 @@ for pack in range(len(packages)):
 
             for n in range(len(lines)):
                 if (n>pub and n<sub-1):
-                    pubtemp.append(lines[n])
+                    pubtemp.append(lines[n][3:-1])
                 elif (n>sub and n<serv-1):
-                    subtemp.append(lines[n])
+                    subtemp.append(lines[n][3:-1])
                 elif (n>serv and n<len(lines)-1):
-                    servtemp.append(lines[n])
+                    servtemp.append(lines[n][3:-1])
             file.close()
 
             nodeinfotemp.append(pubtemp)
@@ -103,7 +100,6 @@ for pack in range(len(packages)):
             }
         NodeDict[nodes[pack][node]] = InfoDict
     Complete[packages[pack]] = NodeDict
-print(Complete)
 
 Topics = {}
 
@@ -111,59 +107,55 @@ for pack in range(len(packages)):
     for node in range(len(nodes[pack])):
         for info in range(len(nodeinfo[pack][node])-1):
             for x in nodeinfo[pack][node][info]:
+                ob = x.find("[")
+                topicname = x[:ob-1]
+                data = x[ob+1:-1]
                 try:
                     if(info == 0):
-                        Topics[x]["Publishers"].append(nodes[pack][node])
+                        Topics[topicname]["Publishers"].append(nodes[pack][node])
                     else:
-                        Topics[x]["Subscribers"].append(nodes[pack][node])
+                        Topics[topicname]["Subscribers"].append(nodes[pack][node])
                 except:
                     if(info == 0):
-                        Topics[x] = {"Publishers": [nodes[pack][node]],
-                                     "Subscribers": []}
+                        Topics[topicname] = {"Publishers": [nodes[pack][node]],
+                                     "Subscribers": [],
+                                     "Data": "",
+                                     "Type": "TBD"}
                     else:
-                        Topics[x]= {"Publishers": [],
-                                    "Subscribers": [nodes[pack][node]]}
-print(Topics)
+                        Topics[topicname]= {"Publishers": [],
+                                    "Subscribers": [nodes[pack][node]],
+                                    "Data": "",
+                                    "Type": "TBD"}
+                if(data != "unknown type" and Topics[topicname]["Data"] == ""):
+                    Topics[topicname]["Data"] = data
 
-##file1 = open("PackageList.txt","w")
-##for pack in packages:
-##    file1.write(pack+"\n")
-##file1.close()
-##
-##file2 = open("NodeList.txt","w")
-##for node in nodes:
-##    file2.write(str(node)+"\n")
-##file2.close()
-##
-##file3 = open("PubSubServ.txt","w")
-##for x in nodeinfo:
-##    file3.write(str(x)+"\n")
-##file3.close()
+for pack in Complete:
+    print(pack+":")
+    for node in Complete[pack]:
+        print("    "+node+":")
+        print("        Publications:")
+        for pub in Complete[pack][node]["Publications"]:
+            print("            "+pub)
+        print("        Subscriptions:")
+        for sub in Complete[pack][node]["Subscriptions"]:
+            print("            "+sub)
+        print("        Services:")
+        for serv in Complete[pack][node]["Services"]:
+            print("            "+serv)
+        print()
 
-##system("cd ~/Desktop")
-##system("rm -r ROS_Info")
-##system("mkdir ROS_Info")
+print("\n\n\n")
 
-
-##for pack in range(len(packages)):
-##    system("cd ~/Desktop")
-##    system("cd ROS_Info")
-##    newpack = "mkdir "+packages[pack]
-##    system(newpack)
-##    packname = "cd " + packages[pack]
-##    system(packname)
-##    for node in range(len(nodes)):
-##        newnode = "mkdir " + nodes[node]
-##        system(newnode)
-##        nodename = "cd " + nodes[node]
-##        system(nodename)
-##        system("touch publishers.txt subscribers.txt services.txt")
-##        for Pubs in nodeinfo[pack][node][0]:
-##            newPub = "echo "+Pubs+" >> publishers.txt"
-##            system(newPub)
-##        for Subs in nodeinfo[pack][node][1]:
-##            newSub = "echo "+Subs+" >> subscribers.txt"
-##            system(newSub)
-##        for Servs in nodeinfo[pack][node][2]:
-##            newServ = "echo "+Servs+" >> services.txt"
-##            system(newServ)
+for topic in Topics:
+    print(topic+":")
+    print("    Publishers:")
+    for pub in Topics[topic]["Publishers"]:
+        print("        "+pub)
+    print("    Subscribers:")
+    for sub in Topics[topic]["Subscribers"]:
+        print("        "+sub)
+    print("    Data:")
+    if(Topics[topic]["Data"] != ""):
+        print("        "+Topics[topic]["Data"])
+    print("    Type:")
+    print("        "+Topics[topic]["Type"]+"\n")
