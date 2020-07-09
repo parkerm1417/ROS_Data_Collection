@@ -14,6 +14,9 @@ except:
 nodes = []
 nodeinfo = []
 dellist=[]
+Complete = {}
+Topics = {}
+Services = {}
 looplen=10       ##Value to be adjusted to test the code, set looplen equal to len(packages) for complete list
 
 ##Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
@@ -89,6 +92,35 @@ for pack in range(looplen):
             nodeinfotemp.append(subtemp)
             nodeinfotemp.append(servtemp)
 
+            for servs in servtemp:
+                args = subprocess.getoutput("rosservice args "+servs)
+                servtype = subprocess.getoutput("rosservice type "+servs)
+                q = servs.find("/",1)
+                if(q == -1):
+                    title = servs[1:]
+                else:
+                    title = servs[q+1:]
+                try:
+                    Services[title]["nodes"][node] = {
+                                "elementType": "node",
+                                "name": node,
+                                "package": packages[pack]
+                                }
+                except:
+                    Services[title] = {
+                                "elementType": "service",
+                                "name": title,
+                                "type": servtype,
+                                "args": args,
+                                "nodes": {}
+                                }   
+                    Services[title]["nodes"][node] = {
+                                "elementType": "node",
+                                "name": node,
+                                "package": packages[pack]
+                                }
+                
+
             ##the info then gets placed at the position of the specific node
             nodeinfo[pack].append(nodeinfotemp)
             e = e + 1
@@ -97,7 +129,6 @@ for pack in range(looplen):
 foldermaker = subprocess.Popen("killall -9 rosmaster",shell=True)     ##kills the rosmaster
 foldermaker.terminate()
 
-Topics = {}
 ##accesses each list and moves to the list within each list, if there is a list within it
 for pack in range(looplen):
     for node in range(len(nodes[pack])):
@@ -144,7 +175,7 @@ for pack in range(looplen):
                             }
                 if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
                     Topics[topicname]["type"] = datatype
-Complete = {}
+                    
 ##fills a separate dictionary with the package and node info
 for pack in range(looplen):
     Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
@@ -203,65 +234,8 @@ for pack in range(looplen):
                 "name" : servs,
                 "type" : ""
                 }
-
-for pack in range(looplen):
-    for node in range(len(nodes[pack])):
-        for serv in nodeinfo[pack][node][2]:
-            bs = serv.find("/",1)
-            title = serv[q+1:]
-            servnode = serv[1:bs]
-
-            try:
-                Services[title]["nodes"][servnode] = {
-                            "elementType": "node",
-                            "name": nodes[pack][node],
-                            "package": packages[pack]
-                            }
-            except:
-                Services[title] = {
-                            "elementType": "service",
-                            "name": title,
-                            "type": "",
-                            "args": "",
-                            "nodes": {}
-                            }
-                Services[title]["nodes"][servnode] = {
-                            "elementType": "node",
-                            "name": nodes[pack][node],
-                            "package": packages[pack]
-                            }
                             
 ##prints both whole dictionaries using json and formats the dictionaries by indenting as it moves deeper in the heirarchy
-print(json.dumps(Topics, indent=8))
-print(json.dumps(Complete, indent=8))
-
-##for pack in Complete:
-##    print(pack+":")
-##    for node in Complete[pack]:
-##        print("    "+node+":")
-##        print("        Publications:")
-##        for pub in Complete[pack][node]["Publications"]:
-##            print("            "+pub)
-##        print("        Subscriptions:")
-##        for sub in Complete[pack][node]["Subscriptions"]:
-##            print("            "+sub)
-##        print("        Services:")
-##        for serv in Complete[pack][node]["Services"]:
-##            print("            "+serv)
-##        print()
-##
-##print("\n\n\n")
-##
-##for topic in Topics:
-##    print(topic+":")
-##    print("    Publishers:")
-##    for pub in Topics[topic]["Publishers"]:
-##        print("        "+pub)
-##    print("    Subscribers:")
-##    for sub in Topics[topic]["Subscribers"]:
-##        print("        "+sub)
-##    print("    Data:")
-##    if(Topics[topic]["Data"] != ""):
-##        print("        "+Topics[topic]["Data"])
-##    print("    Type:")
-##    print("        "+Topics[topic]["Type"]+"\n")
+##print(json.dumps(Topics, indent=8))
+##print(json.dumps(Complete, indent=8))
+print(json.dumps(Services, indent=8))
