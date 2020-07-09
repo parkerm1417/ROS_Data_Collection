@@ -1,7 +1,9 @@
 from os import listdir,system
 import subprocess
 import time
+import json
 
+system("killall -9 rosmaster")
 try:
     subprocess.Popen("roscore")
 except:
@@ -10,6 +12,7 @@ except:
 nodes = []
 nodeinfo = []
 dellist=[]
+looplen=10
 
 
 packages = [f for f in listdir('/opt/ros/noetic/share')]
@@ -29,7 +32,7 @@ for pack in packages:
     nodes.append(temp)
 
 e=0
-for pack in range(len(packages)):
+for pack in range(looplen):
     if nodes[pack] != []:
         for node in nodes[pack]:
             ind = nodes[pack].index(node)
@@ -41,12 +44,12 @@ for pack in range(len(packages)):
             time.sleep(1)
             noder = subprocess.Popen(rnode,shell=True)
             time.sleep(1)
-            killer = subprocess.Popen(kill,shell=True)
+            ##killer = subprocess.Popen(kill,shell=True)
             time.sleep(1)
 
-            runner.terminate()
+            ##runner.terminate()
             noder.terminate()
-            killer.terminate()
+            ##killer.terminate()
             
             file = open("nodeinfo.txt")
             lines = file.readlines()
@@ -90,20 +93,36 @@ foldermaker.terminate()
 
 Complete = {}
 
-for pack in range(len(packages)):
-    NodeDict = {}
+for pack in range(looplen):
+    Complete[packages[pack]] = {
+        "elementType" : "package",
+        "name" : packages[pack],
+        "nodes" : {}
+        }
     for node in range(len(nodes[pack])):
-        InfoDict = {
-            "Publications": nodeinfo[pack][node][0],
-            "Subscriptions": nodeinfo[pack][node][1],
-            "Services": nodeinfo[pack][node][2]
+        Complete[packages[pack]]["nodes"][nodes[pack][node]] = {
+            "elementType" : "node",
+            "name" : nodes[pack][node],
+            "Publications": {},
+            "Subscriptions": {},
+            "Services": {}
             }
-        NodeDict[nodes[pack][node]] = InfoDict
-    Complete[packages[pack]] = NodeDict
+        for pubs in nodeinfo[pack][node][0]:
+            f = pubs.find("[")
+            toptype = pubs[f+1:-1]
+            f = 
+            Complete[packages[pack]]["nodes"][nodes[pack][node]]["Publications"][title] = {
+                "elementType" : "topic",
+                "name" : pubs
+                "type" : toptype
+                }
+
+
+Complete[packages[pack]]["nodes"]
 
 Topics = {}
 
-for pack in range(len(packages)):
+for pack in range(looplen):
     for node in range(len(nodes[pack])):
         for info in range(len(nodeinfo[pack][node])-1):
             for x in nodeinfo[pack][node][info]:
@@ -128,34 +147,35 @@ for pack in range(len(packages)):
                                     "Type": "TBD"}
                 if(data != "unknown type" and Topics[topicname]["Data"] == ""):
                     Topics[topicname]["Data"] = data
+print(json.dumps(Complete,sort_keys=True, indent=8))
 
-for pack in Complete:
-    print(pack+":")
-    for node in Complete[pack]:
-        print("    "+node+":")
-        print("        Publications:")
-        for pub in Complete[pack][node]["Publications"]:
-            print("            "+pub)
-        print("        Subscriptions:")
-        for sub in Complete[pack][node]["Subscriptions"]:
-            print("            "+sub)
-        print("        Services:")
-        for serv in Complete[pack][node]["Services"]:
-            print("            "+serv)
-        print()
-
-print("\n\n\n")
-
-for topic in Topics:
-    print(topic+":")
-    print("    Publishers:")
-    for pub in Topics[topic]["Publishers"]:
-        print("        "+pub)
-    print("    Subscribers:")
-    for sub in Topics[topic]["Subscribers"]:
-        print("        "+sub)
-    print("    Data:")
-    if(Topics[topic]["Data"] != ""):
-        print("        "+Topics[topic]["Data"])
-    print("    Type:")
-    print("        "+Topics[topic]["Type"]+"\n")
+##for pack in Complete:
+##    print(pack+":")
+##    for node in Complete[pack]:
+##        print("    "+node+":")
+##        print("        Publications:")
+##        for pub in Complete[pack][node]["Publications"]:
+##            print("            "+pub)
+##        print("        Subscriptions:")
+##        for sub in Complete[pack][node]["Subscriptions"]:
+##            print("            "+sub)
+##        print("        Services:")
+##        for serv in Complete[pack][node]["Services"]:
+##            print("            "+serv)
+##        print()
+##
+##print("\n\n\n")
+##
+##for topic in Topics:
+##    print(topic+":")
+##    print("    Publishers:")
+##    for pub in Topics[topic]["Publishers"]:
+##        print("        "+pub)
+##    print("    Subscribers:")
+##    for sub in Topics[topic]["Subscribers"]:
+##        print("        "+sub)
+##    print("    Data:")
+##    if(Topics[topic]["Data"] != ""):
+##        print("        "+Topics[topic]["Data"])
+##    print("    Type:")
+##    print("        "+Topics[topic]["Type"]+"\n")
