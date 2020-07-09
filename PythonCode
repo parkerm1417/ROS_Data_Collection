@@ -105,20 +105,46 @@ for pack in range(looplen):
             "name" : nodes[pack][node],
             "Publications": {},
             "Subscriptions": {},
-            "Services": {}
+            "Services Provided": {},
+            "Services Used": {}
             }
         for pubs in nodeinfo[pack][node][0]:
             f = pubs.find("[")
             toptype = pubs[f+1:-1]
-            f = 
+            q = pubs.find("/",1,f-1)
+            if(q == -1):
+                title = pubs[1:f-1]
+            else:
+                title = pubs[q+1:f-1]
             Complete[packages[pack]]["nodes"][nodes[pack][node]]["Publications"][title] = {
                 "elementType" : "topic",
-                "name" : pubs
+                "name" : pubs[:f-1],
                 "type" : toptype
                 }
-
-
-Complete[packages[pack]]["nodes"]
+        for subs in nodeinfo[pack][node][1]:
+            f = subs.find("[")
+            toptype = subs[f+1:-1]
+            q = subs.find("/",1,f-1)
+            if(q == -1):
+                title = subs[1:f-1]
+            else:
+                title = subs[q+1:f-1]
+            Complete[packages[pack]]["nodes"][nodes[pack][node]]["Subscriptions"][title] = {
+                "elementType" : "topic",
+                "name" : subs[:f-1],
+                "type" : toptype
+                }
+        for servs in nodeinfo[pack][node][2]:
+            q = servs.find("/",1)
+            if(q == -1):
+                title = servs[1:]
+            else:
+                title = servs[q+1:]
+            Complete[packages[pack]]["nodes"][nodes[pack][node]]["Services Provided"][title] = {
+                "elementType" : "service",
+                "name" : servs,
+                "type" : ""
+                }
 
 Topics = {}
 
@@ -147,7 +173,7 @@ for pack in range(looplen):
                                     "Type": "TBD"}
                 if(data != "unknown type" and Topics[topicname]["Data"] == ""):
                     Topics[topicname]["Data"] = data
-print(json.dumps(Complete,sort_keys=True, indent=8))
+print(json.dumps(Complete, indent=8))
 
 ##for pack in Complete:
 ##    print(pack+":")
@@ -179,3 +205,9 @@ print(json.dumps(Complete,sort_keys=True, indent=8))
 ##        print("        "+Topics[topic]["Data"])
 ##    print("    Type:")
 ##    print("        "+Topics[topic]["Type"]+"\n")
+    
+        
+    
+
+
+ 
