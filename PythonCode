@@ -203,6 +203,34 @@ for pack in range(looplen):
                 "name" : servs,
                 "type" : ""
                 }
+
+for pack in range(looplen):
+    for node in range(len(nodes[pack])):
+        for serv in nodeinfo[pack][node][2]:
+            bs = serv.find("/",1)
+            title = serv[q+1:]
+            servnode = serv[1:bs]
+
+            try:
+                Services[title]["nodes"][servnode] = {
+                            "elementType": "node",
+                            "name": nodes[pack][node],
+                            "package": packages[pack]
+                            }
+            except:
+                Services[title] = {
+                            "elementType": "service",
+                            "name": title,
+                            "type": "",
+                            "args": "",
+                            "nodes": {}
+                            }
+                Services[title]["nodes"][servnode] = {
+                            "elementType": "node",
+                            "name": nodes[pack][node],
+                            "package": packages[pack]
+                            }
+                            
 ##prints both whole dictionaries using json and formats the dictionaries by indenting as it moves deeper in the heirarchy
 print(json.dumps(Topics, indent=8))
 print(json.dumps(Complete, indent=8))
