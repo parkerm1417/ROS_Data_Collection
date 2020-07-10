@@ -241,6 +241,43 @@ for pack in range(looplen):
                 "args" : Services[title]["args"]
                 }
 
+##creates a text file with all of the messages listed and creates a list that holds all of the messages
+system("rosmsg list > msg_list.txt")
+msgfile = open("msg_list.txt")
+msglistlines = msgfile.readlines()
+msgfile.close()
+##fills the messages dictionary
+for msg in range(len(msglistlines)):
+    bs = msglistlines[msg].find("/")
+    package = msglistlines[msg][:bs]
+    system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
+    msginfo = open("msg_info.txt")
+    msginfolines = msginfo.readlines()
+    msginfo.close()
+    for x in range(len(msginfolines)):
+        p = 0
+        while msginfolines[x][p] == " ":
+            p += 1
+        midsp = msginfolines[x].find(" ", p)
+        msgtype = msginfolines[x][p : midsp]
+        msgname = msginfolines[x][midsp + 1:-1]
+
+        if p == 0:
+            lvl1 = msgname
+            Complete[package]["messages"][lvl1] = {"dmfDataType": msgtype}
+        elif p == 2:
+            lvl2 = msgname
+            Complete[package]["messages"][lvl1][lvl2] = {"dmfDataType": msgtype}
+        elif p == 4:
+            lvl3 = msgname
+            Complete[package]["messages"][lvl1][lvl2][lvl3] = {"dmfDataType": msgtype}
+        elif p == 6:
+            lvl4 = msgname
+            Complete[package]["messages"][lvl1][lvl2][lvl3][lvl4] = {"dmfDataType": msgtype}
+        elif p == 8:
+            lvl5 = msgname
+            Complete[package]["messages"][lvl1][lvl2][lvl3][lvl4][lvl5] = {"dmfDataType": msgtype}
+
 system("rossrv list > servicelist.txt")
 s = open("servicelist.txt")
 srvlist = s.readlines()
