@@ -2,6 +2,9 @@ from os import listdir,system
 import subprocess
 import time
 import json
+
+start = time.time()
+
 ########################################
 ##Ensures that a new roscore is running
 ########################################
@@ -23,7 +26,7 @@ Services = {}
 packages = [f for f in listdir('/opt/ros/noetic/share')]
 packages.sort()
 
-looplen=25 ##Value to be adjusted to test the code, set looplen equal to len(packages) for complete list
+looplen=len(packages) ##Value to be adjusted to test the code, set looplen equal to len(packages) for complete list
 
 n = 0
 for pack in packages:
@@ -251,10 +254,11 @@ for msg in range(len(msglistlines)):
     bs = msglistlines[msg].find("/")
     package = msglistlines[msg][:bs]
     system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
+    Complete[package]["messages"][msglistlines[msg][:-1]] = {}
     msginfo = open("msg_info.txt")
     msginfolines = msginfo.readlines()
     msginfo.close()
-    for x in range(len(msginfolines)):
+    for x in range(len(msginfolines)-1):
         p = 0
         while msginfolines[x][p] == " ":
             p += 1
@@ -264,19 +268,19 @@ for msg in range(len(msglistlines)):
 
         if p == 0:
             lvl1 = msgname
-            Complete[package]["messages"][lvl1] = {"dmfDataType": msgtype}
+            Complete[package]["messages"][msglistlines[msg][:-1]][lvl1] = {"dmfDataType": msgtype}
         elif p == 2:
             lvl2 = msgname
-            Complete[package]["messages"][lvl1][lvl2] = {"dmfDataType": msgtype}
+            Complete[package]["messages"][msglistlines[msg][:-1]][lvl1][lvl2] = {"dmfDataType": msgtype}
         elif p == 4:
             lvl3 = msgname
-            Complete[package]["messages"][lvl1][lvl2][lvl3] = {"dmfDataType": msgtype}
+            Complete[package]["messages"][msglistlines[msg][:-1]][lvl1][lvl2][lvl3] = {"dmfDataType": msgtype}
         elif p == 6:
             lvl4 = msgname
-            Complete[package]["messages"][lvl1][lvl2][lvl3][lvl4] = {"dmfDataType": msgtype}
+            Complete[package]["messages"][msglistlines[msg][:-1]][lvl1][lvl2][lvl3][lvl4] = {"dmfDataType": msgtype}
         elif p == 8:
             lvl5 = msgname
-            Complete[package]["messages"][lvl1][lvl2][lvl3][lvl4][lvl5] = {"dmfDataType": msgtype}
+            Complete[package]["messages"][msglistlines[msg][:-1]][lvl1][lvl2][lvl3][lvl4][lvl5] = {"dmfDataType": msgtype}
 
 system("rossrv list > servicelist.txt")
 s = open("servicelist.txt")
@@ -310,19 +314,19 @@ for srv in srvlist:
 
             if sp == 0:
                 lv1 = msgname
-                Complete[pack]["services"][srv[:-1]]["request"][lv1] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["request"][lv1] = {"dmfDataType":msgtype}
             elif sp == 2:
                 lv2 = msgname
-                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2] = {"dmfDataType":msgtype}
             elif sp == 4:
                 lv3 = msgname
-                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2][lv3] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2][lv3] = {"dmfDataType":msgtype}
             elif sp == 6:
                 lv4 = msgname
-                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2][lv3][lv4] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2][lv3][lv4] = {"dmfDataType":msgtype}
             elif sp == 8:
                 lv5 = msgname
-                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2][lv3][lv4][lv5] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["request"][lv1][lv2][lv3][lv4][lv5] = {"dmfDataType":msgtype}
 
         elif msg > split:
             for ch in srvinfo[msg]:
@@ -337,22 +341,23 @@ for srv in srvlist:
             
             if sp == 0:
                 lv1 = msgname
-                Complete[pack]["services"][srv[:-1]]["response"][lv1] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["response"][lv1] = {"dmfDataType":msgtype}
             elif sp == 2:
                 lv2 = msgname
-                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2] = {"dmfDataType":msgtype}
             elif sp == 4:
                 lv3 = msgname
-                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2][lv3] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2][lv3] = {"dmfDataType":msgtype}
             elif sp == 6:
                 lv4 = msgname
-                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2][lv3][lv4] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2][lv3][lv4] = {"dmfDataType":msgtype}
             elif sp == 8:
                 lv5 = msgname
-                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2][lv3][lv4][lv5] = {"type":msgtype}
+                Complete[pack]["services"][srv[:-1]]["response"][lv1][lv2][lv3][lv4][lv5] = {"dmfDataType":msgtype}
 
                             
 ##prints both whole dictionaries using json and formats the dictionaries by indenting as it moves deeper in the heirarchy
-print(json.dumps(Topics, indent=8))
+##print(json.dumps(Topics, indent=8))
 print(json.dumps(Complete, indent=8))
-print(json.dumps(Services, indent=8))
+##print(json.dumps(Services, indent=8))
+print(time.time()-start)
