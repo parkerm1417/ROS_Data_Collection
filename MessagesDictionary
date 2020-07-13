@@ -12,9 +12,10 @@ msglistlines = msgfile.readlines()
 msgfile.close()
 
 c = 0
-for msg in range(len(msglistlines)): ##len(msglistlines)
+for msg in range(10): ##len(msglistlines)
     system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
-    Messages[msglistlines[msg][:-1]] = {}
+    Messages[msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
+                                        "elementType": "message"}
     msginfo = open("msg_info.txt")
     msginfolines = msginfo.readlines()
     msginfo.close()
@@ -30,10 +31,14 @@ for msg in range(len(msglistlines)): ##len(msglistlines)
             lvl1 = msgname
             if (msgtype in primitives):
                 Messages[msglistlines[msg][:-1]][lvl1] = {
+                    "name": msgname,
+                    "elementType": "argument",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
                 Messages[msglistlines[msg][:-1]][lvl1] = {
+                    "name": msgname,
+                    "elementType": "argument",
                     "type": msgtype,
                     "dmfDataType":"TBD"}
     c += 1
