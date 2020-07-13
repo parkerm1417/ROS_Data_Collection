@@ -1,0 +1,58 @@
+from os import listdir,system
+import subprocess
+import time
+import json
+
+Services = {}
+
+primitives = ["bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]"]
+
+system("rossrv list > servicelist.txt")
+s = open("servicelist.txt")
+srvlist = s.readlines()
+s.close()
+c=0
+
+for srv in srvlist:
+    cmd = "rossrv info "+srv[:-1]+" > srvinfo.txt"
+    system(cmd)
+    s = open("srvinfo.txt")
+    srvinfo = s.readlines()
+    s.close()
+
+    Services[srv[:-1]+"Request"] = {}
+    Services[srv[:-1]+"Response"] = {}
+    
+    split = srvinfo.index("---\n")
+    for msg in range(len(srvinfo)-1):
+        sp = 0
+        for ch in srvinfo[msg]:
+                if( ch == " "):
+                    sp += 1
+                else:
+                    break
+        nmsp = srvinfo[msg].find(" ",sp)
+        msgtype = srvinfo[msg][sp:nmsp]
+        msgname = srvinfo[msg][nmsp+1:-1]
+        
+        if msg < split:
+                
+            if sp == 0:
+                lv1 = msgname
+                if (msgtype in primitives):
+                    Services[srv[:-1]+"Request"][lv1] = {"storageType":msgtype, "dmfDataType":"TBD"}
+                else:
+                    Services[srv[:-1]+"Request"][lv1] = {"Type":msgtype, "dmfDataType":"TBD"}
+
+        elif msg > split:
+
+            if sp == 0:
+                lv1 = msgname
+                if (msgtype in primitives):
+                    Services[srv[:-1]+"Response"][lv1] = {"storageType":msgtype, "dmfDataType":"TBD"}
+                else:
+                    Services[srv[:-1]+"Response"][lv1] = {"Type":msgtype, "dmfDataType":"TBD"}
+    c += 1
+    print(c)
+
+print(json.dumps(Services, indent=8))
