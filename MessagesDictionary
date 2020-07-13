@@ -5,7 +5,7 @@ import json
 
 Messages = {}
 
-primitives = ["bool", "int8", "uint8", "int16", "int32", "uint16", "int32", "uint32", "int64", "uint64", "float32", "float64", "string", "time", "duration"]
+primitives = ["bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]"]
 system("rosmsg list > msg_list.txt")
 msgfile = open("msg_list.txt")
 msglistlines = msgfile.readlines()
