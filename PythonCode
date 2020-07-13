@@ -277,8 +277,7 @@ for msg in range(len(msglistlines)):
                     "name": msgname,
                     "elementType": "argument",
                     "storageType": msgtype,
-                    "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "dmfDataType":"TBD"}
             else:
                 Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1] = {
                     "name": msgname,
@@ -293,8 +292,7 @@ for msg in range(len(msglistlines)):
                     "name": msgname,
                     "elementType": "argument",
                     "storageType": msgtype,
-                    "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "dmfDataType":"TBD"}
             else:
                 Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2] = {
                     "name": msgname,
@@ -309,8 +307,7 @@ for msg in range(len(msglistlines)):
                     "name": msgname,
                     "elementType": "argument",
                     "storageType": msgtype,
-                    "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "dmfDataType":"TBD"}
             else:
                 Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3] = {
                     "name": msgname,
@@ -325,8 +322,7 @@ for msg in range(len(msglistlines)):
                     "name": msgname,
                     "elementType": "argument",
                     "storageType": msgtype,
-                    "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "dmfDataType":"TBD"}
             else:
                 Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4] = {
                     "name": msgname,
@@ -341,10 +337,54 @@ for msg in range(len(msglistlines)):
                     "name": msgname,
                     "elementType": "argument",
                     "storageType": msgtype,
-                    "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "dmfDataType":"TBD"}
             else:
                 Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5] = {
+                    "name": msgname,
+                    "elementType": "argument",
+                    "type": msgtype,
+                    "dmfDataType":"TBD",
+                    "arguments":{}}
+        elif p == 10:
+            lvl6 = msgname
+            if (msgtype in primitives):
+                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6] = {
+                    "name": msgname,
+                    "elementType": "argument",
+                    "storageType": msgtype,
+                    "dmfDataType":"TBD"}
+            else:
+                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6] = {
+                    "name": msgname,
+                    "elementType": "argument",
+                    "type": msgtype,
+                    "dmfDataType":"TBD",
+                    "arguments":{}}
+        elif p == 12:
+            lvl7 = msgname
+            if (msgtype in primitives):
+                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7] = {
+                    "name": msgname,
+                    "elementType": "argument",
+                    "storageType": msgtype,
+                    "dmfDataType":"TBD"}
+            else:
+                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7] = {
+                    "name": msgname,
+                    "elementType": "argument",
+                    "type": msgtype,
+                    "dmfDataType":"TBD",
+                    "arguments":{}}
+        elif p == 14:
+            lvl8 = msgname
+            if (msgtype in primitives):
+                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7]["arguments"][lvl8] = {
+                    "name": msgname,
+                    "elementType": "argument",
+                    "storageType": msgtype,
+                    "dmfDataType":"TBD"}
+            else:
+                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7]["arguments"][lvl8] = {
                     "name": msgname,
                     "elementType": "argument",
                     "type": msgtype,
@@ -399,8 +439,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1] = {
                         "name": msgname,
@@ -416,8 +455,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2] = {
                         "name": msgname,
@@ -432,8 +470,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3] = {
                         "name": msgname,
@@ -448,8 +485,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4] = {
                         "name": msgname,
@@ -464,10 +500,54 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5] = {
+                        "name": msgname,
+                        "elementType": "argument",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "arguments":{}}
+            elif sp == 10:
+                lv6 = msgname
+                if (msgtype in primitives):
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                        "name":msgname,
+                        "elementType": "argument",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                        "name": msgname,
+                        "elementType": "argument",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "arguments":{}}
+            elif sp == 12:
+                lv7 = msgname
+                if (msgtype in primitives):
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                        "name":msgname,
+                        "elementType": "argument",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                        "name": msgname,
+                        "elementType": "argument",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "arguments":{}}
+            elif sp == 14:
+                lv8 = msgname
+                if (msgtype in primitives):
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
+                        "name":msgname,
+                        "elementType": "argument",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
                         "name": msgname,
                         "elementType": "argument",
                         "type": msgtype,
@@ -483,8 +563,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1] = {
                         "name": msgname,
@@ -500,8 +579,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2] = {
                         "name": msgname,
@@ -516,8 +594,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3] = {
                         "name": msgname,
@@ -532,8 +609,7 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4] = {
                         "name": msgname,
@@ -548,10 +624,54 @@ for srv in srvlist:
                         "name":msgname,
                         "elementType": "argument",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5] = {
+                        "name": msgname,
+                        "elementType": "argument",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "arguments":{}}
+            elif sp == 10:
+                lv6 = msgname
+                if (msgtype in primitives):
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                        "name":msgname,
+                        "elementType": "argument",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                        "name": msgname,
+                        "elementType": "argument",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "arguments":{}}
+            elif sp == 12:
+                lv7 = msgname
+                if (msgtype in primitives):
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                        "name":msgname,
+                        "elementType": "argument",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                        "name": msgname,
+                        "elementType": "argument",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "arguments":{}}
+            elif sp == 14:
+                lv8 = msgname
+                if (msgtype in primitives):
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
+                        "name":msgname,
+                        "elementType": "argument",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
                         "name": msgname,
                         "elementType": "argument",
                         "type": msgtype,
