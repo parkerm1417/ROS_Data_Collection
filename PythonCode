@@ -260,7 +260,7 @@ for msg in range(len(msglistlines)):
     system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
     Complete[package]["messages"][msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
                                                              "elementType": "message",
-                                                             "arguments": {}}
+                                                             "fields": {}}
     msginfo = open("msg_info.txt")
     msginfolines = msginfo.readlines()
     msginfo.close()
@@ -275,123 +275,123 @@ for msg in range(len(msglistlines)):
         if p == 0:
             lvl1 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
         elif p == 2:
             lvl2 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
         elif p == 4:
             lvl3 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
         elif p == 6:
             lvl4 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
         elif p == 8:
             lvl5 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
         elif p == 10:
             lvl6 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
         elif p == 12:
             lvl7 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
         elif p == 14:
             lvl8 = msgname
             if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7]["arguments"][lvl8] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7]["fields"][lvl8] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "dataType",
                     "storageType": msgtype,
                     "dmfDataType":"TBD"}
             else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["arguments"][lvl1]["arguments"][lvl2]["arguments"][lvl3]["arguments"][lvl4]["arguments"][lvl5]["arguments"][lvl6]["arguments"][lvl7]["arguments"][lvl8] = {
+                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7]["fields"][lvl8] = {
                     "name": msgname,
-                    "elementType": "argument",
+                    "elementType": "messageType",
                     "type": msgtype,
                     "dmfDataType":"TBD",
-                    "arguments":{}}
+                    "fields":{}}
     c += 1
     print(c)
 print("Messages have been added to dictionary")
@@ -403,9 +403,9 @@ s.close()
 c=0
 
 for srv in srvlist:
-    cmd = "rossrv info "+srv[:-1]+" > srvinfo.txt"
+    cmd = "rossrv info "+srv[:-1]+" > msg_info.txt"
     system(cmd)
-    s = open("srvinfo.txt")
+    s = open("msg_info.txt")
     srvinfo = s.readlines()
     s.close()
     split = srvinfo.index("---\n")
@@ -418,10 +418,10 @@ for srv in srvlist:
                     "responseMessage": srv[:-1]+"Response"}
     Complete[pack]["messages"][srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
                                     "elementType": "message",
-                                    "arguments": {}}
+                                    "fields": {}}
     Complete[pack]["messages"][srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
                                      "elementType": "message",
-                                     "arguments": {}}
+                                     "fields": {}}
     for msg in range(len(srvinfo)-1):
         sp = 0
         for ch in srvinfo[msg]:
@@ -430,257 +430,258 @@ for srv in srvlist:
             else:
                 break
                 
-            nmsp = srvinfo[msg].find(" ",sp)
-            msgtype = srvinfo[msg][sp:nmsp]
-            msgname = srvinfo[msg][nmsp+1:-1]
+        nmsp = srvinfo[msg].find(" ",sp)
+        msgtype = srvinfo[msg][sp:nmsp]
+        msgname = srvinfo[msg][nmsp+1:-1]
             
         if msg > split:
 
             if sp == 0:
                 lv1 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
-                        "dmfDataType":"TBD"}
+                        "dmfDataType":"TBD",
+                        "fields":{}}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
     
             elif sp == 2:
                 lv2 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 4:
                 lv3 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 6:
                 lv4 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 8:
                 lv5 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5] = {
+                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 10:
                 lv6 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 12:
                 lv7 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 14:
                 lv8 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
                     
         elif msg < split:
             
             if sp == 0:
                 lv1 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
     
             elif sp == 2:
                 lv2 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 4:
                 lv3 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 6:
                 lv4 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 8:
                 lv5 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 10:
                 lv6 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 12:
                 lv7 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
             elif sp == 14:
                 lv8 = msgname
                 if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
                         "name":msgname,
-                        "elementType": "argument",
+                        "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["arguments"][lv1]["arguments"][lv2]["arguments"][lv3]["arguments"][lv4]["arguments"][lv5]["arguments"][lv6]["arguments"][lv7]["arguments"][lv8] = {
+                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
                         "name": msgname,
-                        "elementType": "argument",
+                        "elementType": "messageType",
                         "type": msgtype,
                         "dmfDataType":"TBD",
-                        "arguments":{}}
+                        "fields":{}}
     c += 1
     print(c)
 print("Services and additional messages have been added to dictionary")
