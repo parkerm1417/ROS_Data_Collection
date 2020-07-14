@@ -15,10 +15,19 @@ msgfile.close()
 
 c = 0
 for msg in range(len(msglistlines)): ##len(msglistlines)
+    bs = msglistlines[msg].find("/")
+    package = msglistlines[msg][:bs]
+    file = msglistlines[msg][bs+1:-1] + ".msg"
+    com = open("/opt/ros/noetic/share/"+package+"/msg/"+file)
+    comments = com.readlines()
+    com.close()
     system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
     Messages[msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
                                         "elementType": "messageType",
-                                        "fields": {}}
+                                        "fields": {},
+                                        "comments":{}}
+    for comment in range(len(comments)):
+        Messages[msglistlines[msg][:-1]]["comments"][comment] = comments[comment][:-1]
     msginfo = open("msg_info.txt")
     msginfolines = msginfo.readlines()
     msginfo.close()
@@ -100,3 +109,4 @@ for srv in srvlist:
 
 print(json.dumps(Messages, indent=8))
 print(json.dumps(Services, indent=8))
+
