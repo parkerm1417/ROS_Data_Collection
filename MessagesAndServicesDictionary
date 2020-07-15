@@ -18,16 +18,18 @@ for msg in range(len(msglistlines)): ##len(msglistlines)
     bs = msglistlines[msg].find("/")
     package = msglistlines[msg][:bs]
     file = msglistlines[msg][bs+1:-1] + ".msg"
-    com = open("/opt/ros/noetic/share/"+package+"/msg/"+file)
+    com = open("/opt/ros/noetic/share/" + package + "/msg/" + file)
     comments = com.readlines()
     com.close()
     system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
     Messages[msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
                                         "elementType": "messageType",
                                         "fields": {},
-                                        "comments":{}}
+                                        "comments": {}}
+
     for comment in range(len(comments)):
         Messages[msglistlines[msg][:-1]]["comments"][comment] = comments[comment][:-1]
+    
     msginfo = open("msg_info.txt")
     msginfolines = msginfo.readlines()
     msginfo.close()
@@ -61,8 +63,18 @@ s = open("servicelist.txt")
 srvlist = s.readlines()
 s.close()
 c=0
-
+    
 for srv in srvlist:
+    bs = srv.find("/")
+    package = srv[:bs]
+    file = srv[bs+1:-1] + ".srv"
+    com = open("/opt/ros/noetic/share/" + package + "/srv/" + file)
+    comments = com.readlines()
+    try:
+        comsplit = comments.index("---\n")
+    except:
+        comsplit = comments.index("---")
+    com.close()
     cmd = "rossrv info "+srv[:-1]+" > srvinfo.txt"
     system(cmd)
     s = open("srvinfo.txt")
@@ -72,11 +84,26 @@ for srv in srvlist:
     Services[srv[:-1]] = {"name":srv[:-1], "elementType": "service", "requestMessage": srv[:-1]+"Request", "responseMessage": srv[:-1]+"Response"}
     Messages[srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
                                     "elementType": "messageType",
-                                    "fields": {}}
+                                    "fields": {},
+                                    "comments":{}}
     Messages[srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
                                      "elementType": "messageType",
-                                     "fields": {}}
-    
+                                     "fields": {},
+                                     "comments": {}}
+    req = 1
+    res = 1
+    for coms in range(len(comments)):
+        if comments[coms][-1] == "\n":
+            qw = comments[coms][:-1]
+        else:
+            qw = comments[coms]
+        if coms < comsplit:
+            Messages[srv[:-1]+"Request"]["comments"][req] = qw
+            req += 1
+        elif coms > comsplit:
+            Messages[srv[:-1]+"Response"]["comments"][res] = qw
+            res += 1
+            
     split = srvinfo.index("---\n")
     for msg in range(len(srvinfo)-1):
         sp = 0
@@ -109,4 +136,3 @@ for srv in srvlist:
 
 print(json.dumps(Messages, indent=8))
 print(json.dumps(Services, indent=8))
-
