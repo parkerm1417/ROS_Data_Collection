@@ -27,28 +27,40 @@ Services = {}
 packages = [f for f in listdir('/opt/ros/noetic/share')]
 packages.sort()
 
-looplen=len(packages) ##Value to be adjusted to test the code, set looplen equal to len(packages) for complete list
+looplen=0 ##Value to be adjusted to test the code, set looplen equal to len(packages) for complete list
 
 n = 0
-for pack in packages:
-    nodeinfo.append([])         #for each package, a nodeinfo list is added within the package list
+for pack in range(looplen,len(packages)):
+    Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
+    "elementType" : "package",
+    "name" : packages[pack],
+    "nodes" : {},
+    "messages" : {},
+    "services" : {}
+    }
+
+##    nodeinfo.append([])         #for each package, a nodeinfo list is added within the package list
     try:
-        temp = [f for f in listdir('/opt/ros/noetic/lib/' + pack)]  ##each package directory is accessed
+        temp = [f for f in listdir('/opt/ros/noetic/lib/' + packages[pack])]  ##each package directory is accessed
     except:
         temp = []
-    q = len(temp)-1
-    while q >= 0:        ##the .py files within the package folders get removed
-        if temp[q][-3:] == ".py":
-            del temp[q]
-        q = q-1
-    nodes.append(temp)
+    pn = [x for x in temp if x[-3:] != ".py"]
+    for node in pn:
+
+            Complete[packages[pack]]["nodes"][node] = {
+            "elementType" : "node",
+            "name" : node,
+            "publications": {},
+            "subscriptions": {},
+            "services provided": {},
+            "services used": {}
+            }
 
 e=0
-for pack in range(looplen):
-    if nodes[pack] != []:       ##ensure that there are nodes within the package list to be run
-        for node in nodes[pack]:
-            ind = nodes[pack].index(node)
-            run = "rosrun " + packages[pack] + " " + node + " __name:="+node     ##runs each node in the terminal and renames the node to be exact when being terminated 
+for pack in Complete:
+    if Complete[pack]["nodes"] != {}:       ##ensure that there are nodes within the package list to be run
+        for node in Complete[pack]["nodes"]:
+            run = "rosrun " + pack + " " + node + " __name:="+node     ##runs each node in the terminal and renames the node to be exact when being terminated 
             rnode = "rosnode info -q /" + node + " > nodeinfo.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
             kill = "rosnode kill -a"       ##kills all active nodes
             
@@ -65,6 +77,7 @@ for pack in range(looplen):
             
             file = open("nodeinfo.txt")
             lines = file.readlines()       ##reads all of the text within the file and sets it equal to a variable
+            file.close()
             pub = 0
             sub = 0
             serv = 0
@@ -87,17 +100,83 @@ for pack in range(looplen):
             ##adds the publication, subscription, and service info to temporary lists
             for n in range(len(lines)):
                 if (n>pub and n<sub-1):
-                    pubtemp.append(lines[n][3:-1])
+                    ss = lines[n][3:-1]
+                    f = ss.find("[")
+                    toptype = ss[f+1:-1]
+                    q = ss.find("/",1,f-1)
+                    if(q == -1):
+                        title = ss[1:f-1]
+                    else:
+                        title = ss[q+1:f-1]
+                    Complete[pack]["nodes"][node]["publications"][ss] = {
+                        "elementType" : "topic",
+                        "name" : ss[:f-1],
+                        "type" : toptype }
+                    ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
+                    bs = ss.find("/", 1, ob)
+                    topicname = ss[:ob-1]
+                    datatype = ss[ob+1:-1]
+                    try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
+                        Topics[topicname]["publishers"][node] = {
+                            "elementType": "node",
+                            "name": node,
+                            "package": pack
+                            }
+                    except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
+                        Topics[topicname] = {
+                        "elementType": "topic",
+                        "name": topicname,
+                        "type": "",
+                        "data": "TBD",
+                        "publishers": {node:{
+                            "elementType": "node",
+                            "name": node,
+                            "package": pack}},
+                        "subscribers": {},
+                        }
+                    if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
+                        Topics[topicname]["type"] = datatype
+                        
                 elif (n>sub and n<serv-1):
-                    subtemp.append(lines[n][3:-1])
+                    ss = lines[n][3:-1]
+                    f = ss.find("[")
+                    toptype = ss[f+1:-1]
+                    q = ss.find("/",1,f-1)
+                    if(q == -1):
+                        title = ss[1:f-1]
+                    else:
+                        title = ss[q+1:f-1]
+                    Complete[pack]["nodes"][node]["subscriptions"][ss] = {
+                        "elementType" : "topic",
+                        "name" : ss[:f-1],
+                        "type" : toptype }
+                    ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
+                    bs = ss.find("/", 1, ob)
+                    topicname = ss[:ob-1]
+                    datatype = ss[ob+1:-1]
+                    try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
+                        Topics[topicname]["publishers"][node] = {
+                            "elementType": "node",
+                            "name": node,
+                            "package": pack
+                            }
+                    except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
+                        Topics[topicname] = {
+                        "elementType": "topic",
+                        "name": topicname,
+                        "type": "",
+                        "data": "TBD",
+                        "publishers": {},
+                        "subscribers": {node:{
+                            "elementType": "node",
+                            "name": node,
+                            "package": pack}},
+                        }
+                    if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
+                        Topics[topicname]["type"] = datatype
+                    
                 elif (n>serv and n<len(lines)-1):
                     servtemp.append(lines[n][3:-1])
-            file.close()
-
-            ##adds the temporary list information for each node to a collective list
-            nodeinfotemp.append(pubtemp)
-            nodeinfotemp.append(subtemp)
-            nodeinfotemp.append(servtemp)
 
             for servs in servtemp:
                 args = subprocess.getoutput("rosservice args "+servs)
@@ -107,11 +186,18 @@ for pack in range(looplen):
                     title = servs[1:]
                 else:
                     title = servs[q+1:]
+                    
+                Complete[pack]["nodes"][node]["services provided"][title] = {
+                "elementType" : "service",
+                "name" : servs,
+                "type" : servtype,
+                "args" : args}
+                
                 try:
                     Services[title]["nodes"][node] = {
                                 "elementType": "node",
                                 "name": node,
-                                "package": packages[pack]
+                                "package": pack
                                 }
                 except:
                     Services[title] = {
@@ -124,126 +210,16 @@ for pack in range(looplen):
                     Services[title]["nodes"][node] = {
                                 "elementType": "node",
                                 "name": node,
-                                "package": packages[pack]
+                                "package": pack
                                 }
                 
 
             ##the info then gets placed at the position of the specific node
-            nodeinfo[pack].append(nodeinfotemp)
             e = e + 1
             print(e)    ##displays consecutive numbers as each node is run
 
 system("rosnode kill -a")
 print("All nodes  have been started and subsequently killed")
-
-##accesses each list and moves to the list within each list, if there is a list within it
-for pack in range(looplen):
-    for node in range(len(nodes[pack])):
-        for info in range(len(nodeinfo[pack][node])-1):
-            for x in nodeinfo[pack][node][info]:
-                ob = x.find("[")      ##for formatting purposes, extraneous symbols are removed
-                bs = x.find("/", 1, ob)
-                topicname = x[:ob-1]
-                datatype = x[ob+1:-1]
-                try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
-                    if(info == 0):
-                        Topics[topicname]["publishers"][nodes[pack][node]] = {
-                            "elementType": "node",
-                            "name": nodes[pack][node],
-                            "package": packages[pack]
-                            }
-                    else:
-                        Topics[topicname]["subscribers"][nodes[pack][node]] = {
-                            "elementType": "node",
-                            "name": nodes[pack][node],
-                            "package": packages[pack]
-                            }
-                except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
-                    Topics[topicname] = {
-                        "elementType": "topic",
-                        "name": topicname,
-                        "type": "",
-                        "data": "TBD",
-                        "publishers": {},
-                        "subscribers": {},
-                        }
-                    ##the publisher and subscriber dictionaries for each topic are filled
-                    if(info == 0):
-                        Topics[topicname]["publishers"][nodes[pack][node]] = {
-                            "elementType": "node",
-                            "name": nodes[pack][node],
-                            "package": packages[pack]
-                            }
-                    else:
-                        Topics[topicname]["subscribers"][nodes[pack][node]] = {
-                            "elementType": "node",
-                            "name": nodes[pack][node],
-                            "package": packages[pack]
-                            }
-                if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
-                    Topics[topicname]["type"] = datatype
-                    
-##fills a separate dictionary with the package and node info
-for pack in range(looplen):
-    Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
-        "elementType" : "package",
-        "name" : packages[pack],
-        "nodes" : {},
-        "messages" : {},
-        "services" : {}
-        }
-
-    ##each node is filled with information and 4 separate dictionaries: publications, subscriptions, services provided, and services used
-    for node in range(len(nodes[pack])):
-        Complete[packages[pack]]["nodes"][nodes[pack][node]] = {
-            "elementType" : "node",
-            "name" : nodes[pack][node],
-            "publications": {},
-            "subscriptions": {},
-            "services provided": {},
-            "services used": {}
-            }
-        ##fills the publications dictionary
-        for pubs in nodeinfo[pack][node][0]:
-            f = pubs.find("[")
-            toptype = pubs[f+1:-1]
-            q = pubs.find("/",1,f-1)
-            if(q == -1):
-                title = pubs[1:f-1]
-            else:
-                title = pubs[q+1:f-1]
-            Complete[packages[pack]]["nodes"][nodes[pack][node]]["publications"][title] = {
-                "elementType" : "topic",
-                "name" : pubs[:f-1],
-                "type" : toptype
-                }
-        ##fills the subscriptions dictionary
-        for subs in nodeinfo[pack][node][1]:
-            f = subs.find("[")
-            toptype = Topics[subs[:f-1]]["type"]
-            q = subs.find("/",1,f-1)
-            if(q == -1):
-                title = subs[1:f-1]
-            else:
-                title = subs[q+1:f-1]
-            Complete[packages[pack]]["nodes"][nodes[pack][node]]["subscriptions"][title] = {
-                "elementType" : "topic",
-                "name" : subs[:f-1],
-                "type" : toptype
-                }
-        ##fills the services provided dictionary
-        for servs in nodeinfo[pack][node][2]:
-            q = servs.find("/",1)
-            if(q == -1):
-                title = servs[1:]
-            else:
-                title = servs[q+1:]
-            Complete[packages[pack]]["nodes"][nodes[pack][node]]["services provided"][title] = {
-                "elementType" : "service",
-                "name" : servs,
-                "type" : Services[title]["type"],
-                "args" : Services[title]["args"]
-                }
 print("Packages and Nodes have been inserted into dictionary")
 
 ##creates a text file with all of the messages listed and creates a list that holds all of the messages
@@ -687,7 +663,7 @@ for srv in srvlist:
 print("Services and additional messages have been added to dictionary")
 print("Printing Dictionary:")
 ##prints both whole dictionaries using json and formats the dictionaries by indenting as it moves deeper in the heirarchy
-##print(json.dumps(Topics, indent=8))
+print(json.dumps(Topics, indent=8))
 print(json.dumps(Complete, indent=8))
-##print(json.dumps(Services, indent=8))
+print(json.dumps(Services, indent=8))
 print(time.time()-start)
