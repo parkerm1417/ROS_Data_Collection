@@ -27,10 +27,8 @@ Services = {}
 packages = [f for f in listdir('/opt/ros/noetic/share')]
 packages.sort()
 
-looplen=0 ##Value to be adjusted to test the code, set looplen equal to len(packages) for complete list
-
 n = 0
-for pack in range(looplen,len(packages)):
+for pack in range(0,len(packages)):
     Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
     "elementType" : "package",
     "name" : packages[pack],
@@ -68,12 +66,7 @@ for pack in Complete:
             time.sleep(1)
             noder = subprocess.Popen(rnode,shell=True)
             time.sleep(1)
-            ##killer = subprocess.Popen(kill,shell=True)
-            time.sleep(1)
-
-            ##runner.terminate()
-            noder.terminate()
-            ##killer.terminate()
+            
             
             file = open("nodeinfo.txt")
             lines = file.readlines()       ##reads all of the text within the file and sets it equal to a variable
@@ -132,7 +125,7 @@ for pack in Complete:
                             "elementType": "node",
                             "name": node,
                             "package": pack}},
-                        "subscribers": {},
+                        "subscribers": {}
                         }
                     if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
                         Topics[topicname]["type"] = datatype
@@ -148,8 +141,8 @@ for pack in Complete:
                         title = ss[q+1:f-1]
                     Complete[pack]["nodes"][node]["subscriptions"][ss] = {
                         "elementType" : "topic",
-                        "name" : ss[:f-1],
-                        "type" : toptype }
+                        "name" : ss[:f-1]
+                        }
                     ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
                     bs = ss.find("/", 1, ob)
                     topicname = ss[:ob-1]
@@ -213,7 +206,12 @@ for pack in Complete:
                                 "package": pack
                                 }
                 
+            killer = subprocess.Popen(kill,shell=True)
+            time.sleep(1)
 
+            runner.terminate()
+            noder.terminate()
+            killer.terminate()
             ##the info then gets placed at the position of the specific node
             e = e + 1
             print(e)    ##displays consecutive numbers as each node is run
