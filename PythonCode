@@ -22,9 +22,14 @@ Complete = {}
 Topics = {}
 Services = {}
 
+system("rosversion -d > distribution.txt")
+distro = open("distribution.txt")
+ROS_DISTRO_LIST = str(distro.readlines())
+ROS_DISTRO = ROS_DISTRO_LIST[2:-4]
+distro.close()
 
 ##Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
-packages = [f for f in listdir('/opt/ros/noetic/share')]
+packages = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/share')]
 packages.sort()
 
 n = 0
@@ -39,7 +44,7 @@ for pack in range(0,len(packages)):
 
 ##    nodeinfo.append([])         #for each package, a nodeinfo list is added within the package list
     try:
-        temp = [f for f in listdir('/opt/ros/noetic/lib/' + packages[pack])]  ##each package directory is accessed
+        temp = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/lib/' + packages[pack])]  ##each package directory is accessed
     except:
         temp = []
     pn = [x for x in temp if x[-3:] != ".py"]
@@ -101,9 +106,9 @@ for pack in Complete:
                         title = ss[1:f-1]
                     else:
                         title = ss[q+1:f-1]
-                    Complete[pack]["nodes"][node]["publications"][ss] = {
+                    Complete[pack]["nodes"][node]["publications"][title] = {
                         "elementType" : "topic",
-                        "name" : ss[:f-1],
+                        "name" : title,
                         "type" : toptype }
                     ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
                     bs = ss.find("/", 1, ob)
@@ -135,13 +140,10 @@ for pack in Complete:
                     f = ss.find("[")
                     toptype = ss[f+1:-1]
                     q = ss.find("/",1,f-1)
-                    if(q == -1):
-                        title = ss[1:f-1]
-                    else:
-                        title = ss[q+1:f-1]
-                    Complete[pack]["nodes"][node]["subscriptions"][ss] = {
+                    title = ss[:f-1]
+                    Complete[pack]["nodes"][node]["subscriptions"][title] = {
                         "elementType" : "topic",
-                        "name" : ss[:f-1]
+                        "name" : title
                         }
                     ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
                     bs = ss.find("/", 1, ob)
