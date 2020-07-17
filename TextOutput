@@ -24,17 +24,17 @@ topics = json.loads(top)
 for pack in bigdict:
     print(pack)
     for node in bigdict[pack]["nodes"]:
-        print("    " + node)
+        print("    Node: " + node)
         print("        Publications:")
         for pub in bigdict[pack]["nodes"][node]["publications"]:
-            print("            " + pub)
+            print("            Topic: " + pub)
             print("                Message Type: " + bigdict[pack]["nodes"][node]["publications"][pub]["type"])
             print("                Message Comments:")
             for com in messages[bigdict[pack]["nodes"][node]["publications"][pub]["type"]]["comments"]:
                 print("                    " + str(messages[bigdict[pack]["nodes"][node]["publications"][pub]["type"]]["comments"][com]))
         print("        Subscriptions:")
         for sub in bigdict[pack]["nodes"][node]["subscriptions"]:
-            print("            " + sub)
+            print("            Topic: " + sub)
             print("                Message Type: " + topics[sub]["type"])
             print("                Comments:")
             if topics[sub]["type"] != "":
@@ -82,4 +82,3 @@ for pack in bigdict:
                     print("                Response Message Comments: ")
                     for com in messages["roscpp/SetLoggerLevelRequest"]["comments"]:
                         print("            " + str(messages["roscpp/SetLoggerLevelRequest"]["comments"][com]))
-                        
