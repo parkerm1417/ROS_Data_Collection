@@ -2813,14 +2813,14 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/fibonacci/cancel": {
+                                        "fibonacci/cancel": {
                                                 "elementType": "topic",
-                                                "name": "/fibonacci/cancel",
+                                                "name": "fibonacci/cancel",
                                                 "type": "actionlib_msgs/GoalID"
                                         },
-                                        "/fibonacci/goal": {
+                                        "fibonacci/goal": {
                                                 "elementType": "topic",
-                                                "name": "/fibonacci/goal",
+                                                "name": "fibonacci/goal",
                                                 "type": "actionlib_tutorials/FibonacciActionGoal"
                                         }
                                 },
@@ -2866,19 +2866,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/averaging/cancel": {
+                                        "averaging/cancel": {
                                                 "elementType": "topic",
-                                                "name": "/averaging/cancel",
+                                                "name": "averaging/cancel",
                                                 "type": "actionlib_msgs/GoalID"
                                         },
-                                        "/averaging/goal": {
+                                        "averaging/goal": {
                                                 "elementType": "topic",
-                                                "name": "/averaging/goal",
+                                                "name": "averaging/goal",
                                                 "type": "actionlib_tutorials/AveragingActionGoal"
                                         },
-                                        "/random_number": {
+                                        "random_number": {
                                                 "elementType": "topic",
-                                                "name": "/random_number",
+                                                "name": "random_number",
                                                 "type": "std_msgs/Float32"
                                         }
                                 },
@@ -2919,19 +2919,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/averaging/feedback": {
+                                        "averaging/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/averaging/feedback",
+                                                "name": "averaging/feedback",
                                                 "type": "actionlib_tutorials/AveragingActionFeedback"
                                         },
-                                        "/averaging/result": {
+                                        "averaging/result": {
                                                 "elementType": "topic",
-                                                "name": "/averaging/result",
+                                                "name": "averaging/result",
                                                 "type": "actionlib_tutorials/AveragingActionResult"
                                         },
-                                        "/averaging/status": {
+                                        "averaging/status": {
                                                 "elementType": "topic",
-                                                "name": "/averaging/status",
+                                                "name": "averaging/status",
                                                 "type": "actionlib_msgs/GoalStatusArray"
                                         }
                                 },
@@ -2972,19 +2972,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/fibonacci/feedback": {
+                                        "fibonacci/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/fibonacci/feedback",
+                                                "name": "fibonacci/feedback",
                                                 "type": "actionlib_tutorials/FibonacciActionFeedback"
                                         },
-                                        "/fibonacci/result": {
+                                        "fibonacci/result": {
                                                 "elementType": "topic",
-                                                "name": "/fibonacci/result",
+                                                "name": "fibonacci/result",
                                                 "type": "actionlib_tutorials/FibonacciActionResult"
                                         },
-                                        "/fibonacci/status": {
+                                        "fibonacci/status": {
                                                 "elementType": "topic",
-                                                "name": "/fibonacci/status",
+                                                "name": "fibonacci/status",
                                                 "type": "actionlib_msgs/GoalStatusArray"
                                         }
                                 },
@@ -4771,9 +4771,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -10999,9 +10999,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -11032,9 +11032,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -11065,9 +11065,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -11098,9 +11098,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -11695,9 +11695,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/diagnostics": {
+                                        "diagnostics": {
                                                 "elementType": "topic",
-                                                "name": "/diagnostics",
+                                                "name": "diagnostics",
                                                 "type": "diagnostic_msgs/DiagnosticArray"
                                         }
                                 },
@@ -11734,9 +11734,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -12179,9 +12179,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -12212,9 +12212,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17437,9 +17437,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17531,9 +17531,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17564,9 +17564,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17597,9 +17597,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17630,9 +17630,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17663,9 +17663,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17696,9 +17696,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -17729,9 +17729,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -20060,9 +20060,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -20166,33 +20166,33 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/image_rotate_1595273773986706666/get_loggers",
+                                                "name": "/image_rotate_1595277024682916171/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/image_rotate_1595273773986706666/set_logger_level",
+                                                "name": "/image_rotate_1595277024682916171/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         },
                                         "set_parameters": {
                                                 "elementType": "service",
-                                                "name": "/image_rotate_1595273773986706666/set_parameters",
+                                                "name": "/image_rotate_1595277024682916171/set_parameters",
                                                 "type": "dynamic_reconfigure/Reconfigure",
                                                 "args": "config"
                                         },
@@ -20236,9 +20236,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -20269,9 +20269,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -20317,22 +20317,22 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/image": {
+                                        "image": {
                                                 "elementType": "topic",
-                                                "name": "/image",
+                                                "name": "image",
                                                 "type": "sensor_msgs/Image"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/extract_images_1595273792233527888/get_loggers",
+                                                "name": "/extract_images_1595277041092106857/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/extract_images_1595273792233527888/set_logger_level",
+                                                "name": "/extract_images_1595277041092106857/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -20350,22 +20350,22 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/image": {
+                                        "image": {
                                                 "elementType": "topic",
-                                                "name": "/image",
+                                                "name": "image",
                                                 "type": "sensor_msgs/Image"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/disparity_view_1595273796745828866/get_loggers",
+                                                "name": "/disparity_view_1595277045700931150/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/disparity_view_1595273796745828866/set_logger_level",
+                                                "name": "/disparity_view_1595277045700931150/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -20383,22 +20383,22 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/image": {
+                                        "image": {
                                                 "elementType": "topic",
-                                                "name": "/image",
+                                                "name": "image",
                                                 "type": "sensor_msgs/Image"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/video_recorder_1595273802027538190/get_loggers",
+                                                "name": "/video_recorder_1595277050345945888/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/video_recorder_1595273802027538190/set_logger_level",
+                                                "name": "/video_recorder_1595277050345945888/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -20431,9 +20431,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/image": {
+                                        "image": {
                                                 "elementType": "topic",
-                                                "name": "/image",
+                                                "name": "image",
                                                 "type": "sensor_msgs/Image"
                                         }
                                 },
@@ -20488,45 +20488,45 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/camera_info": {
+                                        "camera_info": {
                                                 "elementType": "topic",
-                                                "name": "/camera_info",
+                                                "name": "camera_info",
                                                 "type": "sensor_msgs/CameraInfo"
                                         },
-                                        "/image": {
+                                        "image": {
                                                 "elementType": "topic",
-                                                "name": "/image",
+                                                "name": "image",
                                                 "type": "sensor_msgs/Image"
                                         }
                                 },
                                 "services provided": {
                                         "end": {
                                                 "elementType": "service",
-                                                "name": "/image_saver_1595273817796177801/end",
+                                                "name": "/image_saver_1595277061627626115/end",
                                                 "type": "std_srvs/Trigger",
                                                 "args": ""
                                         },
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/image_saver_1595273817796177801/get_loggers",
+                                                "name": "/image_saver_1595277061627626115/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "save": {
                                                 "elementType": "service",
-                                                "name": "/image_saver_1595273817796177801/save",
+                                                "name": "/image_saver_1595277061627626115/save",
                                                 "type": "std_srvs/Empty",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/image_saver_1595273817796177801/set_logger_level",
+                                                "name": "/image_saver_1595277061627626115/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         },
                                         "start": {
                                                 "elementType": "service",
-                                                "name": "/image_saver_1595273817796177801/start",
+                                                "name": "/image_saver_1595277061627626115/start",
                                                 "type": "std_srvs/Trigger",
                                                 "args": ""
                                         }
@@ -20544,9 +20544,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -20577,32 +20577,32 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/stereo/disparity": {
+                                        "stereo/disparity": {
                                                 "elementType": "topic",
-                                                "name": "/stereo/disparity",
+                                                "name": "stereo/disparity",
                                                 "type": "stereo_msgs/DisparityImage"
                                         },
-                                        "/stereo/left/image": {
+                                        "stereo/left/image": {
                                                 "elementType": "topic",
-                                                "name": "/stereo/left/image",
+                                                "name": "stereo/left/image",
                                                 "type": "sensor_msgs/Image"
                                         },
-                                        "/stereo/right/image": {
+                                        "stereo/right/image": {
                                                 "elementType": "topic",
-                                                "name": "/stereo/right/image",
+                                                "name": "stereo/right/image",
                                                 "type": "sensor_msgs/Image"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/stereo_view_1595273830586394340/get_loggers",
+                                                "name": "/stereo_view_1595277072863734527/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/stereo_view_1595273830586394340/set_logger_level",
+                                                "name": "/stereo_view_1595277072863734527/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -20643,9 +20643,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/basic_controls/feedback": {
+                                        "basic_controls/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/basic_controls/feedback",
+                                                "name": "basic_controls/feedback",
                                                 "type": "visualization_msgs/InteractiveMarkerFeedback"
                                         }
                                 },
@@ -20686,9 +20686,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/cube/feedback": {
+                                        "cube/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/cube/feedback",
+                                                "name": "cube/feedback",
                                                 "type": "visualization_msgs/InteractiveMarkerFeedback"
                                         }
                                 },
@@ -20729,9 +20729,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/simple_marker/feedback": {
+                                        "simple_marker/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/simple_marker/feedback",
+                                                "name": "simple_marker/feedback",
                                                 "type": "visualization_msgs/InteractiveMarkerFeedback"
                                         }
                                 },
@@ -20772,9 +20772,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/pong/feedback": {
+                                        "pong/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/pong/feedback",
+                                                "name": "pong/feedback",
                                                 "type": "visualization_msgs/InteractiveMarkerFeedback"
                                         }
                                 },
@@ -20815,9 +20815,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/menu/feedback": {
+                                        "menu/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/menu/feedback",
+                                                "name": "menu/feedback",
                                                 "type": "visualization_msgs/InteractiveMarkerFeedback"
                                         }
                                 },
@@ -20858,9 +20858,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/selection/feedback": {
+                                        "selection/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/selection/feedback",
+                                                "name": "selection/feedback",
                                                 "type": "visualization_msgs/InteractiveMarkerFeedback"
                                         }
                                 },
@@ -20901,9 +20901,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/point_cloud/feedback": {
+                                        "point_cloud/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/point_cloud/feedback",
+                                                "name": "point_cloud/feedback",
                                                 "type": "visualization_msgs/InteractiveMarkerFeedback"
                                         }
                                 },
@@ -20955,9 +20955,34 @@
                         "joint_state_publisher": {
                                 "elementType": "node",
                                 "name": "joint_state_publisher",
-                                "publications": {},
-                                "subscriptions": {},
-                                "services provided": {},
+                                "publications": {
+                                        "rosout_agg": {
+                                                "elementType": "topic",
+                                                "name": "rosout_agg",
+                                                "type": "rosgraph_msgs/Log"
+                                        }
+                                },
+                                "subscriptions": {
+                                        "rosout": {
+                                                "elementType": "topic",
+                                                "name": "rosout",
+                                                "type": "rosgraph_msgs/Log"
+                                        }
+                                },
+                                "services provided": {
+                                        "get_loggers": {
+                                                "elementType": "service",
+                                                "name": "/rosout/get_loggers",
+                                                "type": "roscpp/GetLoggers",
+                                                "args": ""
+                                        },
+                                        "set_logger_level": {
+                                                "elementType": "service",
+                                                "name": "/rosout/set_logger_level",
+                                                "type": "roscpp/SetLoggerLevel",
+                                                "args": "logger level"
+                                        }
+                                },
                                 "services used": {}
                         }
                 },
@@ -20971,9 +20996,34 @@
                         "joint_state_publisher_gui": {
                                 "elementType": "node",
                                 "name": "joint_state_publisher_gui",
-                                "publications": {},
-                                "subscriptions": {},
-                                "services provided": {},
+                                "publications": {
+                                        "rosout_agg": {
+                                                "elementType": "topic",
+                                                "name": "rosout_agg",
+                                                "type": "rosgraph_msgs/Log"
+                                        }
+                                },
+                                "subscriptions": {
+                                        "rosout": {
+                                                "elementType": "topic",
+                                                "name": "rosout",
+                                                "type": "rosgraph_msgs/Log"
+                                        }
+                                },
+                                "services provided": {
+                                        "get_loggers": {
+                                                "elementType": "service",
+                                                "name": "/rosout/get_loggers",
+                                                "type": "roscpp/GetLoggers",
+                                                "args": ""
+                                        },
+                                        "set_logger_level": {
+                                                "elementType": "service",
+                                                "name": "/rosout/set_logger_level",
+                                                "type": "roscpp/SetLoggerLevel",
+                                                "args": "logger level"
+                                        }
+                                },
                                 "services used": {}
                         }
                 },
@@ -21009,19 +21059,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/cloud": {
+                                        "cloud": {
                                                 "elementType": "topic",
-                                                "name": "/cloud",
+                                                "name": "cloud",
                                                 "type": "sensor_msgs/PointCloud2"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -21076,9 +21126,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -21109,19 +21159,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/scan": {
+                                        "scan": {
                                                 "elementType": "topic",
-                                                "name": "/scan",
+                                                "name": "scan",
                                                 "type": "sensor_msgs/LaserScan"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -21176,19 +21226,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/cloud": {
+                                        "cloud": {
                                                 "elementType": "topic",
-                                                "name": "/cloud",
+                                                "name": "cloud",
                                                 "type": "sensor_msgs/PointCloud2"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -21248,34 +21298,34 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/cloud_in1": {
+                                        "cloud_in1": {
                                                 "elementType": "topic",
-                                                "name": "/cloud_in1",
+                                                "name": "cloud_in1",
                                                 "type": "sensor_msgs/PointCloud"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/merge_clouds_1595273929066214935/get_loggers",
-                                                "type": "ERROR: Unable to communicate with service [/merge_clouds_1595273929066214935/get_loggers], address [rosrpc://matthewparker:55469]",
-                                                "args": "ERROR: Unable to communicate with service [/merge_clouds_1595273929066214935/get_loggers], address [rosrpc://matthewparker:55469]"
+                                                "name": "/merge_clouds/get_loggers",
+                                                "type": "roscpp/GetLoggers",
+                                                "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/merge_clouds_1595273929066214935/set_logger_level",
-                                                "type": "ERROR: Unable to communicate with service [/merge_clouds_1595273929066214935/set_logger_level], address [rosrpc://matthewparker:55469]",
-                                                "args": "ERROR: Unable to communicate with service [/merge_clouds_1595273929066214935/set_logger_level], address [rosrpc://matthewparker:55469]"
+                                                "name": "/merge_clouds/set_logger_level",
+                                                "type": "roscpp/SetLoggerLevel",
+                                                "args": "logger level"
                                         }
                                 },
                                 "services used": {}
@@ -21291,19 +21341,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/scan_in": {
+                                        "scan_in": {
                                                 "elementType": "topic",
-                                                "name": "/scan_in",
+                                                "name": "scan_in",
                                                 "type": "sensor_msgs/PointCloud"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -21651,19 +21701,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/scan_in": {
+                                        "scan_in": {
                                                 "elementType": "topic",
-                                                "name": "/scan_in",
+                                                "name": "scan_in",
                                                 "type": "sensor_msgs/PointCloud"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -21699,19 +21749,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/scan": {
+                                        "scan": {
                                                 "elementType": "topic",
-                                                "name": "/scan",
+                                                "name": "scan",
                                                 "type": "sensor_msgs/LaserScan"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -21747,9 +21797,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/scan": {
+                                        "scan": {
                                                 "elementType": "topic",
-                                                "name": "/scan",
+                                                "name": "scan",
                                                 "type": "sensor_msgs/LaserScan"
                                         }
                                 },
@@ -21812,29 +21862,29 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/myviz_1595273959663196889/get_loggers",
-                                                "type": "Unknown service [/myviz_1595273959663196889/get_loggers]",
-                                                "args": "ERROR: Service [/myviz_1595273959663196889/get_loggers] is not available."
+                                                "name": "/myviz_1595277173539334695/get_loggers",
+                                                "type": "roscpp/GetLoggers",
+                                                "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/myviz_1595273959663196889/set_logger_level",
-                                                "type": "Unknown service [/myviz_1595273959663196889/set_logger_level]",
-                                                "args": "ERROR: Service [/myviz_1595273959663196889/set_logger_level] is not available."
+                                                "name": "/myviz_1595277173539334695/set_logger_level",
+                                                "type": "roscpp/SetLoggerLevel",
+                                                "args": "logger level"
                                         }
                                 },
                                 "services used": {}
@@ -25654,9 +25704,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -25687,9 +25737,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -25720,9 +25770,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26237,9 +26287,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26270,9 +26320,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26303,9 +26353,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26336,32 +26386,32 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/input": {
+                                        "input": {
                                                 "elementType": "topic",
-                                                "name": "/input",
+                                                "name": "input",
                                                 "type": "sensor_msgs/PointCloud2"
                                         },
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/pointcloud_to_pcd_1595273997238750181/get_loggers",
+                                                "name": "/pointcloud_to_pcd_1595277207979523857/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/pointcloud_to_pcd_1595273997238750181/set_logger_level",
+                                                "name": "/pointcloud_to_pcd_1595277207979523857/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -26384,9 +26434,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/input": {
+                                        "input": {
                                                 "elementType": "topic",
-                                                "name": "/input",
+                                                "name": "input",
                                                 "type": "sensor_msgs/PointCloud2"
                                         }
                                 },
@@ -26446,9 +26496,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26487,9 +26537,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26701,9 +26751,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26784,9 +26834,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26817,9 +26867,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -26850,9 +26900,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27077,9 +27127,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27110,22 +27160,22 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/listener_1595274038980169424/get_loggers",
+                                                "name": "/listener_1595277250501678238/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/listener_1595274038980169424/set_logger_level",
+                                                "name": "/listener_1595277250501678238/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -27143,9 +27193,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27235,9 +27285,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
@@ -27268,9 +27318,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27301,9 +27351,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
@@ -27334,9 +27384,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27400,9 +27450,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27433,9 +27483,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27498,9 +27548,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
@@ -27531,9 +27581,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
@@ -27564,9 +27614,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
@@ -27597,9 +27647,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27630,9 +27680,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
@@ -27663,9 +27713,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/chatter": {
+                                        "chatter": {
                                                 "elementType": "topic",
-                                                "name": "/chatter",
+                                                "name": "chatter",
                                                 "type": "std_msgs/String"
                                         }
                                 },
@@ -27696,9 +27746,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -27822,9 +27872,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28097,9 +28147,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28138,9 +28188,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28221,9 +28271,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28416,9 +28466,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28471,9 +28521,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28533,9 +28583,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28588,22 +28638,22 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout_agg": {
+                                        "rosout_agg": {
                                                 "elementType": "topic",
-                                                "name": "/rosout_agg",
+                                                "name": "rosout_agg",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/rqt_gui_py_node_102838/get_loggers",
+                                                "name": "/rqt_gui_py_node_132978/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/rqt_gui_py_node_102838/set_logger_level",
+                                                "name": "/rqt_gui_py_node_132978/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -28629,9 +28679,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28670,9 +28720,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28711,9 +28761,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28766,9 +28816,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28807,9 +28857,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28848,9 +28898,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28889,9 +28939,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28930,9 +28980,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -28971,9 +29021,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29012,9 +29062,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29053,9 +29103,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29094,9 +29144,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29142,9 +29192,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29183,9 +29233,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29231,9 +29281,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29279,9 +29329,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29320,9 +29370,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29361,9 +29411,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29402,9 +29452,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29443,9 +29493,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29484,9 +29534,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29525,9 +29575,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29566,9 +29616,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29607,9 +29657,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29648,9 +29698,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -29704,45 +29754,45 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/rviz_1595274332919148341/get_loggers",
+                                                "name": "/rviz_1595277537090133625/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "load_config": {
                                                 "elementType": "service",
-                                                "name": "/rviz_1595274332919148341/load_config",
+                                                "name": "/rviz_1595277537090133625/load_config",
                                                 "type": "rviz/SendFilePath",
                                                 "args": "path"
                                         },
                                         "reload_shaders": {
                                                 "elementType": "service",
-                                                "name": "/rviz_1595274332919148341/reload_shaders",
+                                                "name": "/rviz_1595277537090133625/reload_shaders",
                                                 "type": "std_srvs/Empty",
                                                 "args": ""
                                         },
                                         "save_config": {
                                                 "elementType": "service",
-                                                "name": "/rviz_1595274332919148341/save_config",
+                                                "name": "/rviz_1595277537090133625/save_config",
                                                 "type": "rviz/SendFilePath",
                                                 "args": "path"
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/rviz_1595274332919148341/set_logger_level",
+                                                "name": "/rviz_1595277537090133625/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -32552,9 +32602,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -32585,9 +32635,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -34127,9 +34177,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -34165,27 +34215,27 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/change_notifier_1595274390519191721/get_loggers",
+                                                "name": "/change_notifier_1595277582832980362/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/change_notifier_1595274390519191721/set_logger_level",
+                                                "name": "/change_notifier_1595277582832980362/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -34203,27 +34253,27 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/view_frames_105681_1595274396330/get_loggers",
+                                                "name": "/view_frames_135827_1595277588118/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/view_frames_105681_1595274396330/set_logger_level",
+                                                "name": "/view_frames_135827_1595277588118/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -34241,27 +34291,27 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
                                 "services provided": {
                                         "get_loggers": {
                                                 "elementType": "service",
-                                                "name": "/tf_monitor_1595274401758682421/get_loggers",
+                                                "name": "/tf_monitor_1595277593127146209/get_loggers",
                                                 "type": "roscpp/GetLoggers",
                                                 "args": ""
                                         },
                                         "set_logger_level": {
                                                 "elementType": "service",
-                                                "name": "/tf_monitor_1595274401758682421/set_logger_level",
+                                                "name": "/tf_monitor_1595277593127146209/set_logger_level",
                                                 "type": "roscpp/SetLoggerLevel",
                                                 "args": "logger level"
                                         }
@@ -34284,9 +34334,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf_old": {
+                                        "tf_old": {
                                                 "elementType": "topic",
-                                                "name": "/tf_old",
+                                                "name": "tf_old",
                                                 "type": "tf/tfMessage"
                                         }
                                 },
@@ -34317,9 +34367,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -34350,14 +34400,14 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf/tfMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -36126,24 +36176,24 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf/tfMessage"
                                         },
-                                        "/tf2_buffer_server/cancel": {
+                                        "tf2_buffer_server/cancel": {
                                                 "elementType": "topic",
-                                                "name": "/tf2_buffer_server/cancel",
+                                                "name": "tf2_buffer_server/cancel",
                                                 "type": "actionlib_msgs/GoalID"
                                         },
-                                        "/tf2_buffer_server/goal": {
+                                        "tf2_buffer_server/goal": {
                                                 "elementType": "topic",
-                                                "name": "/tf2_buffer_server/goal",
+                                                "name": "tf2_buffer_server/goal",
                                                 "type": "tf2_msgs/LookupTransformActionGoal"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         }
                                 },
@@ -36174,9 +36224,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36222,9 +36272,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36326,9 +36376,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36359,9 +36409,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36392,9 +36442,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36425,9 +36475,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36458,9 +36508,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36491,9 +36541,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36524,9 +36574,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36557,9 +36607,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36590,9 +36640,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36623,9 +36673,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36656,9 +36706,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -36689,9 +36739,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -37507,19 +37557,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/turtle_shape/feedback": {
+                                        "turtle_shape/feedback": {
                                                 "elementType": "topic",
-                                                "name": "/turtle_shape/feedback",
+                                                "name": "turtle_shape/feedback",
                                                 "type": "turtle_actionlib/ShapeActionFeedback"
                                         },
-                                        "/turtle_shape/result": {
+                                        "turtle_shape/result": {
                                                 "elementType": "topic",
-                                                "name": "/turtle_shape/result",
+                                                "name": "turtle_shape/result",
                                                 "type": "turtle_actionlib/ShapeActionResult"
                                         },
-                                        "/turtle_shape/status": {
+                                        "turtle_shape/status": {
                                                 "elementType": "topic",
-                                                "name": "/turtle_shape/status",
+                                                "name": "turtle_shape/status",
                                                 "type": "actionlib_msgs/GoalStatusArray"
                                         }
                                 },
@@ -37570,19 +37620,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/turtle1/pose": {
+                                        "turtle1/pose": {
                                                 "elementType": "topic",
-                                                "name": "/turtle1/pose",
+                                                "name": "turtle1/pose",
                                                 "type": "turtlesim/Pose"
                                         },
-                                        "/turtle_shape/cancel": {
+                                        "turtle_shape/cancel": {
                                                 "elementType": "topic",
-                                                "name": "/turtle_shape/cancel",
+                                                "name": "turtle_shape/cancel",
                                                 "type": "actionlib_msgs/GoalID"
                                         },
-                                        "/turtle_shape/goal": {
+                                        "turtle_shape/goal": {
                                                 "elementType": "topic",
-                                                "name": "/turtle_shape/goal",
+                                                "name": "turtle_shape/goal",
                                                 "type": "turtle_actionlib/ShapeActionGoal"
                                         }
                                 },
@@ -38419,19 +38469,19 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/tf": {
+                                        "tf": {
                                                 "elementType": "topic",
-                                                "name": "/tf",
+                                                "name": "tf",
                                                 "type": "tf/tfMessage"
                                         },
-                                        "/tf_static": {
+                                        "tf_static": {
                                                 "elementType": "topic",
-                                                "name": "/tf_static",
+                                                "name": "tf_static",
                                                 "type": "tf2_msgs/TFMessage"
                                         },
-                                        "/turtle_point_stamped": {
+                                        "turtle_point_stamped": {
                                                 "elementType": "topic",
-                                                "name": "/turtle_point_stamped",
+                                                "name": "turtle_point_stamped",
                                                 "type": "geometry_msgs/PointStamped"
                                         }
                                 },
@@ -38489,9 +38539,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -38557,9 +38607,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
@@ -38635,9 +38685,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/turtle1/cmd_vel": {
+                                        "turtle1/cmd_vel": {
                                                 "elementType": "topic",
-                                                "name": "/turtle1/cmd_vel",
+                                                "name": "turtle1/cmd_vel",
                                                 "type": "geometry_msgs/Twist"
                                         }
                                 },
@@ -38715,9 +38765,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/input/pose": {
+                                        "input/pose": {
                                                 "elementType": "topic",
-                                                "name": "/input/pose",
+                                                "name": "input/pose",
                                                 "type": "turtlesim/Pose"
                                         }
                                 },
@@ -38753,9 +38803,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/turtle1/pose": {
+                                        "turtle1/pose": {
                                                 "elementType": "topic",
-                                                "name": "/turtle1/pose",
+                                                "name": "turtle1/pose",
                                                 "type": "turtlesim/Pose"
                                         }
                                 },
@@ -43325,9 +43375,9 @@
                                         }
                                 },
                                 "subscriptions": {
-                                        "/rosout": {
+                                        "rosout": {
                                                 "elementType": "topic",
-                                                "name": "/rosout",
+                                                "name": "rosout",
                                                 "type": "rosgraph_msgs/Log"
                                         }
                                 },
