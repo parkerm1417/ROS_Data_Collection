@@ -17,802 +17,823 @@ except:
 
 nodes = []
 nodeinfo = []
-dellist=[]
 Complete = {}
 Topics = {}
 Services = {}
 
-system("rosversion -d > distribution.txt")
-distro = open("distribution.txt")
-ROS_DISTRO_LIST = str(distro.readlines())
-ROS_DISTRO = ROS_DISTRO_LIST[2:-4]
-distro.close()
+def GetDistro():
+    return subprocess.getoutput("rosversion -d")
 
-##Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
-packages = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/share')]
-packages.sort()
+def PacksAndNodes(ROS_DISTRO):
+    ##Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
+    packages = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/share')]
+    packages.sort()
 
-n = 0
-for pack in range(0,len(packages)):
-    Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
-    "elementType" : "package",
-    "name" : packages[pack],
-    "nodes" : {},
-    "messages" : {},
-    "services" : {}
-    }
+    n = 0
+    for pack in range(0,len(packages)):
+        Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
+        "elementType" : "package",
+        "name" : packages[pack],
+        "nodes" : {},
+        "messages" : {},
+        "services" : {}
+        }
 
-##    nodeinfo.append([])         #for each package, a nodeinfo list is added within the package list
-    try:
-        temp = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/lib/' + packages[pack])]  ##each package directory is accessed
-    except:
-        temp = []
-    pn = [x for x in temp if x[-3:] != ".py"]
-    for node in pn:
+    ##    nodeinfo.append([])         #for each package, a nodeinfo list is added within the package list
+        try:
+            temp = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/lib/' + packages[pack])]  ##each package directory is accessed
+        except:
+            temp = []
+        pn = [x for x in temp if x[-3:] != ".py"]
+        for node in pn:
 
-            Complete[packages[pack]]["nodes"][node] = {
-            "elementType" : "node",
-            "name" : node,
-            "publications": {},
-            "subscriptions": {},
-            "services provided": {},
-            "services used": {}
-            }
+                Complete[packages[pack]]["nodes"][node] = {
+                "elementType" : "node",
+                "name" : node,
+                "publications": {},
+                "subscriptions": {},
+                "services provided": {},
+                "services used": {}
+                }
+    return
 
-e=0
-for pack in Complete:
-    if Complete[pack]["nodes"] != {}:       ##ensure that there are nodes within the package list to be run
-        for node in Complete[pack]["nodes"]:
-            run = "rosrun " + pack + " " + node + " __name:="+node     ##runs each node in the terminal and renames the node to be exact when being terminated 
-            rnode = "rosnode info -q /" + node + " > nodeinfo.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
-            kill = "rosnode kill -a"       ##kills all active nodes
-            
-            runner = subprocess.Popen(run,shell=True)
-            time.sleep(1)
-            noder = subprocess.Popen(rnode,shell=True)
-            time.sleep(1)
-            
-            
-            file = open("nodeinfo.txt")
-            lines = file.readlines()       ##reads all of the text within the file and sets it equal to a variable
-            file.close()
-            pub = 0
-            sub = 0
-            serv = 0
+def PubSubServ():
+    e=0
+    for pack in Complete:
+        if Complete[pack]["nodes"] != {}:       ##ensure that there are nodes within the package list to be run
+            for node in Complete[pack]["nodes"]:
+                run = "rosrun " + pack + " " + node + " __name:="+node     ##runs each node in the terminal and renames the node to be exact when being terminated 
+                rnode = "rosnode info -q /" + node + " > nodeinfo.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
+                kill = "rosnode kill -a"       ##kills all active nodes
+                
+                runner = subprocess.Popen(run,shell=True)
+                time.sleep(1)
+                noder = subprocess.Popen(rnode,shell=True)
+                time.sleep(1)
+                
+                
+                file = open("nodeinfo.txt")
+                lines = file.readlines()       ##reads all of the text within the file and sets it equal to a variable
+                file.close()
+                pub = 0
+                sub = 0
+                serv = 0
 
-            ##Looks at the fourth letter of each line to determine whether the information is about a publication, subscription, or service
-            for n in range(len(lines)):
-                if (lines[n] != "\n"):
-                    if (lines[n][3] == "l"):
-                        pub = n
-                    elif(lines[n][3] == "s"):
-                        sub = n
-                    elif (lines[n][3] == "v"):
-                        serv = n
+                ##Looks at the fourth letter of each line to determine whether the information is about a publication, subscription, or service
+                for n in range(len(lines)):
+                    if (lines[n] != "\n"):
+                        if (lines[n][3] == "l"):
+                            pub = n
+                        elif(lines[n][3] == "s"):
+                            sub = n
+                        elif (lines[n][3] == "v"):
+                            serv = n
 
-            pubtemp=[]
-            subtemp=[]
-            servtemp=[]
-            nodeinfotemp = []
+                pubtemp=[]
+                subtemp=[]
+                servtemp=[]
+                nodeinfotemp = []
 
-            ##adds the publication, subscription, and service info to temporary lists
-            for n in range(len(lines)):
-                if (n>pub and n<sub-1):
-                    ss = lines[n][3:-1]
-                    f = ss.find("[")
-                    toptype = ss[f+1:-1]
-                    q = ss.find("/",1,f-1)
-                    if(q == -1):
-                        title = ss[1:f-1]
-                    else:
-                        title = ss[q+1:f-1]
-                    Complete[pack]["nodes"][node]["publications"][title] = {
-                        "elementType" : "topic",
-                        "name" : title,
-                        "type" : toptype }
-                    ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
-                    bs = ss.find("/", 1, ob)
-                    topicname = ss[:ob-1]
-                    datatype = ss[ob+1:-1]
-                    try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
-                        Topics[topicname]["publishers"][node] = {
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack
+                ##adds the publication, subscription, and service info to temporary lists
+                for n in range(len(lines)):
+                    if (n>pub and n<sub-1):
+                        ss = lines[n][3:-1]
+                        f = ss.find("[")
+                        toptype = ss[f+1:-1]
+                        q = ss.find("/",1,f-1)
+                        if(q == -1):
+                            title = ss[1:f-1]
+                        else:
+                            title = ss[q+1:f-1]
+                        Complete[pack]["nodes"][node]["publications"][title] = {
+                            "elementType" : "topic",
+                            "name" : title,
+                            "type" : toptype }
+                        ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
+                        bs = ss.find("/", 1, ob)
+                        topicname = ss[:ob-1]
+                        datatype = ss[ob+1:-1]
+                        try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
+                            Topics[topicname]["publishers"][node] = {
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack
+                                }
+                        except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
+                            Topics[topicname] = {
+                            "elementType": "topic",
+                            "name": topicname,
+                            "type": "",
+                            "data": "TBD",
+                            "publishers": {node:{
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack}},
+                            "subscribers": {}
                             }
-                    except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
-                        Topics[topicname] = {
-                        "elementType": "topic",
-                        "name": topicname,
-                        "type": "",
-                        "data": "TBD",
-                        "publishers": {node:{
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack}},
-                        "subscribers": {}
-                        }
-                    if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
-                        Topics[topicname]["type"] = datatype
+                        if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
+                            Topics[topicname]["type"] = datatype
+                            
+                    elif (n>sub and n<serv-1):
+                        ss = lines[n][3:-1]
+                        f = ss.find("[")
+                        toptype = ss[f+1:-1]
+                        q = ss.find("/",1,f-1)
+                        title = ss[:f-1]
+                        Complete[pack]["nodes"][node]["subscriptions"][title] = {
+                            "elementType" : "topic",
+                            "name" : title
+                            }
+                        ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
+                        bs = ss.find("/", 1, ob)
+                        topicname = ss[:ob-1]
+                        datatype = ss[ob+1:-1]
+                        try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
+                            Topics[topicname]["publishers"][node] = {
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack
+                                }
+                        except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
+                            Topics[topicname] = {
+                            "elementType": "topic",
+                            "name": topicname,
+                            "type": "",
+                            "data": "TBD",
+                            "publishers": {},
+                            "subscribers": {node:{
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack}},
+                            }
+                        if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
+                            Topics[topicname]["type"] = datatype
                         
-                elif (n>sub and n<serv-1):
-                    ss = lines[n][3:-1]
-                    f = ss.find("[")
-                    toptype = ss[f+1:-1]
-                    q = ss.find("/",1,f-1)
-                    title = ss[:f-1]
-                    Complete[pack]["nodes"][node]["subscriptions"][title] = {
-                        "elementType" : "topic",
-                        "name" : title
-                        }
-                    ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
-                    bs = ss.find("/", 1, ob)
-                    topicname = ss[:ob-1]
-                    datatype = ss[ob+1:-1]
-                    try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
-                        Topics[topicname]["publishers"][node] = {
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack
-                            }
-                    except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
-                        Topics[topicname] = {
-                        "elementType": "topic",
-                        "name": topicname,
-                        "type": "",
-                        "data": "TBD",
-                        "publishers": {},
-                        "subscribers": {node:{
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack}},
-                        }
-                    if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
-                        Topics[topicname]["type"] = datatype
-                    
-                elif (n>serv and n<len(lines)-1):
-                    servtemp.append(lines[n][3:-1])
+                    elif (n>serv and n<len(lines)-1):
+                        servtemp.append(lines[n][3:-1])
 
-            for servs in servtemp:
-                args = subprocess.getoutput("rosservice args "+servs)
-                servtype = subprocess.getoutput("rosservice type "+servs)
-                q = servs.find("/",1)
-                if(q == -1):
-                    title = servs[1:]
+                for servs in servtemp:
+                    args = subprocess.getoutput("rosservice args "+servs)
+                    servtype = subprocess.getoutput("rosservice type "+servs)
+                    q = servs.find("/",1)
+                    if(q == -1):
+                        title = servs[1:]
+                    else:
+                        title = servs[q+1:]
+                        
+                    Complete[pack]["nodes"][node]["services provided"][title] = {
+                    "elementType" : "service",
+                    "name" : servs,
+                    "type" : servtype,
+                    "args" : args}
+                    
+                    try:
+                        Services[title]["nodes"][node] = {
+                                    "elementType": "node",
+                                    "name": node,
+                                    "package": pack
+                                    }
+                    except:
+                        Services[title] = {
+                                    "elementType": "service",
+                                    "name": title,
+                                    "type": servtype,
+                                    "args": args,
+                                    "nodes": {}
+                                    }   
+                        Services[title]["nodes"][node] = {
+                                    "elementType": "node",
+                                    "name": node,
+                                    "package": pack
+                                    }
+                    
+                killer = subprocess.Popen(kill,shell=True)
+                time.sleep(1)
+
+                runner.terminate()
+                noder.terminate()
+                killer.terminate()
+                ##the info then gets placed at the position of the specific node
+                e = e + 1
+                print(e)    ##displays consecutive numbers as each node is run
+
+    system("rosnode kill -a")
+    print("All nodes  have been started and subsequently killed")
+    print("Packages and Nodes have been inserted into dictionary")
+    return
+
+def Msgs():
+    ##creates a text file with all of the messages listed and creates a list that holds all of the messages
+    system("rosmsg list > msg_list.txt")
+    msgfile = open("msg_list.txt")
+    msglistlines = msgfile.readlines()
+    msgfile.close()
+    ##fills the messages dictionary
+
+    c = 0
+    for msg in range(len(msglistlines)):
+        bs = msglistlines[msg].find("/")
+        package = msglistlines[msg][:bs]
+        system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
+        Complete[package]["messages"][msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
+                                                                 "elementType": "message",
+                                                                 "fields": {}}
+        msginfo = open("msg_info.txt")
+        msginfolines = msginfo.readlines()
+        msginfo.close()
+        for x in range(len(msginfolines)-1):
+            p = 0
+            while msginfolines[x][p] == " ":
+                p += 1
+            midsp = msginfolines[x].find(" ", p)
+            msgtype = msginfolines[x][p : midsp]
+            msgname = msginfolines[x][midsp + 1:-1]
+
+            if p == 0:
+                lvl1 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
                 else:
-                    title = servs[q+1:]
-                    
-                Complete[pack]["nodes"][node]["services provided"][title] = {
-                "elementType" : "service",
-                "name" : servs,
-                "type" : servtype,
-                "args" : args}
-                
-                try:
-                    Services[title]["nodes"][node] = {
-                                "elementType": "node",
-                                "name": node,
-                                "package": pack
-                                }
-                except:
-                    Services[title] = {
-                                "elementType": "service",
-                                "name": title,
-                                "type": servtype,
-                                "args": args,
-                                "nodes": {}
-                                }   
-                    Services[title]["nodes"][node] = {
-                                "elementType": "node",
-                                "name": node,
-                                "package": pack
-                                }
-                
-            killer = subprocess.Popen(kill,shell=True)
-            time.sleep(1)
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+            elif p == 2:
+                lvl2 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+            elif p == 4:
+                lvl3 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+            elif p == 6:
+                lvl4 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+            elif p == 8:
+                lvl5 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+            elif p == 10:
+                lvl6 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+            elif p == 12:
+                lvl7 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+            elif p == 14:
+                lvl8 = msgname
+                if (msgtype in primitives):
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7]["fields"][lvl8] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7]["fields"][lvl8] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD",
+                        "fields":{}}
+        c += 1
+        print(c)
+    print("Messages have been added to dictionary")
+    return
 
-            runner.terminate()
-            noder.terminate()
-            killer.terminate()
-            ##the info then gets placed at the position of the specific node
-            e = e + 1
-            print(e)    ##displays consecutive numbers as each node is run
-
-system("rosnode kill -a")
-print("All nodes  have been started and subsequently killed")
-print("Packages and Nodes have been inserted into dictionary")
-
-##creates a text file with all of the messages listed and creates a list that holds all of the messages
-system("rosmsg list > msg_list.txt")
-msgfile = open("msg_list.txt")
-msglistlines = msgfile.readlines()
-msgfile.close()
-##fills the messages dictionary
-
-c = 0
-for msg in range(len(msglistlines)):
-    bs = msglistlines[msg].find("/")
-    package = msglistlines[msg][:bs]
-    system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
-    Complete[package]["messages"][msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
-                                                             "elementType": "message",
-                                                             "fields": {}}
-    msginfo = open("msg_info.txt")
-    msginfolines = msginfo.readlines()
-    msginfo.close()
-    for x in range(len(msginfolines)-1):
-        p = 0
-        while msginfolines[x][p] == " ":
-            p += 1
-        midsp = msginfolines[x].find(" ", p)
-        msgtype = msginfolines[x][p : midsp]
-        msgname = msginfolines[x][midsp + 1:-1]
-
-        if p == 0:
-            lvl1 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-        elif p == 2:
-            lvl2 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-        elif p == 4:
-            lvl3 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-        elif p == 6:
-            lvl4 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-        elif p == 8:
-            lvl5 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-        elif p == 10:
-            lvl6 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-        elif p == 12:
-            lvl7 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-        elif p == 14:
-            lvl8 = msgname
-            if (msgtype in primitives):
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7]["fields"][lvl8] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
-            else:
-                Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1]["fields"][lvl2]["fields"][lvl3]["fields"][lvl4]["fields"][lvl5]["fields"][lvl6]["fields"][lvl7]["fields"][lvl8] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD",
-                    "fields":{}}
-    c += 1
-    print(c)
-print("Messages have been added to dictionary")
-
-system("rossrv list > servicelist.txt")
-s = open("servicelist.txt")
-srvlist = s.readlines()
-s.close()
-c=0
-
-for srv in srvlist:
-    cmd = "rossrv info "+srv[:-1]+" > msg_info.txt"
-    system(cmd)
-    s = open("msg_info.txt")
-    srvinfo = s.readlines()
+def Srvs():
+    system("rossrv list > servicelist.txt")
+    s = open("servicelist.txt")
+    srvlist = s.readlines()
     s.close()
-    split = srvinfo.index("---\n")
-    bs = srv.find("/")
-    pack = srv[:bs]
-    Complete[pack]["services"][srv[:-1]]= {
-                    "name":srv[:-1],
-                    "elementType": "service",
-                    "requestMessage": srv[:-1]+"Request",
-                    "responseMessage": srv[:-1]+"Response"}
-    Complete[pack]["messages"][srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
-                                    "elementType": "message",
-                                    "fields": {}}
-    Complete[pack]["messages"][srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
-                                     "elementType": "message",
-                                     "fields": {}}
-    for msg in range(len(srvinfo)-1):
-        sp = 0
-        for ch in srvinfo[msg]:
-            if( ch == " "):
-                sp += 1
-            else:
-                break
-                
-        nmsp = srvinfo[msg].find(" ",sp)
-        msgtype = srvinfo[msg][sp:nmsp]
-        msgname = srvinfo[msg][nmsp+1:-1]
-            
-        if msg > split:
+    c=0
 
-            if sp == 0:
-                lv1 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
+    for srv in srvlist:
+        cmd = "rossrv info "+srv[:-1]+" > msg_info.txt"
+        system(cmd)
+        s = open("msg_info.txt")
+        srvinfo = s.readlines()
+        s.close()
+        split = srvinfo.index("---\n")
+        bs = srv.find("/")
+        pack = srv[:bs]
+        Complete[pack]["services"][srv[:-1]]= {
+                        "name":srv[:-1],
+                        "elementType": "service",
+                        "requestMessage": srv[:-1]+"Request",
+                        "responseMessage": srv[:-1]+"Response"}
+        Complete[pack]["messages"][srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
+                                        "elementType": "message",
+                                        "fields": {}}
+        Complete[pack]["messages"][srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
+                                         "elementType": "message",
+                                         "fields": {}}
+        for msg in range(len(srvinfo)-1):
+            sp = 0
+            for ch in srvinfo[msg]:
+                if( ch == " "):
+                    sp += 1
                 else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-    
-            elif sp == 2:
-                lv2 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 4:
-                lv3 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 6:
-                lv4 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 8:
-                lv5 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 10:
-                lv6 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 12:
-                lv7 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 14:
-                lv8 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
+                    break
                     
-        elif msg < split:
-            
-            if sp == 0:
-                lv1 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-    
-            elif sp == 2:
-                lv2 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 4:
-                lv3 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 6:
-                lv4 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 8:
-                lv5 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 10:
-                lv6 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 12:
-                lv7 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-            elif sp == 14:
-                lv8 = msgname
-                if (msgtype in primitives):
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
-                        "name":msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD",
-                        "fields":{}}
-    c += 1
-    print(c)
-print("Services and additional messages have been added to complete dictionary")
-print("Message dictionary creating...")
+            nmsp = srvinfo[msg].find(" ",sp)
+            msgtype = srvinfo[msg][sp:nmsp]
+            msgname = srvinfo[msg][nmsp+1:-1]
+                
+            if msg > split:
 
-##prints Topics, Complete, and Services dictionaries using json and formats the dictionaries by indenting as it moves deeper in the heirarchy
-top = open("TopicsDictionary.json", "w")
-top.write(json.dumps(Topics, indent=8))
-top.close()
+                if sp == 0:
+                    lv1 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+        
+                elif sp == 2:
+                    lv2 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 4:
+                    lv3 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 6:
+                    lv4 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 8:
+                    lv5 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 10:
+                    lv6 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 12:
+                    lv7 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 14:
+                    lv8 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                        
+            elif msg < split:
+                
+                if sp == 0:
+                    lv1 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+        
+                elif sp == 2:
+                    lv2 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 4:
+                    lv3 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 6:
+                    lv4 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 8:
+                    lv5 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 10:
+                    lv6 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 12:
+                    lv7 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+                elif sp == 14:
+                    lv8 = msgname
+                    if (msgtype in primitives):
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
+                            "name":msgname,
+                            "elementType": "dataType",
+                            "storageType": msgtype,
+                            "dmfDataType":"TBD"}
+                    else:
+                        Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1]["fields"][lv2]["fields"][lv3]["fields"][lv4]["fields"][lv5]["fields"][lv6]["fields"][lv7]["fields"][lv8] = {
+                            "name": msgname,
+                            "elementType": "messageType",
+                            "type": msgtype,
+                            "dmfDataType":"TBD",
+                            "fields":{}}
+        c += 1
+        print(c)
+    print("Services and additional messages have been added to complete dictionary")
+    return
 
-comp = open("CompletePackageDictionary.json", "w")
-comp.write(json.dumps(Complete, indent=8))
-comp.close()
+def CreateFiles():
+    print("Message dictionary creating...")
 
-servi = open("ServicesDictionary.json", "w")
-servi.write(json.dumps(Services, indent=8))
-servi.close()
+    ##prints Topics, Complete, and Services dictionaries using json and formats the dictionaries by indenting as it moves deeper in the heirarchy
+    top = open("TopicsDictionary.json", "w")
+    top.write(json.dumps(Topics, indent=8))
+    top.close()
 
+    comp = open("CompletePackageDictionary.json", "w")
+    comp.write(json.dumps(Complete, indent=8))
+    comp.close()
+
+    servi = open("ServicesDictionary.json", "w")
+    servi.write(json.dumps(Services, indent=8))
+    servi.close()
+    return
 
 #################################################################
 ##Everything below is for creating the messages dictionary
 #################################################################
 
 Messages = {}
-Services = {}
+Service = {}
 
-primitives = ["bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]"]
+def MsgOnly(ROS_DISTRO):
+    system("rosmsg list > msg_list.txt")
+    msgfile = open("msg_list.txt")
+    msglistlines = msgfile.readlines()
+    msgfile.close()
 
-system("rosmsg list > msg_list.txt")
-msgfile = open("msg_list.txt")
-msglistlines = msgfile.readlines()
-msgfile.close()
+    c = 0
+    for msg in range(len(msglistlines)): 
+        bs = msglistlines[msg].find("/")
+        package = msglistlines[msg][:bs]
+        file = msglistlines[msg][bs+1:-1] + ".msg"
+        com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/msg/" + file)
+        comments = com.readlines()
+        com.close()
+        system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
+        Messages[msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
+                                            "elementType": "messageType",
+                                            "fields": {},
+                                            "comments": {}}
 
-c = 0
-for msg in range(len(msglistlines)): 
-    bs = msglistlines[msg].find("/")
-    package = msglistlines[msg][:bs]
-    file = msglistlines[msg][bs+1:-1] + ".msg"
-    com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/msg/" + file)
-    comments = com.readlines()
-    com.close()
-    system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
-    Messages[msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
+        for comment in range(len(comments)):
+            Messages[msglistlines[msg][:-1]]["comments"][comment] = comments[comment][:-1]
+        
+        msginfo = open("msg_info.txt")
+        msginfolines = msginfo.readlines()
+        msginfo.close()
+        for x in range(len(msginfolines)-1):
+            p = 0
+            while msginfolines[x][p] == " ":
+                p += 1
+            midsp = msginfolines[x].find(" ", p)
+            msgtype = msginfolines[x][p : midsp]
+            msgname = msginfolines[x][midsp + 1:-1]
+
+            if p == 0:
+                lvl1 = msgname
+                if (msgtype in primitives):
+                    Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
+                else:
+                    Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD"}
+        c += 1
+        print(c)
+    return
+
+def SrvMsgs(ROS_DISTRO):    
+    system("rossrv list > servicelist.txt")
+    s = open("servicelist.txt")
+    srvlist = s.readlines()
+    s.close()
+    c=0
+        
+    for srv in srvlist:
+        bs = srv.find("/")
+        package = srv[:bs]
+        file = srv[bs+1:-1] + ".srv"
+        com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/srv/" + file)
+        comments = com.readlines()
+        try:
+            comsplit = comments.index("---\n")
+        except:
+            comsplit = comments.index("---")
+        com.close()
+        cmd = "rossrv info "+srv[:-1]+" > srvinfo.txt"
+        system(cmd)
+        s = open("srvinfo.txt")
+        srvinfo = s.readlines()
+        s.close()
+
+        Service[srv[:-1]] = {"name":srv[:-1], "elementType": "service", "requestMessage": srv[:-1]+"Request", "responseMessage": srv[:-1]+"Response"}
+        Messages[srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
                                         "elementType": "messageType",
                                         "fields": {},
-                                        "comments": {}}
-
-    for comment in range(len(comments)):
-        Messages[msglistlines[msg][:-1]]["comments"][comment] = comments[comment][:-1]
-    
-    msginfo = open("msg_info.txt")
-    msginfolines = msginfo.readlines()
-    msginfo.close()
-    for x in range(len(msginfolines)-1):
-        p = 0
-        while msginfolines[x][p] == " ":
-            p += 1
-        midsp = msginfolines[x].find(" ", p)
-        msgtype = msginfolines[x][p : midsp]
-        msgname = msginfolines[x][midsp + 1:-1]
-
-        if p == 0:
-            lvl1 = msgname
-            if (msgtype in primitives):
-                Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
-                    "name": msgname,
-                    "elementType": "dataType",
-                    "storageType": msgtype,
-                    "dmfDataType":"TBD"}
+                                        "comments":{}}
+        Messages[srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
+                                         "elementType": "messageType",
+                                         "fields": {},
+                                         "comments": {}}
+        req = 1
+        res = 1
+        for coms in range(len(comments)):
+            if comments[coms][-1] == "\n":
+                qw = comments[coms][:-1]
             else:
-                Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
-                    "name": msgname,
-                    "elementType": "messageType",
-                    "type": msgtype,
-                    "dmfDataType":"TBD"}
-    c += 1
-    print(c)
-    
-system("rossrv list > servicelist.txt")
-s = open("servicelist.txt")
-srvlist = s.readlines()
-s.close()
-c=0
-    
-for srv in srvlist:
-    bs = srv.find("/")
-    package = srv[:bs]
-    file = srv[bs+1:-1] + ".srv"
-    com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/srv/" + file)
-    comments = com.readlines()
-    try:
-        comsplit = comments.index("---\n")
-    except:
-        comsplit = comments.index("---")
-    com.close()
-    cmd = "rossrv info "+srv[:-1]+" > srvinfo.txt"
-    system(cmd)
-    s = open("srvinfo.txt")
-    srvinfo = s.readlines()
-    s.close()
-
-    Services[srv[:-1]] = {"name":srv[:-1], "elementType": "service", "requestMessage": srv[:-1]+"Request", "responseMessage": srv[:-1]+"Response"}
-    Messages[srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
-                                    "elementType": "messageType",
-                                    "fields": {},
-                                    "comments":{}}
-    Messages[srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
-                                     "elementType": "messageType",
-                                     "fields": {},
-                                     "comments": {}}
-    req = 1
-    res = 1
-    for coms in range(len(comments)):
-        if comments[coms][-1] == "\n":
-            qw = comments[coms][:-1]
-        else:
-            qw = comments[coms]
-        if coms < comsplit:
-            Messages[srv[:-1]+"Request"]["comments"][req] = qw
-            req += 1
-        elif coms > comsplit:
-            Messages[srv[:-1]+"Response"]["comments"][res] = qw
-            res += 1
+                qw = comments[coms]
+            if coms < comsplit:
+                Messages[srv[:-1]+"Request"]["comments"][req] = qw
+                req += 1
+            elif coms > comsplit:
+                Messages[srv[:-1]+"Response"]["comments"][res] = qw
+                res += 1
+                
+        split = srvinfo.index("---\n")
+        for msg in range(len(srvinfo)-1):
+            sp = 0
+            for ch in srvinfo[msg]:
+                    if( ch == " "):
+                        sp += 1
+                    else:
+                        break
+            nmsp = srvinfo[msg].find(" ",sp)
+            msgtype = srvinfo[msg][sp:nmsp]
+            msgname = srvinfo[msg][nmsp+1:-1]
             
-    split = srvinfo.index("---\n")
-    for msg in range(len(srvinfo)-1):
-        sp = 0
-        for ch in srvinfo[msg]:
-                if( ch == " "):
-                    sp += 1
-                else:
-                    break
-        nmsp = srvinfo[msg].find(" ",sp)
-        msgtype = srvinfo[msg][sp:nmsp]
-        msgname = srvinfo[msg][nmsp+1:-1]
-        
-        if msg < split:    
-            if sp == 0:
-                lv1 = msgname
-                if (msgtype in primitives):
-                    Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
-                else:
-                    Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "type":msgtype, "dmfDataType":"TBD"}
+            if msg < split:    
+                if sp == 0:
+                    lv1 = msgname
+                    if (msgtype in primitives):
+                        Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
+                    else:
+                        Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "type":msgtype, "dmfDataType":"TBD"}
 
-        elif msg > split:
-            if sp == 0:
-                lv1 = msgname
-                if (msgtype in primitives):
-                    Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
-                else:
-                    Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "type":msgtype, "dmfDataType":"TBD"}
-    c += 1
-    print(c)
+            elif msg > split:
+                if sp == 0:
+                    lv1 = msgname
+                    if (msgtype in primitives):
+                        Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
+                    else:
+                        Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "type":msgtype, "dmfDataType":"TBD"}
+        c += 1
+        print(c)
+    return
 
-mess = open("MessagesDictionary.json", "w")
-mess.write(json.dumps(Messages, indent=8))
-print("Message dictionary complete")
-print("total time elapsed: " + str(time.time()-start) + " seconds")
+def MsgFile(): 
+    mess = open("MessagesDictionary.json", "w")
+    mess.write(json.dumps(Messages, indent=8))
+    mess.close()
+    print("Message dictionary complete")
+    print("total time elapsed: " + str(time.time()-start) + " seconds")
+    return
+
+dist = GetDistro()
+PacksAndNodes(dist)
+PubSubServ()
+Msgs()
+Srvs()
+CreateFiles()
+MsgOnly(dist)
+SrvMsgs(dist)
+MsgFile()
