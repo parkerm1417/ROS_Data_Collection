@@ -59,15 +59,30 @@ def PacksAndNodes(ROS_DISTRO):
 
 def PubSubServ():
     e=0
+    system("rosnode list > nodelist.txt")
+    file = open("nodelist.txt")
+    oldlines = file.readlines()
+    file.close
+    
     for pack in Complete:
         if Complete[pack]["nodes"] != {}:       ##ensure that there are nodes within the package list to be run
             for node in Complete[pack]["nodes"]:
-                run = "rosrun " + pack + " " + node + " __name:="+node     ##runs each node in the terminal and renames the node to be exact when being terminated 
-                rnode = "rosnode info -q /" + node + " > nodeinfo.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
+                run = "rosrun " + pack + " " + node     ##runs each node in the terminal and renames the node to be exact when being terminated 
                 kill = "rosnode kill -a"       ##kills all active nodes
                 
                 runner = subprocess.Popen(run,shell=True)
                 time.sleep(1)
+                
+                system("rosnode list > nodelist.txt")
+                file = open("nodelist.txt")
+                newlines = file.readlines()
+                file.close
+                for new in newlines:
+                    if (new not in oldlines):
+                        CurrentNode = new[:-1]
+                        break
+                oldlines = newlines    
+                rnode = "rosnode info -q " + new[:-1] + " > nodeinfo.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
                 noder = subprocess.Popen(rnode,shell=True)
                 time.sleep(1)
                 
@@ -142,10 +157,11 @@ def PubSubServ():
                         title = ss[:f-1]
                         Complete[pack]["nodes"][node]["subscriptions"][title] = {
                             "elementType" : "topic",
-                            "name" : title
+                            "name" : title,
+                            "type" : ""
                             }
                         ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
-                        bs = ss.find("/", 1, ob)
+                        bs = ss.find("/", 1, ob-1)
                         topicname = ss[:ob-1]
                         datatype = ss[ob+1:-1]
                         try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
