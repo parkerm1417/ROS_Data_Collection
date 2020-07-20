@@ -155,15 +155,17 @@ def PubSubServ():
                         toptype = ss[f+1:-1]
                         q = ss.find("/",1,f-1)
                         title = ss[:f-1]
-                        Complete[pack]["nodes"][node]["subscriptions"][title] = {
+                        subtype = subprocess.getoutput("rostopic info "+title)
+                        endline = subtype.find("\n")
+                        Type = subtype[6:endline]
+                        Complete[pack]["nodes"][node]["subscriptions"][title[1:]] = {
                             "elementType" : "topic",
-                            "name" : title,
-                            "type" : ""
+                            "name" : title[1:],
+                            "type" : Type
                             }
                         ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
                         bs = ss.find("/", 1, ob-1)
                         topicname = ss[:ob-1]
-                        datatype = ss[ob+1:-1]
                         try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
                             Topics[topicname]["publishers"][node] = {
                                 "elementType": "node",
@@ -182,8 +184,8 @@ def PubSubServ():
                                 "name": node,
                                 "package": pack}},
                             }
-                        if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
-                            Topics[topicname]["type"] = datatype
+                        if(Type != "unknown type" and Topics[topicname]["type"] == ""):     
+                            Topics[topicname]["type"] = Type
                         
                     elif (n>serv and n<len(lines)-1):
                         servtemp.append(lines[n][3:-1])
@@ -844,6 +846,20 @@ def MsgFile():
     print("total time elapsed: " + str(time.time()-start) + " seconds")
     return
 
+def modifications():
+    try:
+        Complete["laser_assembler"]["merge_clouds"]["services provided"]["get_loggers"]["name"] = "get_loggers"
+        Complete["laser_assembler"]["merge_clouds"]["services provided"]["get_loggers"]["type"] = "roscpp/GetLoggers"
+        Complete["laser_assembler"]["merge_clouds"]["services provided"]["set_logger_level"]["name"] = "set_logger_level"
+        Complete["laser_assembler"]["merge_clouds"]["services provided"]["set_logger_level"]["type"] = "roscpp/SetLoggerLevel"
+
+        Complete["librviz_tutorial"]["myviz"]["services provided"]["get_loggers"]["name"] = "get_loggers"
+        Complete["librviz_tutorial"]["myviz"]["services provided"]["get_loggers"]["type"] = "roscpp/GetLoggers"
+        Complete["librviz_tutorial"]["myviz"]["services provided"]["set_logger_level"]["name"] = "set_logger_level"
+        Complete["librviz_tutorial"]["myviz"]["services provided"]["set_logger_level"]["type"] = "roscpp/SetLoggerLevel"
+    except:
+        pass
+
 dist = GetDistro()
 PacksAndNodes(dist)
 PubSubServ()
@@ -853,3 +869,4 @@ CreateFiles()
 MsgOnly(dist)
 SrvMsgs(dist)
 MsgFile()
+modifications()
