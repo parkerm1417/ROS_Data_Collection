@@ -2,19 +2,19 @@ import json
 import subprocess as sp
 
 me = sp.getoutput("whoami")
-file = open("/home/" + me + "/Desktop/CompletePackageDictionary.txt")
+file = open("/home/" + me + "/python_practice/CompletePackageDictionary.json")
 complete = file.read()
 file.close()
 
 bigdict = json.loads(complete)
 
-file = open("/home/" + me + "/Desktop/MessagesDictionary.txt")
+file = open("/home/" + me + "/python_practice/MessagesDictionary.json")
 msgs = file.read()
 file.close()
 
 messages = json.loads(msgs)
 
-file = open("/home/" + me + "/Desktop/TopicsDictionary.txt")
+file = open("/home/" + me + "/python_practice/TopicsDictionary.json")
 top = file.read()
 file.close()
 
@@ -24,113 +24,69 @@ topics = json.loads(top)
 for pack in bigdict:
     print(pack)
     for node in bigdict[pack]["nodes"]:
-        publ = []
-        subl = []
-        servl = []
+        full = []
+        used = []
         print("    Node: " + node)
         print("        Publications:")
         for pub in bigdict[pack]["nodes"][node]["publications"]:
             print("            Topic: " + pub)
             print("                Message Type: " + bigdict[pack]["nodes"][node]["publications"][pub]["type"])
-            publ.append(bigdict[pack]["nodes"][node]["publications"][pub]["type"])
-            print("                Message Comments:")
-            for com in messages[bigdict[pack]["nodes"][node]["publications"][pub]["type"]]["comments"]:
-                print("                    " + str(messages[bigdict[pack]["nodes"][node]["publications"][pub]["type"]]["comments"][com]))
+            full.append(bigdict[pack]["nodes"][node]["publications"][pub]["type"])
         print("        Subscriptions:")
         for sub in bigdict[pack]["nodes"][node]["subscriptions"]:
             print("            Topic: " + sub)
-            print("                Message Type: " + topics[sub]["type"])
-            subl.append(topics[sub]["type"])
-            print("                Comments:")
-            if topics[sub]["type"] != "":
-                for com in messages[topics[sub]["type"]]["comments"]:
-                    print("                    " + str(messages[topics[sub]["type"]]["comments"][com]))
+            print("                Message Type: " + bigdict[pack]["nodes"][node]["subscriptions"][sub]["type"])
+            full.append(bigdict[pack]["nodes"][node]["subscriptions"][sub]["type"])
         print("        Services Provided:")
         for serv in bigdict[pack]["nodes"][node]["services provided"]:
             try:
                 print("             Service: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"])
                 print("                Message: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"] + "Request")
                 print("                    Request Message Type: " + bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request")
-                servl.append(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request")
-                print("                    Request Message Comments: ")
-                for com in messages[bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request"]["comments"]:
-                    print("                    " + str(messages[bigdict[pack]["nodes"][node]["services provided"][serv]["type"]+ "Request"]["comments"][com]))
-            
+                full.append(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request")
             except:
-                if str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request") == "ERROR: Unable to communicate with service [/merge_clouds/get_loggers]":
+                if str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request") == "ERROR: Unable to communicate with service [/merge_clouds_1595273946536621763/get_loggers]":
                     print("             Service: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"])
                     print("                Message: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"] + "Request")
                     print("                    Request Message Type: roscpp/GetLoggersRequest")
-                    servl.append("roscpp/GetLoggersRequest")
-                    print("                    Request Message Comments: ")
-                    for com in messages["roscpp/GetLoggersRequest"]["comments"]:
-                        print("            " + str(messages["roscpp/GetLoggersRequest"]["comments"][com]))
-                elif str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request") == "ERROR: Unable to communicate with service [/merge_clouds/set_logger_level]":
+                    full.append("roscpp/GetLoggersRequest")
+                elif str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Request") == "ERROR: Unable to communicate with service [/merge_clouds1595273946536621763/set_logger_level]":
                     print("            Service: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"])
                     print("                Message: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"] + "Request")
                     print("                    Request Message Type: " + "roscpp/SetLoggerLevelRequest")
-                    servl.append("roscpp/SetLoggerLevelRequest")
-                    print("                    Request Message Comments: ")
-                    for com in messages["roscpp/SetLoggerLevelRequest"]["comments"]:
-                        print("            " + str(messages["roscpp/SetLoggerLevelRequest"]["comments"][com]))
-                    
+                    full.append("roscpp/SetLoggerLevelRequest")  
             try:
                 print("             Service: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"])
                 print("                Message: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"] + "Response")
                 print("                    Response Message Type: " + bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Response")
-                servl.append(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Response")
-                print("                    Response Message Comments: ")
-                for com in messages[bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Response"]["comments"]:
-                    print("                    " + str(messages[bigdict[pack]["nodes"][node]["services provided"][serv]["type"]+ "Response"]["comments"][com]))
-                
+                full.append(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Response")
             except:
-                if str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Response") == "ERROR: Unable to communicate with service [/merge_clouds/get_loggers]":
+                if str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"] + "Response") == "ERROR: Unable to communicate with service [/merge_clouds_1595273946536621763/get_loggers]":
                     print("            Service: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"])
                     print("                Message: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"] + "Response")
                     print("                    Response Message Type: " + "roscpp/GetLoggersResponse")
-                    servl.append("roscpp/GetLoggersResponse")
-                    print("                    Response Message Comments: ")
-                    print("            " + str(messages["roscpp/GetLoggersRespnse"]["comments"]))
-                elif str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"]+ "Response") == "ERROR: Unable to communicate with service [/merge_clouds/set_logger_level]":
+                    full.append("roscpp/GetLoggersResponse")
+                elif str(bigdict[pack]["nodes"][node]["services provided"][serv]["type"]+ "Response") == "ERROR: Unable to communicate with service [/merge_clouds1595273946536621763/set_logger_level]":
                     print("            Service: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"] + "Response")
                     print("                Message: " + bigdict[pack]["nodes"][node]["services provided"][serv]["name"] + "Response")
                     print("                    Response Message Type: " + "roscpp/SetLoggerLevelResponse")
-                    servl.append("roscpp/SetLoggerLevelResponse")
-                    print("                    Response Message Comments: ")
-                    for com in messages["roscpp/SetLoggerLevelRequest"]["comments"]:
-                        print("            " + str(messages["roscpp/SetLoggerLevelRequest"]["comments"][com]))
+                    full.append("roscpp/SetLoggerLevelResponse")
         print("        Message Types:")
-        for msg in publ:
-            print("            Message Type: " + msg)
-            print("                Fields:")
-            for field in messages[msg]["fields"]:
-                try:    
-                    print("                    " + field + " : " + messages[msg]["fields"][field]["type"])
-                except:
-                    print("                    " + field + " : " + messages[msg]["fields"][field]["storageType"])
-            print("                Comments:")
-            for com in messages[msg]["comments"]:
-                print("                    " + messages[msg]["comments"][com])
-        for msg in subl:
-            print("            Message Type: " + msg)
-            print("                Fields:")
-            for field in messages[msg]["fields"]:
-                try:    
-                    print("                    " + field + " : " + messages[msg]["fields"][field]["type"])
-                except:
-                    print("                    " + field + " : " + messages[msg]["fields"][field]["storageType"])
-            print("                Comments:")
-            for com in messages[msg]["comments"]:
-                print("                    " + messages[msg]["comments"][com])
-        for msg in servl:
-            print("            Message Type: " + msg)
-            print("                Fields:")
-            for field in messages[msg]["fields"]:
-                try:    
-                    print("                    " + field + " : " + messages[msg]["fields"][field]["type"])
-                except:
-                    print("                    " + field + " : " + messages[msg]["fields"][field]["storageType"])
-            print("                Comments:")
-            for com in messages[msg]["comments"]:
-                print("                    " + messages[msg]["comments"][com])
- 
+        for msg in full:
+            if msg not in used:
+                print("            Message Type: " + msg)
+                print("                Fields:")
+                for field in messages[msg]["fields"]:
+                    try:    
+                        print("                    " + field + " : " + messages[msg]["fields"][field]["type"])
+                        b = messages[msg]["fields"][field]["type"].find("[")
+                        if b == -1:
+                            full.append(messages[msg]["fields"][field]["type"])
+                        else:
+                            full.append(messages[msg]["fields"][field]["type"][:b])
+                    except:
+                        print("                    " + field + " : " + messages[msg]["fields"][field]["storageType"])
+                print("                Comments:")
+                for com in messages[msg]["comments"]:
+                    print("                    " + messages[msg]["comments"][com])
+                used.append(msg)
