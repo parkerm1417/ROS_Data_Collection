@@ -57,6 +57,11 @@ for pack in bigdict:
                 for field in messages[msg]["fields"]:
                     try:    
                         print("                              " + field + " : " + messages[msg]["fields"][field]["type"])
+                        b = messages[msg]["fields"][field]["type"].find("[")
+                        if b == -1:
+                            full.append(messages[msg]["fields"][field]["type"])
+                        else:
+                            full.append(messages[msg]["fields"][field]["type"][:b])
                     except:
                         print("                              " + field + " : " + messages[msg]["fields"][field]["storageType"])
                 print("                        Comments:")
