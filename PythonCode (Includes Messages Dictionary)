@@ -4,7 +4,7 @@ import time
 import json
 
 start = time.time()
-primitives = ["bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]"]
+primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]"]
 
 ########################################
 ##Ensures that a new roscore is running
@@ -848,15 +848,18 @@ def MsgFile():
 
 def modifications():
     try:
-        Complete["laser_assembler"]["merge_clouds"]["services provided"]["get_loggers"]["name"] = "get_loggers"
-        Complete["laser_assembler"]["merge_clouds"]["services provided"]["get_loggers"]["type"] = "roscpp/GetLoggers"
-        Complete["laser_assembler"]["merge_clouds"]["services provided"]["set_logger_level"]["name"] = "set_logger_level"
-        Complete["laser_assembler"]["merge_clouds"]["services provided"]["set_logger_level"]["type"] = "roscpp/SetLoggerLevel"
+        Complete["laser_assembler"]["nodes"]["merge_clouds"]["services provided"]["get_loggers"]["name"] = "/merge_clouds/get_loggers"
+        Complete["laser_assembler"]["nodes"]["merge_clouds"]["services provided"]["get_loggers"]["type"] = "roscpp/GetLoggers"
+        Complete["laser_assembler"]["nodes"]["merge_clouds"]["services provided"]["get_loggers"]["args"] = ""
+        Complete["laser_assembler"]["nodes"]["merge_clouds"]["services provided"]["set_logger_level"]["name"] = "/merge_clouds/set_logger_level"
+        Complete["laser_assembler"]["nodes"]["merge_clouds"]["services provided"]["set_logger_level"]["type"] = "roscpp/SetLoggerLevel"
+        Complete["laser_assembler"]["nodes"]["merge_clouds"]["services provided"]["set_logger_level"]["args"] = "logger level"
 
-        Complete["librviz_tutorial"]["myviz"]["services provided"]["get_loggers"]["name"] = "get_loggers"
-        Complete["librviz_tutorial"]["myviz"]["services provided"]["get_loggers"]["type"] = "roscpp/GetLoggers"
-        Complete["librviz_tutorial"]["myviz"]["services provided"]["set_logger_level"]["name"] = "set_logger_level"
-        Complete["librviz_tutorial"]["myviz"]["services provided"]["set_logger_level"]["type"] = "roscpp/SetLoggerLevel"
+        Complete["librviz_tutorial"]["nodes"]["myviz"]["services provided"]["get_loggers"]["name"] = "/rviz/get_loggers"
+        Complete["librviz_tutorial"]["nodes"]["myviz"]["services provided"]["load_config"]["name"] = "/rviz/load_config"
+        Complete["librviz_tutorial"]["nodes"]["myviz"]["services provided"]["reload_shaders"]["name"] = "/rviz/reload_shaders"
+        Complete["librviz_tutorial"]["nodes"]["myviz"]["services provided"]["save_config"]["name"] = "/rviz/save_config"
+        Complete["librviz_tutorial"]["nodes"]["myviz"]["services provided"]["set_logger_level"]["name"] = "/rviz/set_logger_level"
     except:
         pass
 
