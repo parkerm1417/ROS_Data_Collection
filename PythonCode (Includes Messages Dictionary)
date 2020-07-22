@@ -4,7 +4,7 @@ import time
 import json
 
 start = time.time()
-primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]"]
+primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
 
 ########################################
 ##Ensures that a new roscore is running
@@ -20,6 +20,7 @@ nodeinfo = []
 Complete = {}
 Topics = {}
 Services = {}
+Messages = {}
 
 def GetDistro():
     return subprocess.getoutput("rosversion -d")
@@ -240,7 +241,7 @@ def PubSubServ():
     print("Packages and Nodes have been inserted into dictionary")
     return
 
-def Msgs():
+def Msgs(ROS_DISTRO):
     ##creates a text file with all of the messages listed and creates a list that holds all of the messages
     system("rosmsg list > msg_list.txt")
     msgfile = open("msg_list.txt")
@@ -252,10 +253,21 @@ def Msgs():
     for msg in range(len(msglistlines)):
         bs = msglistlines[msg].find("/")
         package = msglistlines[msg][:bs]
+        file = msglistlines[msg][bs+1:-1] + ".msg"
         system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
         Complete[package]["messages"][msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
                                                                  "elementType": "message",
                                                                  "fields": {}}
+        com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/msg/" + file)
+        comments = com.readlines()
+        com.close()
+        Messages[msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
+                                            "elementType": "messageType",
+                                            "fields": {},
+                                            "comments": {}}
+        for comment in range(len(comments)):
+            Messages[msglistlines[msg][:-1]]["comments"][comment] = comments[comment][:-1]
+            
         msginfo = open("msg_info.txt")
         msginfolines = msginfo.readlines()
         msginfo.close()
@@ -275,6 +287,11 @@ def Msgs():
                         "elementType": "dataType",
                         "storageType": msgtype,
                         "dmfDataType":"TBD"}
+                    Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
+                        "name": msgname,
+                        "elementType": "dataType",
+                        "storageType": msgtype,
+                        "dmfDataType":"TBD"}
                 else:
                     Complete[package]["messages"][msglistlines[msg][:-1]]["fields"][lvl1] = {
                         "name": msgname,
@@ -282,6 +299,11 @@ def Msgs():
                         "type": msgtype,
                         "dmfDataType":"TBD",
                         "fields":{}}
+                    Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
+                        "name": msgname,
+                        "elementType": "messageType",
+                        "type": msgtype,
+                        "dmfDataType":"TBD"}
             elif p == 2:
                 lvl2 = msgname
                 if (msgtype in primitives):
@@ -392,7 +414,7 @@ def Msgs():
     print("Messages have been added to dictionary")
     return
 
-def Srvs():
+def Srvs(ROS_DISTRO):
     system("rossrv list > servicelist.txt")
     s = open("servicelist.txt")
     srvlist = s.readlines()
@@ -400,6 +422,16 @@ def Srvs():
     c=0
 
     for srv in srvlist:
+        bs = srv.find("/")
+        package = srv[:bs]
+        file = srv[bs+1:-1] + ".srv"
+        com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/srv/" + file)
+        comments = com.readlines()
+        try:
+            comsplit = comments.index("---\n")
+        except:
+            comsplit = comments.index("---")
+        com.close()
         cmd = "rossrv info "+srv[:-1]+" > msg_info.txt"
         system(cmd)
         s = open("msg_info.txt")
@@ -419,6 +451,17 @@ def Srvs():
         Complete[pack]["messages"][srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
                                          "elementType": "message",
                                          "fields": {}}
+
+        Services[srv[:-1]] = {"name":srv[:-1], "elementType": "service", "requestMessage": srv[:-1]+"Request", "responseMessage": srv[:-1]+"Response"}
+        Messages[srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
+                                        "elementType": "messageType",
+                                        "fields": {},
+                                        "comments":{}}
+        Messages[srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
+                                         "elementType": "messageType",
+                                         "fields": {},
+                                         "comments": {}}
+        
         for msg in range(len(srvinfo)-1):
             sp = 0
             for ch in srvinfo[msg]:
@@ -442,6 +485,7 @@ def Srvs():
                             "storageType": msgtype,
                             "dmfDataType":"TBD",
                             "fields":{}}
+                        Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
                     else:
                         Complete[pack]["messages"][srv[:-1]+"Response"]["fields"][lv1] = {
                             "name": msgname,
@@ -449,6 +493,7 @@ def Srvs():
                             "type": msgtype,
                             "dmfDataType":"TBD",
                             "fields":{}}
+                        Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "storageType":msgtype, "dmfDataType":"TBD"}
         
                 elif sp == 2:
                     lv2 = msgname
@@ -566,6 +611,7 @@ def Srvs():
                             "elementType": "dataType",
                             "storageType": msgtype,
                             "dmfDataType":"TBD"}
+                        Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
                     else:
                         Complete[pack]["messages"][srv[:-1]+"Request"]["fields"][lv1] = {
                             "name": msgname,
@@ -573,6 +619,7 @@ def Srvs():
                             "type": msgtype,
                             "dmfDataType":"TBD",
                             "fields":{}}
+                        Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "storageType":msgtype, "dmfDataType":"TBD"}
         
                 elif sp == 2:
                     lv2 = msgname
@@ -699,146 +746,7 @@ def CreateFiles():
     servi = open("ServicesDictionary.json", "w")
     servi.write(json.dumps(Services, indent=8))
     servi.close()
-    return
 
-#################################################################
-##Everything below is for creating the messages dictionary
-#################################################################
-
-Messages = {}
-Service = {}
-
-def MsgOnly(ROS_DISTRO):
-    system("rosmsg list > msg_list.txt")
-    msgfile = open("msg_list.txt")
-    msglistlines = msgfile.readlines()
-    msgfile.close()
-
-    c = 0
-    for msg in range(len(msglistlines)): 
-        bs = msglistlines[msg].find("/")
-        package = msglistlines[msg][:bs]
-        file = msglistlines[msg][bs+1:-1] + ".msg"
-        com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/msg/" + file)
-        comments = com.readlines()
-        com.close()
-        system("rosmsg info " + msglistlines[msg][:-1] + " > msg_info.txt")
-        Messages[msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
-                                            "elementType": "messageType",
-                                            "fields": {},
-                                            "comments": {}}
-
-        for comment in range(len(comments)):
-            Messages[msglistlines[msg][:-1]]["comments"][comment] = comments[comment][:-1]
-        
-        msginfo = open("msg_info.txt")
-        msginfolines = msginfo.readlines()
-        msginfo.close()
-        for x in range(len(msginfolines)-1):
-            p = 0
-            while msginfolines[x][p] == " ":
-                p += 1
-            midsp = msginfolines[x].find(" ", p)
-            msgtype = msginfolines[x][p : midsp]
-            msgname = msginfolines[x][midsp + 1:-1]
-
-            if p == 0:
-                lvl1 = msgname
-                if (msgtype in primitives):
-                    Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
-                        "name": msgname,
-                        "elementType": "dataType",
-                        "storageType": msgtype,
-                        "dmfDataType":"TBD"}
-                else:
-                    Messages[msglistlines[msg][:-1]]["fields"][lvl1] = {
-                        "name": msgname,
-                        "elementType": "messageType",
-                        "type": msgtype,
-                        "dmfDataType":"TBD"}
-        c += 1
-        print(c)
-    return
-
-def SrvMsgs(ROS_DISTRO):    
-    system("rossrv list > servicelist.txt")
-    s = open("servicelist.txt")
-    srvlist = s.readlines()
-    s.close()
-    c=0
-        
-    for srv in srvlist:
-        bs = srv.find("/")
-        package = srv[:bs]
-        file = srv[bs+1:-1] + ".srv"
-        com = open("/opt/ros/" + ROS_DISTRO + "/share/" + package + "/srv/" + file)
-        comments = com.readlines()
-        try:
-            comsplit = comments.index("---\n")
-        except:
-            comsplit = comments.index("---")
-        com.close()
-        cmd = "rossrv info "+srv[:-1]+" > srvinfo.txt"
-        system(cmd)
-        s = open("srvinfo.txt")
-        srvinfo = s.readlines()
-        s.close()
-
-        Service[srv[:-1]] = {"name":srv[:-1], "elementType": "service", "requestMessage": srv[:-1]+"Request", "responseMessage": srv[:-1]+"Response"}
-        Messages[srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
-                                        "elementType": "messageType",
-                                        "fields": {},
-                                        "comments":{}}
-        Messages[srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
-                                         "elementType": "messageType",
-                                         "fields": {},
-                                         "comments": {}}
-        req = 1
-        res = 1
-        for coms in range(len(comments)):
-            if comments[coms][-1] == "\n":
-                qw = comments[coms][:-1]
-            else:
-                qw = comments[coms]
-            if coms < comsplit:
-                Messages[srv[:-1]+"Request"]["comments"][req] = qw
-                req += 1
-            elif coms > comsplit:
-                Messages[srv[:-1]+"Response"]["comments"][res] = qw
-                res += 1
-                
-        split = srvinfo.index("---\n")
-        for msg in range(len(srvinfo)-1):
-            sp = 0
-            for ch in srvinfo[msg]:
-                    if( ch == " "):
-                        sp += 1
-                    else:
-                        break
-            nmsp = srvinfo[msg].find(" ",sp)
-            msgtype = srvinfo[msg][sp:nmsp]
-            msgname = srvinfo[msg][nmsp+1:-1]
-            
-            if msg < split:    
-                if sp == 0:
-                    lv1 = msgname
-                    if (msgtype in primitives):
-                        Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
-                    else:
-                        Messages[srv[:-1]+"Request"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "type":msgtype, "dmfDataType":"TBD"}
-
-            elif msg > split:
-                if sp == 0:
-                    lv1 = msgname
-                    if (msgtype in primitives):
-                        Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "dataType", "storageType":msgtype, "dmfDataType":"TBD"}
-                    else:
-                        Messages[srv[:-1]+"Response"]["fields"][lv1] = {"name":lv1, "elementType": "messageType", "type":msgtype, "dmfDataType":"TBD"}
-        c += 1
-        print(c)
-    return
-
-def MsgFile(): 
     mess = open("MessagesDictionary.json", "w")
     mess.write(json.dumps(Messages, indent=8))
     mess.close()
@@ -866,10 +774,8 @@ def modifications():
 dist = GetDistro()
 PacksAndNodes(dist)
 PubSubServ()
-Msgs()
-Srvs()
-CreateFiles()
-MsgOnly(dist)
-SrvMsgs(dist)
-MsgFile()
+Msgs(dist)
+Srvs(dist)
 modifications()
+CreateFiles()
+
