@@ -2,6 +2,7 @@ from os import listdir,system
 import subprocess
 import time
 import json
+from datetime import date
 
 start = time.time()
 primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
@@ -23,7 +24,17 @@ Services = {}
 Messages = {}
 
 def GetDistro():
-    return subprocess.getoutput("rosversion -d")
+    distro = subprocess.getoutput("rosversion -d")
+    Complete["Distribution"] = distro
+    Messages["Distribution"] = distro
+    Services["Distribution"] = distro
+    Topics["Distribution"] = distro
+    today = date.today()
+    Complete["Date"] = today
+    Messages["Date"] = today
+    Services["Date"] = today
+    Topics["Date"] = today
+    return distro
 
 def PacksAndNodes(ROS_DISTRO):
     ##Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
@@ -752,6 +763,7 @@ def CreateFiles():
     mess.close()
     print("Message dictionary complete")
     print("total time elapsed: " + str(time.time()-start) + " seconds")
+    system("killall -9 rosmaster")
     return
 
 def modifications():
@@ -778,4 +790,5 @@ Msgs(dist)
 Srvs(dist)
 modifications()
 CreateFiles()
+
 
