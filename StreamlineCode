@@ -42,7 +42,17 @@ except:
     Services = {}
     Messages = {}
 
-nodes = []
+distro = subprocess.getoutput("rosversion -d")
+try:
+    if distro != Complete["Distribution"]:
+        Complete = {}
+        Topics = {}
+        Services = {}
+        Messages = {}
+except:
+    pass
+
+system("rospack list > packageslist.txt")
 
 #######################################################################################################
 ##Function Name: GetDistro
@@ -54,18 +64,18 @@ nodes = []
 ##		program was run.
 #######################################################################################################
 
-def GetDistro():
+def GetDistro(dist):
     distro = subprocess.getoutput("rosversion -d")
-    Complete["Distribution"] = distro
-    Messages["Distribution"] = distro
-    Services["Distribution"] = distro
-    Topics["Distribution"] = distro
+    Complete["Distribution"] = dist
+    Messages["Distribution"] = dist
+    Services["Distribution"] = dist
+    Topics["Distribution"] = dist
     today = date.today()
     Complete["Date"] = today.strftime("%x")
     Messages["Date"] = today.strftime("%x")
     Services["Date"] = today.strftime("%x")
     Topics["Date"] = today.strftime("%x")
-    return distro
+    return
 
 #######################################################################################################
 ##Function Name: PacksAndNodes
@@ -85,6 +95,13 @@ def PacksAndNodes(ROS_DISTRO):
     ##Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
     packages = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/share')]
     packages.sort()
+    
+    packstorun = input("Please list desired packages and seperate multiple packages with a comma\nYou will find all available packages in packageslist.txt\nThe package names are everything prior to the space on each line\nIf you would like all packages to run, please type \"ALL\"\nPackages: ")
+    
+    if(packstorun == "ALL"):
+        packages = [f for f in listdir('/opt/ros/'+ROS_DISTRO+'/share')]
+    else:
+        packages = [x for x in packstorun.split(",")]
     
     try:
         lastpackindex = packages.index(lastpack)
@@ -258,7 +275,9 @@ def PacksAndNodes(ROS_DISTRO):
                     "elementType" : "service",
                     "name" : servs,
                     "type" : servtype,
-                    "args" : args}
+                    "fields" : args,
+                    "requestMessage": servtype+"Request", 
+                    "responseMessage": servtype+"Response"}
                     
                     try:
                         Services[title]["nodes"][node] = {
@@ -272,6 +291,8 @@ def PacksAndNodes(ROS_DISTRO):
                                     "name": servs,
                                     "type": servtype,
                                     "args": args,
+                                    "requestMessage": servtype+"Request", 
+                                    "responseMessage": servtype+"Response",
                                     "nodes": {}
                                     }   
                         Services[title]["nodes"][node] = {
@@ -305,8 +326,7 @@ def PacksAndNodes(ROS_DISTRO):
 
         print("Package "+ str(pack+1) +" of "+ str(len(packages)) + " complete")
     system("rosnode kill -a")
-    print("All nodes  have been started and subsequently killed")
-    print("Packages and Nodes have been inserted into dictionary")
+    print("PACKAGES COMPLETED\n")
     return
 
 #######################################################################################################
@@ -525,7 +545,7 @@ def Msgs(ROS_DISTRO):
         comp.close()
         
         print("Message "+ str(msg+1) +" of "+ str(len(msglistlines)) + " complete")
-    print("Messages have been added to dictionary")
+    print("MESSAGES COMPLETED\n ")
     return
 
 #######################################################################################################
@@ -588,8 +608,7 @@ def Srvs(ROS_DISTRO):
         Complete[pack]["messages"][srv[:-1]+"Response"] = {"name": srv[:-1]+"Response",
                                          "elementType": "message",
                                          "fields": {}}
-
-        Services[srv[:-1]] = {"name":srv[:-1], "elementType": "service", "requestMessage": srv[:-1]+"Request", "responseMessage": srv[:-1]+"Response"}
+                                         
         Messages[srv[:-1]+"Request"] = {"name": srv[:-1]+"Request",
                                         "elementType": "messageType",
                                         "fields": {},
@@ -877,7 +896,7 @@ def Srvs(ROS_DISTRO):
         mess.close()
 
         print("Service "+ str(srvlist.index(srv)+1) +" of "+ str(len(srvlist)) + " complete")
-    print("Services and additional messages have been added to complete dictionary")
+    print("SERVICES COMPLETED\n")
     return
 
 #######################################################################################################
@@ -913,6 +932,10 @@ def CreateFiles():
     print("Message dictionary complete")
     print("total time elapsed: " + str(time.time()-start) + " seconds")
     system("killall -9 rosmaster")
+    
+    while(True):
+        print("PROGRAM IS DONE RUNNING PLEASE KILL ANY PROGRAMS STILL RUNNING")
+        time.sleep(0.1)
     return
 
 #######################################################################################################
@@ -941,7 +964,7 @@ def modifications():
         pass
     return
 
-dist = GetDistro()
+GetDistro(distro)
 PacksAndNodes(dist)
 ##PubSubServ()
 Msgs(dist)
