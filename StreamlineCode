@@ -37,6 +37,7 @@ try:
     prevMsgsStr = prevMsgs.read()
     prevMsgs.close()
     Messages = json.loads(prevMsgsStr)
+    time.sleep(1)
     
 except:
     Complete = {}
@@ -71,24 +72,48 @@ Topics["Date"] = today.strftime("%x")
 #######################################################################################################
 
 ##Get the last package completed in the Complete dictionary
-lastpack = list(Complete.keys())
-lastpack = lastpack[-1]
+lastpacklist = list(Complete.keys())
+lastpack = lastpacklist[-1]
 
-##Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
-packages = [f for f in listdir('/opt/ros/'+distro+'/share')]
-packages.sort()
+####Opens the directory to where the packages are located and creates a list packages, which contains all packages alphabetically
+##packages = [f for f in listdir('/opt/ros/'+distro+'/share')]
+##packages.sort()
 
-##packstorun = input("Please list desired packages and seperate multiple packages with a comma\nYou will find all available packages in packageslist.txt\nThe package names are everything prior to the space on each line\nIf you would like all packages to run, please type \"ALL\"\nPackages: ")
-##
-##if(packstorun == "ALL"):
-##    packages = [f for f in listdir('/opt/ros/'+distro+'/share')]
-##else:
-##    packages = [x for x in packstorun.split(",")]
+packstorun = input("Please list desired packages and seperate multiple packages with a comma\nYou will find all available packages in packageslist.txt\nThe package names are everything prior to the space on each line\nIf you would like all packages to run, please type \"ALL\"\nPackages: ")
 
-try:
-    lastpackindex = packages.index(lastpack)
-except:
+if(packstorun == "ALL"):
+    packages = [f for f in listdir('/opt/ros/'+distro+'/share')]
+    packages.sort()
+else:
+    packages = [x for x in packstorun.split(",")]
+    Complete = {}
+    Topics = {}
+    Services = {}
+    Messages = {}
     lastpackindex = -1
+
+if packstorun == "ALL":
+    try:
+        lastpackindex = packages.index(lastpack)
+        if lastpackindex + 3 != len(lastpacklist):
+            print("Previous run not for all packages, dictionaries cleared")
+            Complete = {}
+            Topics = {}
+            Services = {}
+            Messages = {}
+            lastpackindex = -1
+    except:
+        lastpackindex = -1
+
+Complete["Distribution"] = distro
+Messages["Distribution"] = distro
+Services["Distribution"] = distro
+Topics["Distribution"] = distro
+today = date.today()
+Complete["Date"] = today.strftime("%x")
+Messages["Date"] = today.strftime("%x")
+Services["Date"] = today.strftime("%x")
+Topics["Date"] = today.strftime("%x")
 
 for pack in range(lastpackindex+1,len(packages)):
     Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
@@ -135,7 +160,9 @@ for pack in range(lastpackindex+1,len(packages)):
                 if (new not in oldlines):
                     CurrentNode = new[:-1]
                     break
-            oldlines = newlines    
+                else:
+                    CurrentNode = ""
+            print(oldlines)
             rnode = "rosnode info -q " + CurrentNode + " > temptext.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
             noder = subprocess.Popen(rnode,shell=True)
             time.sleep(1)
@@ -281,6 +308,11 @@ for pack in range(lastpackindex+1,len(packages)):
 
             killer = subprocess.Popen(kill,shell=True)
             time.sleep(1)
+
+            system("rosnode list > temptext.txt")
+            file = open("temptext.txt")
+            oldlines = file.readlines()
+            file.close
 
             runner.terminate()
             noder.terminate()
@@ -887,7 +919,7 @@ mess = open("MessagesDictionary.json", "w")
 mess.write(json.dumps(Messages, indent=8))
 mess.close()
 
-print("total time elapsed: " + str(time.time()-start) + " seconds")
+print("total time elapsed: " + str(time.time()-start) + " seconds\n")
 system("killall -9 rosmaster")
 
 while(True):
