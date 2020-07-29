@@ -276,7 +276,7 @@ for pack in range(lastpackindex+1,len(packages)):
                     Services[title]["nodes"][node] = {
                                 "elementType": "node",
                                 "name": title,
-                                "package": packacges[pack]
+                                "package": packages[pack]
                                 }
 
             killer = subprocess.Popen(kill,shell=True)
