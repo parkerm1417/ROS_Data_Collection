@@ -1,1 +1,74 @@
+from os import listdir,system
+import subprocess
+import time
+import json
+from datetime import date
 
+primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
+
+msglist = input("Please type all messages you would like information on. Separate messages with commas.\nMessages:")
+if msglist == "ALL":
+    file = subprocess.getoutput("rosmsg list")
+    messages = file.split("\n")
+else:
+    messages = [x for x in msglist.split(",")]
+
+msgdic = {}
+
+distro = subprocess.getoutput("rosversion -d")
+
+for msg in messages:
+    msgdic[msg] = {
+        "fields": {},
+        "comments": {}
+        }
+    system("rosmsg info "+msg+" > temptext.txt")
+    file = open("temptext.txt")
+    msginfo = file.readlines()
+    file.close()
+    for line in range(len(msginfo)-1):
+        if(msginfo[line][0] != " "):
+            sp = msginfo[line].find(" ")
+            msgdic[msg]["fields"][msginfo[line][sp+1:-1]] = msginfo[line][:sp]
+            if ((msginfo[line][:sp] not in primitives) and (msginfo[line][:sp] not in messages)):
+                if(msginfo[line][:sp][-1] == "]"):
+                    q = msginfo[line][:sp]
+                    br = q.find("[")
+                    q = q[:br]
+                    if (q not in messages) and (q not in primitives):
+                        messages.append(q)
+                        print("added no bracket")
+                        print(msginfo[line][:sp])
+                        print(q)
+                else:
+                    messages.append(msginfo[line][:sp])
+                    print("added")
+            elif msginfo[line][:sp] in messages:
+                print("Already in messages")
+    bs = msg.find("/")
+    file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/msg/"+msg[bs+1:]+".msg")
+    comments = file.readlines()
+    file.close()
+    c = 1
+    for com in comments:
+        while com[0] == " ":
+            com = com[1:]
+        if(com[-1] == "\n"):
+            msgdic[msg]["comments"][c] = com[:-1]
+        else:
+            msgdic[msg]["comments"][c] = com
+        c += 1
+filename =  distro + "_msgs_" + date.today().strftime("%x") + ".txt"
+filename.replace("/","_")
+msgs = open(filename,"w")
+msgs.write("            Message Types:\n")
+for msg in msgdic:
+    msgs.write("                  Message Type: "+msg+"\n")
+    msgs.write("                        Fields:\n")
+    for field in msgdic[msg]["fields"]:
+        msgs.write("                              "+field+" : "+msgdic[msg]["fields"][field]+"\n")
+    msgs.write("                        Comments:\n")
+    for com in msgdic[msg]["comments"]:
+        msgs.write("                              "+msgdic[msg]["comments"][com]+"\n")
+
+msgs.close()
