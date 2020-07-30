@@ -27,7 +27,13 @@ for msg in messages:
         }
     c+=1
     print(c)
-filename =  distro + "_srvs_" + date.today().strftime("%m_%d_%Y") + ".txt"
+
+if("marti_nav_msgs/DeleteRoute" in messages and msglist == "ALL"):
+    RTK = "RTK2019_"
+else:
+    RTK = ""
+
+filename =  RTK + distro + "_srvs_" + date.today().strftime("%m_%d_%Y") + ".json"
 srvs = open(filename,"w")
 srvs.write(json.dumps(msgdic, indent = 8))
 srvs.close()
