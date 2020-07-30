@@ -179,5 +179,5 @@ msgs.close()
 filename =  distro + "_msgs_" + date.today().strftime("%m_%d_%Y") + ".json"
 filename.replace("/","_")
 msgs = open(filename,"w")
-msgs.write(json.dumps(msgdic))
+msgs.write(json.dumps(msgdic, indent=8))
 msgs.close()
