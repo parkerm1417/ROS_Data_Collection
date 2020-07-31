@@ -162,7 +162,6 @@ for pack in range(lastpackindex+1,len(packages)):
                     break
                 else:
                     CurrentNode = ""
-            print(oldlines)
             rnode = "rosnode info -q " + CurrentNode + " > temptext.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
             noder = subprocess.Popen(rnode,shell=True)
             time.sleep(1)
