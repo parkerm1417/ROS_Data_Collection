@@ -55,7 +55,11 @@ for msg in messages:
                         else:
                             messages.append(msginfo[line][:sp])
             bs = msg.find("/")
-            file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/srv/"+msg[bs+1:-7]+".srv")
+            try:
+                file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/srv/"+msg[bs+1:-7]+".srv")
+            except:
+                file = open("/opt/rtk/"+distro+"/share/"+msg[:bs]+"/srv/"+msg[bs+1:-7]+".srv")
+
             comments = file.readlines()
             file.close()
             c = 1
@@ -104,7 +108,11 @@ for msg in messages:
                         else:
                             messages.append(msginfo[line][:sp])
             bs = msg.find("/")
-            file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/srv/"+msg[bs+1:-8]+".srv")
+            try:
+                file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/srv/"+msg[bs+1:-8]+".srv")
+            except:
+                file = open("/opt/rtk/"+distro+"/share/"+msg[:bs]+"/srv/"+msg[bs+1:-8]+".srv")
+                
             comments = file.readlines()
             file.close()
             c = 1
@@ -147,7 +155,10 @@ for msg in messages:
                     else:
                         messages.append(msginfo[line][:sp])
         bs = msg.find("/")
-        file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/msg/"+msg[bs+1:]+".msg")
+        try:
+            file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/msg/"+msg[bs+1:]+".msg")
+        except:
+            file = open("/opt/rtk/"+distro+"/share/"+msg[:bs]+"/msg/"+msg[bs+1:]+".msg")
         comments = file.readlines()
         file.close()
         c = 1
@@ -175,6 +186,9 @@ for msg in msgdic:
     for com in msgdic[msg]["comments"]:
         msgs.write("                              "+msgdic[msg]["comments"][com]+"\n")
 msgs.close()
+
+msgitems = msgdic.items()
+msgdic = sorted(msgitems)
 
 filename =  distro + "_msgs_" + date.today().strftime("%m_%d_%Y") + ".json"
 filename.replace("/","_")
