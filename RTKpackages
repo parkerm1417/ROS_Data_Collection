@@ -508,9 +508,12 @@ for srv in srvlist:
         com = open("/opt/rtk/" + distro + "/share/" + package + "/srv/" + file)
     comments = com.readlines()
     try:
-        comsplit = comments.index("---\n")
+        try:
+            comsplit = comments.index("---\n")
+        except:
+            comsplit = comments.index("---")
     except:
-        comsplit = comments.index("---")
+        comsplit = len(comments)
     com.close()
     cmd = "rossrv info "+srv[:-1]+" > temptext.txt"
     system(cmd)
