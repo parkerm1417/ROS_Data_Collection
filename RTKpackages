@@ -2,6 +2,8 @@ from os import listdir,system,remove
 import subprocess
 import time
 import json
+from services import serviceFunc
+from messages import messageFunc
 from datetime import date
 
 start = time.time()
@@ -50,8 +52,6 @@ try:
 except:
     Complete = {}
     Topics = {}
-    Services = {}
-    Messages = {}
     print("No previous run found, new files created\n")
     
 distro = subprocess.getoutput("rosversion -d")
@@ -59,8 +59,6 @@ try:
     if distro != Complete["Distribution"]:
         Complete = {}
         Topics = {}
-        Services = {}
-        Messages = {}
         print("Distribution has changed since last run, new files created")
 except:
     pass
@@ -79,8 +77,6 @@ if(packstorun == "ALL"):
             print("Previous run not for all packages, dictionaries cleared")
             Complete = {}
             Topics = {}
-            Services = {}
-            Messages = {}
             lastpackindex = -1
     except:
         lastpackindex = -1
@@ -91,7 +87,6 @@ elif(packstorun[-4:] == ".txt"):
     file.close()
     Complete = {}
     Topics = {}
-    Messages = {}
     lastpackindex = -1
     
 else:
@@ -99,6 +94,10 @@ else:
     Complete = {}
     Topics = {}
     lastpackindex = -1
+    
+inputName = input("what would you like to name the outputted files?\nFile names will be of the format:\n'YOUR INPUT'_msgs_Date.json\nFile Name:")
+messageFunc(packages,distro,inputName)
+serviceFunc(packages,distro,inputName)
 
 Complete["Distribution"] = distro
 
@@ -107,6 +106,7 @@ today = date.today()
 Complete["Date"] = today.strftime("%x")
 
 Topics["Date"] = today.strftime("%x")
+
 
 for pack in range(lastpackindex+1,len(packages)):
     Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
@@ -163,7 +163,7 @@ for pack in range(lastpackindex+1,len(packages)):
                     break
                 else:
                     CurrentNode = ""
-            print(oldlines)
+
             rnode = "rosnode info -q " + CurrentNode + " > temptext.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
             noder = subprocess.Popen(rnode,shell=True)
             time.sleep(1)
@@ -332,7 +332,10 @@ for msg in range(len(msglistlines)):
     Complete[package]["messages"][msglistlines[msg][:-1]] = {"name": msglistlines[msg][:-1],
                                                              "elementType": "message",
                                                              "fields": {}}
-    com = open("/opt/ros/" + distro + "/share/" + package + "/msg/" + file)
+    try:
+        com = open("/opt/ros/" + distro + "/share/" + package + "/msg/" + file)
+    except:
+        com = open("/opt/rtk/" + distro + "/share/" + package + "/msg/" + file)
     comments = com.readlines()
     com.close()
 
@@ -499,7 +502,10 @@ for srv in srvlist:
         pass
     
     file = srv[bs+1:-1] + ".srv"
-    com = open("/opt/ros/" + distro + "/share/" + package + "/srv/" + file)
+    try:
+        com = open("/opt/ros/" + distro + "/share/" + package + "/srv/" + file)
+    except:
+        com = open("/opt/rtk/" + distro + "/share/" + package + "/srv/" + file)
     comments = com.readlines()
     try:
         comsplit = comments.index("---\n")
@@ -806,6 +812,8 @@ comp = open("CompletePackageDictionary.json", "w")
 comp.write(json.dumps(Complete, indent=8))
 comp.close()
 
+remove("CompleteTemp.json")
+remove("TopicsTemp.json")
 print("total time elapsed: " + str(time.time()-start) + " seconds\n")
 system("killall -9 rosmaster")
 
