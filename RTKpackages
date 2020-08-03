@@ -1,0 +1,32 @@
+from os import listdir,system
+import subprocess
+import time
+import json
+from datetime import date
+
+start = time.time()
+primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
+
+########################################
+##Ensures that a new roscore is running
+########################################
+system("killall -9 rosmaster")
+try:
+    subprocess.Popen("roscore")
+    time.sleep(2.5)
+except:
+    pass
+
+system("rospack list > packageslist.txt")
+packs = open("packageslist.txt")
+packslist = packs.readlines()
+packs.close()
+
+allpacks = {}
+
+packs = open("packageslist.txt","w")
+for pack in packslist:
+    sp = pack.find(" ")
+    packs.write(pack[:sp]+"\n")
+    allpacks[pack[:sp]] = pack[sp+1:]
+packs.close()
