@@ -49,15 +49,6 @@ try:
     packages = prevfile["packages"]
     inputName = prevfile["inputName"]
 
-    try:
-        lastpacklist = list(Complete.keys())
-        lastpacklist.sort()
-        lastpack = lastpacklist[-1]
-        lastpackindex = packages.index(lastpack)
-        print(lastpackindex)
-        print(len(packages))
-    except:
-        lastpackindex = -1
     print("Previous run found!")
     continueRun = input("Would you like to continue this previous run? (Y/n): ")
     print("")
@@ -119,19 +110,14 @@ if(continueRun == "n" or continueRun == "N"):
     if(packstorun == "ALL"):
         packages = [f for f in allpacks]
         packages.sort()
-        lastpackindex = -1
             
     elif(packstorun[-4:] == ".txt"):
         file = open(packstorun)
         packages = file.readlines()
         file.close()
-        for pack in range(len(packages)):
-            packages[pack] = packages[pack][:-1]
-        lastpackindex = -1
         
     else:
         packages = [x for x in packstorun.split(",")]
-        lastpackindex = -1
 
     SavedRun["packages"] = packages    
     inputName = input("what would you like to name the outputted files?\nFile names will be of the format:\n'YOUR INPUT'_msgs_Date.json\nFile Name: ")
@@ -167,207 +153,209 @@ Topics["Date"] = today.strftime("%x")
 
 SavedRun["date"] = today.strftime("%x")
 
-for pack in range(lastpackindex+1,len(packages)):
-    Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
-    "elementType" : "package",
-    "name" : packages[pack],
-    "distribution" : "",
-    "nodes" : {},
-    "messages" : {},
-    "services" : {}
-    }
+for pack in range(len(packages)):
+    if packages[pack] not in Complete:
+        Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
+        "elementType" : "package",
+        "name" : packages[pack],
+        "distribution" : "",
+        "nodes" : {},
+        "messages" : {},
+        "services" : {}
+        }
 
-    temp = []
-    try:
-        temp = [f for f in listdir('/opt/ros/'+distro+'/lib/' + packages[pack])]  ##each package directory is accessed
-        Complete[packages[pack]]["distribution"] = "ROS/"+distro
-    except:
-        pass
-    
-    try:
-        temp = [f for f in listdir('/opt/rtk/'+distro+'/lib/' + packages[pack])]
-        Complete[packages[pack]]["distribution"] = "RTK/"+distro
-    except:
-        pass
+        temp = []
+        try:
+            temp = [f for f in listdir('/opt/ros/'+distro+'/lib/' + packages[pack])]  ##each package directory is accessed
+            Complete[packages[pack]]["distribution"] = "ROS/"+distro
+        except:
+            pass
+        
+        try:
+            temp = [f for f in listdir('/opt/rtk/'+distro+'/lib/' + packages[pack])]
+            Complete[packages[pack]]["distribution"] = "RTK/"+distro
+        except:
+            pass
 
-    system("rosnode list > temptext.txt")
-    file = open("temptext.txt")
-    oldlines = file.readlines()
-    file.close()
+        system("rosnode list > temptext.txt")
+        file = open("temptext.txt")
+        oldlines = file.readlines()
+        file.close()
 
-    for node in temp:
+        for node in temp:
 
-            Complete[packages[pack]]["nodes"][node] = {
-            "elementType" : "node",
-            "name" : node,
-            "publications": {},
-            "subscriptions": {},
-            "services provided": {},
-            "services used": {}
-            }
+                Complete[packages[pack]]["nodes"][node] = {
+                "elementType" : "node",
+                "name" : node,
+                "publications": {},
+                "subscriptions": {},
+                "services provided": {},
+                "services used": {}
+                }
 
-            run = "rosrun " + packages[pack] + " " + node     ##runs each node in the terminal and renames the node to be exact when being terminated 
-            kill = "killall " + node       ##kills all active nodes
+                run = "rosrun " + packages[pack] + " " + node     ##runs each node in the terminal and renames the node to be exact when being terminated 
+                kill = "killall " + node       ##kills all active nodes
 
-            runner = subprocess.Popen(run,shell=True)
-            time.sleep(1)
+                runner = subprocess.Popen(run,shell=True)
+                time.sleep(1)
 
-            system("rosnode list > temptext.txt")
-            file = open("temptext.txt")
-            newlines = file.readlines()
-            file.close
-            for new in newlines:
-                if (new not in oldlines):
-                    CurrentNode = new[:-1]
-                    break
-                else:
-                    CurrentNode = ""
-
-            rnode = "rosnode info -q " + CurrentNode + " > temptext.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
-            noder = subprocess.Popen(rnode,shell=True)
-            time.sleep(1)
-
-
-            file = open("temptext.txt")
-            lines = file.readlines()       ##reads all of the text within the file and sets it equal to a variable
-            file.close()
-            pub = 0
-            sub = 0
-            serv = 0
-
-            ##Looks at the fourth letter of each line to determine whether the information is about a publication, subscription, or service
-            for n in range(len(lines)):
-                if (lines[n] != "\n"):
-                    if (lines[n][3] == "l"):
-                        pub = n
-                    elif(lines[n][3] == "s"):
-                        sub = n
-                    elif (lines[n][3] == "v"):
-                        serv = n
-
-            pubtemp=[]
-            subtemp=[]
-            servtemp=[]
-            nodeinfotemp = []
-
-            ##adds the publication, subscription, and service info to temporary lists
-            for n in range(len(lines)):
-                if (n>pub and n<sub-1):
-                    ss = lines[n][3:-1]
-                    f = ss.find("[")
-                    toptype = ss[f+1:-1]
-                    q = ss.find("/",1,f-1)
-                    if(q == -1):
-                        title = ss[1:f-1]
+                system("rosnode list > temptext.txt")
+                file = open("temptext.txt")
+                newlines = file.readlines()
+                file.close
+                for new in newlines:
+                    if (new not in oldlines):
+                        CurrentNode = new[:-1]
+                        break
                     else:
-                        title = ss[q+1:f-1]
-                    Complete[packages[pack]]["nodes"][node]["publications"][title] = {
-                        "elementType" : "topic",
-                        "name" : title,
-                        "type" : toptype }
-                    ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
-                    bs = ss.find("/", 1, ob)
-                    topicname = ss[:ob-1]
-                    datatype = ss[ob+1:-1]
-                    try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
-                        Topics[topicname]["publishers"][node] = {
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack
+                        CurrentNode = ""
+
+                rnode = "rosnode info -q " + CurrentNode + " > temptext.txt"       ##gets info about each nod and puts it into a .txt file to be accessed later
+                noder = subprocess.Popen(rnode,shell=True)
+                time.sleep(1)
+
+
+                file = open("temptext.txt")
+                lines = file.readlines()       ##reads all of the text within the file and sets it equal to a variable
+                file.close()
+                pub = 0
+                sub = 0
+                serv = 0
+
+                ##Looks at the fourth letter of each line to determine whether the information is about a publication, subscription, or service
+                for n in range(len(lines)):
+                    if (lines[n] != "\n"):
+                        if (lines[n][3] == "l"):
+                            pub = n
+                        elif(lines[n][3] == "s"):
+                            sub = n
+                        elif (lines[n][3] == "v"):
+                            serv = n
+
+                pubtemp=[]
+                subtemp=[]
+                servtemp=[]
+                nodeinfotemp = []
+
+                ##adds the publication, subscription, and service info to temporary lists
+                for n in range(len(lines)):
+                    if (n>pub and n<sub-1):
+                        ss = lines[n][3:-1]
+                        f = ss.find("[")
+                        toptype = ss[f+1:-1]
+                        q = ss.find("/",1,f-1)
+                        if(q == -1):
+                            title = ss[1:f-1]
+                        else:
+                            title = ss[q+1:f-1]
+                        Complete[packages[pack]]["nodes"][node]["publications"][title] = {
+                            "elementType" : "topic",
+                            "name" : title,
+                            "type" : toptype }
+                        ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
+                        bs = ss.find("/", 1, ob)
+                        topicname = ss[:ob-1]
+                        datatype = ss[ob+1:-1]
+                        try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
+                            Topics[topicname]["publishers"][node] = {
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack
+                                }
+                        except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
+                            Topics[topicname] = {
+                            "elementType": "topic",
+                            "name": topicname,
+                            "type": "",
+                            "data": "TBD",
+                            "publishers": {node:{
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack}},
+                            "subscribers": {}
                             }
-                    except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
-                        Topics[topicname] = {
-                        "elementType": "topic",
-                        "name": topicname,
-                        "type": "",
-                        "data": "TBD",
-                        "publishers": {node:{
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack}},
-                        "subscribers": {}
-                        }
-                    if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
-                        Topics[topicname]["type"] = datatype
+                        if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
+                            Topics[topicname]["type"] = datatype
 
-                elif (n>sub and n<serv-1):
-                    ss = lines[n][3:-1]
-                    f = ss.find("[")
-                    toptype = ss[f+1:-1]
-                    q = ss.find("/",1,f-1)
-                    title = ss[:f-1]
-                    subtype = subprocess.getoutput("rostopic info "+title)
-                    endline = subtype.find("\n")
-                    Type = subtype[6:endline]
-                    Complete[packages[pack]]["nodes"][node]["subscriptions"][title[1:]] = {
-                        "elementType" : "topic",
-                        "name" : title[1:],
-                        "type" : Type
-                        }
-                    ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
-                    bs = ss.find("/", 1, ob-1)
-                    topicname = ss[:ob-1]
-                    try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
-                        Topics[topicname]["publishers"][node] = {
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack
+                    elif (n>sub and n<serv-1):
+                        ss = lines[n][3:-1]
+                        f = ss.find("[")
+                        toptype = ss[f+1:-1]
+                        q = ss.find("/",1,f-1)
+                        title = ss[:f-1]
+                        subtype = subprocess.getoutput("rostopic info "+title)
+                        endline = subtype.find("\n")
+                        Type = subtype[6:endline]
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"][title[1:]] = {
+                            "elementType" : "topic",
+                            "name" : title[1:],
+                            "type" : Type
                             }
-                    except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
-                        Topics[topicname] = {
-                        "elementType": "topic",
-                        "name": topicname,
-                        "type": "",
-                        "data": "TBD",
-                        "publishers": {},
-                        "subscribers": {node:{
-                            "elementType": "node",
-                            "name": node,
-                            "package": pack}},
-                        }
-                    if(Type != "unknown type" and Topics[topicname]["type"] == ""):     
-                        Topics[topicname]["type"] = Type
+                        ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
+                        bs = ss.find("/", 1, ob-1)
+                        topicname = ss[:ob-1]
+                        try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
+                            Topics[topicname]["publishers"][node] = {
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack
+                                }
+                        except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
+                            Topics[topicname] = {
+                            "elementType": "topic",
+                            "name": topicname,
+                            "type": "",
+                            "data": "TBD",
+                            "publishers": {},
+                            "subscribers": {node:{
+                                "elementType": "node",
+                                "name": node,
+                                "package": pack}},
+                            }
+                        if(Type != "unknown type" and Topics[topicname]["type"] == ""):     
+                            Topics[topicname]["type"] = Type
 
-                elif (n>serv and n<len(lines)-1):
-                    servtemp.append(lines[n][3:-1])
+                    elif (n>serv and n<len(lines)-1):
+                        servtemp.append(lines[n][3:-1])
 
-            for servs in servtemp:
-                args = subprocess.getoutput("rosservice args "+servs)
-                servtype = subprocess.getoutput("rosservice type "+servs)
-                q = servs.find("/",1)
-                if(q == -1):
-                    title = servs[1:]
-                else:
-                    title = servs[q+1:]
+                for servs in servtemp:
+                    args = subprocess.getoutput("rosservice args "+servs)
+                    servtype = subprocess.getoutput("rosservice type "+servs)
+                    q = servs.find("/",1)
+                    if(q == -1):
+                        title = servs[1:]
+                    else:
+                        title = servs[q+1:]
 
-                Complete[packages[pack]]["nodes"][node]["services provided"][title] = {
-                "elementType" : "service",
-                "name" : servs,
-                "type" : servtype,
-                "args" : args}
+                    Complete[packages[pack]]["nodes"][node]["services provided"][title] = {
+                    "elementType" : "service",
+                    "name" : servs,
+                    "type" : servtype,
+                    "args" : args}
 
-            killname = "rosnode kill -a"
-            killer = subprocess.Popen(killname,shell=True)
-            system(kill)
-            time.sleep(1)
+                killname = "rosnode kill -a"
+                killer = subprocess.Popen(killname,shell=True)
+                kill2 = subprocess.Popen(kill,shell=True)
+                time.sleep(1)
 
-            system("rosnode list > temptext.txt")
-            file = open("temptext.txt")
-            oldlines = file.readlines()
-            file.close
+                system("rosnode list > temptext.txt")
+                file = open("temptext.txt")
+                oldlines = file.readlines()
+                file.close
 
-            runner.terminate()
-            noder.terminate()
-            killer.terminate()
+                runner.terminate()
+                noder.terminate()
+                killer.terminate()
+                kill2.terminate()
 
-    SavedRun["Complete"] = Complete
-    SavedRun["Topics"] = Topics
-    file = open("PreviousRun.json","w")
-    file.write(json.dumps(SavedRun))
-    file.close()
+        SavedRun["Complete"] = Complete
+        SavedRun["Topics"] = Topics
+        file = open("PreviousRun.json","w")
+        file.write(json.dumps(SavedRun))
+        file.close()
 
-    print("Package "+ str(pack+1) +" of "+ str(len(packages)) + " complete")
-    system("rosnode kill -a")
+        print("Package "+ str(pack+1) +" of "+ str(len(packages)) + " complete")
+        system("rosnode kill -a")
 system("rosnode kill -a")
 print("PACKAGES COMPLETED\n")
 
@@ -881,11 +869,17 @@ print("SERVICES COMPLETED\n")
 ###############################################################################################
 ###############################################################################################
 
-top = open("TopicsDictionary.json", "w")
+topitems = Topics.items()
+Topics = sorted(topitems)
+
+compitems = Complete.items()
+Complete = sorted(compitems)
+
+top = open(inputName + "_TopicsDictionary_" + ".json", "w")
 top.write(json.dumps(Topics, indent=8))
 top.close()
 
-comp = open("CompletePackageDictionary.json", "w")
+comp = open(inputName + "_PackageDictionary_" + date.today().strftime("%m_%d_%Y") + ".json", "w")
 comp.write(json.dumps(Complete, indent=8))
 comp.close()
 
@@ -897,4 +891,3 @@ system("killall -9 rosmaster")
 while(True):
     print("PROGRAM IS DONE RUNNING PLEASE KILL ANY PROGRAMS STILL RUNNING")
     time.sleep(0.1)
-
