@@ -1,4 +1,4 @@
-from os import listdir,system
+from os import listdir,system,remove
 import subprocess
 import time
 import json
@@ -24,23 +24,38 @@ def serviceFunc(packages,distro,inputName):
             if message[:bs] in packages:
                 edits.append(message)
 
-    msgdic = {}
+    try:
+        file = open("tempServices.json")
+        prev = file.read()
+        msgdic = json.loads(prev)
+    except:
+        msgdic = {}
 
     c=1
+    
     for msg in edits:
-        bs = msg.find("/")
-        msgdic[msg] = {
-            "name": msg[bs+1:],
-            "elementType": "service",
-            "requestMessage": msg[bs+1:]+"Request",
-            "responseMessage": msg[bs+1:]+"Response"
-            }
-        print("Service "+ str(c) +" of "+ str(len(edits)) +" completed")
+        if msg not in msgdic:
+            bs = msg.find("/")
+            msgdic[msg] = {
+                "name": msg[bs+1:],
+                "elementType": "service",
+                "requestMessage": msg[bs+1:]+"Request",
+                "responseMessage": msg[bs+1:]+"Response"
+                }
+            print("Service "+ str(c) +" of "+ str(len(edits)) +" completed")
+
+            file = open("tempServices.json","w")
+            file.write(json.dumps(msgdic))
+            file.close()
+            
         c+=1
+
+    msgitems = msgdic.items()
+    msgdic = sorted(msgitems)
 
     filename =  inputName + "_srvs_" + date.today().strftime("%m_%d_%Y") + ".json"
     srvs = open(filename,"w")
     srvs.write(json.dumps(msgdic, indent = 8))
     srvs.close()
+    remove("tempServices.json")
     return
-
