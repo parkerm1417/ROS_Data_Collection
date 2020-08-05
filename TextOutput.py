@@ -1,7 +1,8 @@
 import json
 import subprocess as sp
+from os import system
 
-distro = system("rosversion -d")
+me = sp.getoutput("whoami")
 print("The file names you are about to enter should\nall come from the same run of RTKpackages.py")
 packagedict = input("Enter the exact file path of the package dictionary .json\nfile you wish to get output from.\nExample: /home/mie/Desktop/packages.json\n")
 print()
@@ -27,15 +28,19 @@ file.close()
 
 topics = json.loads(top)
 
-system("mkdir /home/Desktop/Architecture_Documents")
-system("mkdir /home/Desktop/Architecture_Documents/ROS")
-system("mkdir /home/Desktop/Architecture_Documents/RTK")
+system("mkdir /home/" + me + "/Desktop/Architecture_Documents")
+system("mkdir /home/" + me + "/Desktop/Architecture_Documents/ROS")
+system("mkdir /home/" + me + "/Desktop/Architecture_Documents/RTK")
+c = 0
 for pack in bigdict:
+    if pack == "Distribution" or pack == "Date":
+        print("skipped")
+        continue
     if (bigdict[pack]["distribution"][:3] == "ROS"):
-        system("mkdir /home/Desktop/Architecture_Documents/ROS/" + pack)
+        system("mkdir /home/" + me + "/Desktop/Architecture_Documents/ROS/" + pack)
         for node in bigdict[pack]["nodes"]:
             try:
-                file = open("/home/Desktop/Architecture_Documents/ROS/" + pack + "/" + node".txt", "x")
+                file = open("/home/" + me + "/Desktop/Architecture_Documents/ROS/" + pack + "/" + node + ".txt", "x")
             except:
                 continue
             file.write("Package: " + pack)
@@ -83,10 +88,10 @@ for pack in bigdict:
                     used.append(msg)
 
     elif (bigdict[pack]["distribution"][:3] == "RTK"):
-        system("mkdir /home/Desktop/Architecture_Documents/RTK/" + pack)
+        system("mkdir /home/" + me + "/Desktop/Architecture_Documents/RTK/" + pack)
         for node in bigdict[pack]["nodes"]:
             try:
-                file = open("/home/Desktop/Architecture_Documents/RTK/" + pack + "/" + node".txt", "x")
+                file = open("/home/" + me + "/Desktop/Architecture_Documents/RTK/" + pack + "/" + node + ".txt", "x")
             except:
                 continue
             file.write("Package: " + pack)
@@ -132,3 +137,6 @@ for pack in bigdict:
                     for com in messages[msg]["comments"]:
                         file.write("                              " + messages[msg]["comments"][com])
                     used.append(msg)
+    c + 1
+    print("Package " + str(c) + " of " + str(len(bigdict)-2) + " completed")
+print("Program complete. See Desktop for Architecture_Documents folder.")
