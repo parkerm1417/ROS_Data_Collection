@@ -5,7 +5,7 @@ import json
 from datetime import date
 
 
-def serviceFunc(packages,distro,inputName):
+def serviceFunc(packages,distro,inputName,Complete):
     primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
 
     ##msglist = input("Please type all services you would like information on. Separate services with commas.\nServices:")
@@ -15,14 +15,14 @@ def serviceFunc(packages,distro,inputName):
     ##else:
     ##    messages = [x for x in msglist.split(",")]
 
-    file = subprocess.getoutput("rossrv list")
-    messages = file.split("\n")
+##    file = subprocess.getoutput("rossrv list")
+##    messages = file.split("\n")
     edits = []
 
-    for message in messages:
-            bs = message.find("/")
-            if message[:bs] in packages:
-                edits.append(message)
+##    for message in messages:
+##            bs = message.find("/")
+##            if message[:bs] in packages:
+##                edits.append(message)
 
     try:
         file = open("tempServices.json")
@@ -31,6 +31,12 @@ def serviceFunc(packages,distro,inputName):
     except:
         msgdic = {}
 
+    for pack in Complete:
+        if pack != "Distribution" and pack != "Date":
+            for node in Complete[pack]["nodes"]:
+                for serv in Complete[pack]["nodes"][node]["services provided"]:
+                    if Complete[pack]["nodes"][node]["services provided"][serv]["type"] not in edits:
+                        edits.append(Complete[pack]["nodes"][node]["services provided"][serv]["type"])
     c=1
     
     for msg in edits:
@@ -56,3 +62,4 @@ def serviceFunc(packages,distro,inputName):
     srvs.close()
     remove("tempServices.json")
     return
+
