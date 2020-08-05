@@ -213,9 +213,6 @@ def messageFunc(packages,distro,inputName):
 ##            msgs.write("                              "+msgdic[msg]["comments"][com]+"\n")
 ##    msgs.close()
 
-    msgitems = msgdic.items()
-    msgdic = sorted(msgitems)
-
     filename =  inputName + "_msgs_" + date.today().strftime("%m_%d_%Y") + ".json"
     filename.replace("/","_")
     msgs = open(filename,"w")
