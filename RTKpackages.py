@@ -29,9 +29,14 @@ allpacks = {}
 packs = open("packageslist.txt","w")
 for pack in packslist:
     sp = pack.find(" ")
-    packs.write(pack[:sp]+"\n")
+    packs.write(pack[:sp] + "\n")
     allpacks[pack[:sp]] = pack[sp+1:]
 packs.close()
+packs = open("packageslist.txt")
+packslist = packs.readlines()
+packs.close()
+for pl in range(len(packslist)):
+    packslist[pl] = packslist[pl][:-1]
 print("Packages list updated, please see 'packageslist.txt' on Desktop for full list\n")
 
 try:
@@ -91,33 +96,37 @@ if(continueRun == "n" or continueRun == "N"):
     Topics = {}
     alreadydoneMSGS = []
     alreadydoneSERV = []
+    packages = []
     messagescheck = False
     servicescheck = False
 
-    try:
-        remove("tempMessages.json")
-    except:
-        pass
+    while ((not set(packages).issubset(set(packslist))) or (packages == [])):
+        if packages != []:
+            print("*****One or more packages is not a valid entry. Please check your packages and try again.*****\n")
+        try:
+            remove("tempMessages.json")
+        except:
+            pass
 
-    try:
-        remove("tempServices.json")
-    except:
-        pass
-    
-    packstorun = input("Please list desired packages and seperate multiple packages with a comma (NO SPACES)\nYou will find all available packages in packageslist.txt\nThe package names are everything prior to the space on each line\nIf you would like all packages to run, please type \"ALL\"\nPackages: ")
-    print("")
-
-    if(packstorun == "ALL"):
-        packages = [f for f in allpacks]
-        packages.sort()
-            
-    elif(packstorun[-4:] == ".txt"):
-        file = open(packstorun)
-        packages = file.readlines()
-        file.close()
+        try:
+            remove("tempServices.json")
+        except:
+            pass
         
-    else:
-        packages = [x for x in packstorun.split(",")]
+        packstorun = input("Please list desired packages and seperate multiple packages with a comma (NO SPACES)\nYou will find all available packages in packageslist.txt\nThe package names are everything prior to the space on each line\nIf you would like all packages to run, please type \"ALL\"\nPackages: ")
+        print("")
+
+        if(packstorun == "ALL"):
+            packages = [f for f in allpacks]
+            packages.sort()
+                
+        elif(packstorun[-4:] == ".txt"):
+            file = open(packstorun)
+            packages = file.readlines()
+            file.close()
+            
+        else:
+            packages = [x for x in packstorun.split(",")]
 
     SavedRun["packages"] = packages    
     inputName = input("what would you like to name the outputted files?\nFile names will be of the format:\n'YOUR INPUT'_msgs_Date.json\nFile Name: ")
@@ -869,11 +878,6 @@ print("SERVICES COMPLETED\n")
 ###############################################################################################
 ###############################################################################################
 
-topitems = Topics.items()
-Topics = sorted(topitems)
-
-compitems = Complete.items()
-Complete = sorted(compitems)
 
 top = open(inputName + "_TopicsDictionary_" + ".json", "w")
 top.write(json.dumps(Topics, indent=8))
