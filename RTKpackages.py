@@ -135,22 +135,6 @@ if(continueRun == "n" or continueRun == "N"):
     file = open("PreviousRun.json","w")
     file.write(json.dumps(SavedRun))
     file.close()
-          
-print("")
-if not messagescheck:
-    messageFunc(packages,distro,inputName)
-    SavedRun["messagescheck"] = True
-    file = open("PreviousRun.json","w")
-    file.write(json.dumps(SavedRun))
-    file.close()
-    print("")
-if not servicescheck:
-    serviceFunc(packages,distro,inputName)
-    SavedRun["servicescheck"] = True
-    file = open("PreviousRun.json","w")
-    file.write(json.dumps(SavedRun))
-    file.close()
-    print("")
 
 Complete["Distribution"] = distro
 
@@ -163,6 +147,10 @@ Topics["Date"] = today.strftime("%x")
 SavedRun["date"] = today.strftime("%x")
 
 for pack in range(len(packages)):
+
+    subprocess.Popen("roscore")
+    time.sleep(2.5)
+    
     if packages[pack] not in Complete:
         Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
         "elementType" : "package",
@@ -365,6 +353,8 @@ for pack in range(len(packages)):
 
         print("Package "+ str(pack+1) +" of "+ str(len(packages)) + " complete")
         system("rosnode kill -a")
+        system("killall -9 rosmaster")
+        
 system("rosnode kill -a")
 print("PACKAGES COMPLETED\n")
 
@@ -878,6 +868,21 @@ print("SERVICES COMPLETED\n")
 ###############################################################################################
 ###############################################################################################
 
+print("")
+if not messagescheck:
+    messageFunc(packages,distro,inputName,Complete)
+    SavedRun["messagescheck"] = True
+    file = open("PreviousRun.json","w")
+    file.write(json.dumps(SavedRun))
+    file.close()
+    print("")
+if not servicescheck:
+    serviceFunc(packages,distro,inputName,Complete)
+    SavedRun["servicescheck"] = True
+    file = open("PreviousRun.json","w")
+    file.write(json.dumps(SavedRun))
+    file.close()
+    print("")
 
 top = open(inputName + "_TopicsDictionary_" + ".json", "w")
 top.write(json.dumps(Topics, indent=8))
