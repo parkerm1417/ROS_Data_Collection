@@ -50,9 +50,6 @@ def serviceFunc(packages,distro,inputName):
             
         c+=1
 
-    msgitems = msgdic.items()
-    msgdic = sorted(msgitems)
-
     filename =  inputName + "_srvs_" + date.today().strftime("%m_%d_%Y") + ".json"
     srvs = open(filename,"w")
     srvs.write(json.dumps(msgdic, indent = 8))
