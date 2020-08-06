@@ -2,7 +2,7 @@ import json
 import subprocess as sp
 from os import system
 
-primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
+primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]","unknown type","char"]
 
 me = sp.getoutput("whoami")
 print("The file names you are about to enter should\nall come from the same run of RTKpackages.py")
@@ -135,6 +135,6 @@ for pack in bigdict:
                     used.append(msg)
 
     file.close()
-    c + 1
+    c += 1
     print("Package " + str(c) + " of " + str(len(bigdict)-2) + " completed")
 print("Program complete. See Desktop for Architecture_Documents folder.")
