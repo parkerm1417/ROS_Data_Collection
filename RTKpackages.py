@@ -345,6 +345,37 @@ for pack in range(len(packages)):
                 killer.terminate()
                 kill2.terminate()
 
+                if pack != "Distribution" and pack != "Date":
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["get_loggers"]["type"] = "roscpp/GetLoggers"
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["get_loggers"]["args"] = ""
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_logger_level"]["type"] = "roscpp/SetLoggerLevel"
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_logger_level"]["args"] = "logger level"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_exposure"]["type"] = "marti_sensor_msgs/SetExposure"
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_exposure"]["args"] = "auto_exposure time"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_parameters"]["type"] = "dynamic_reconfigure/Reconfigure"
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_parameters"]["args"] = "config"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_camera_info"]["type"] = "sensor_msgs/SetCameraInfo"
+                        Complete[packages[pack]]["nodes"][node]["services provided"]["set_camera_info"]["args"] = "camera_info"
+                    except:
+                        pass
+
         SavedRun["Complete"] = Complete
         SavedRun["Topics"] = Topics
         file = open("PreviousRun.json","w")
@@ -884,7 +915,7 @@ if not servicescheck:
     file.close()
     print("")
 
-top = open(inputName + "_TopicsDictionary_" + ".json", "w")
+top = open(inputName + "_TopicsDictionary_" + date.today().strftime("%m_%d_%Y") + ".json", "w")
 top.write(json.dumps(Topics, indent=8))
 top.close()
 
