@@ -47,9 +47,7 @@ def messageFunc(packages,distro,inputName,Complete):
         msgdic = {}
 
     p = 1
-    print(edits)
     for msg in edits:
-        print(msg)
         if (msg not in msgdic) and msg != "unknown type":
             Done = False
             bs = msg.find("/")
