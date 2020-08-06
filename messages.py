@@ -6,7 +6,7 @@ from datetime import date
 
 
 def messageFunc(packages,distro,inputName,Complete):
-    primitives = ["char","byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
+    primitives = ["unknown type","char","byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
 
 ##    file = subprocess.getoutput("rosmsg list")
 ##    messages = file.split("\n")
@@ -47,10 +47,10 @@ def messageFunc(packages,distro,inputName,Complete):
         msgdic = {}
 
     p = 1
-    
+    print(edits)
     for msg in edits:
         print(msg)
-        if msg not in msgdic:
+        if (msg not in msgdic) and msg != "unknown type":
             Done = False
             bs = msg.find("/")
             msgdic[msg] = {
@@ -60,7 +60,6 @@ def messageFunc(packages,distro,inputName,Complete):
                 "comments": {}
                 }
             if(msg[-7:] == "Request"):
-                print("1")
                 try:
                     system("rossrv info "+msg[:-7]+" > temptext.txt")
                     file = open("temptext.txt")
@@ -71,32 +70,19 @@ def messageFunc(packages,distro,inputName,Complete):
                         
                     except:
                         split = msginfo.index("---")
-                    print("A")
-                    for line in range(split+1,len(msginfo)):
-                        print("A1")
+                    for line in range(0,split):
                         if(msginfo[line][0] != " " and msginfo[line] != "\n"):
-                            print("A2")
                             sp = msginfo[line].find(" ")
-                            print("A3")
                             msgdic[msg]["fields"][msginfo[line][sp+1:-1]] = msginfo[line][:sp]
-                            print("A4")
                             if ((msginfo[line][:sp] not in primitives) and (msginfo[line][:sp] not in edits)):
-                                print("A5")
                                 if(msginfo[line][:sp][-1] == "]"):
-                                    print("A6")
                                     q = msginfo[line][:sp]
-                                    print("A7")
                                     br = q.find("[")
-                                    print("A8")
                                     q = q[:br]
-                                    print("A9")
                                     if (q not in edits) and (q not in primitives):
-                                        print("A10")
                                         edits.append(q)
-                                        print("A11")
                                 else:
                                     edits.append(msginfo[line][:sp])
-                    print("B")
                     bs = msg.find("/")
                     try:
                         file = open("/opt/ros/"+distro+"/share/"+msg[:bs]+"/srv/"+msg[bs+1:-7]+".srv")
@@ -107,7 +93,6 @@ def messageFunc(packages,distro,inputName,Complete):
 
                     comments = file.readlines()
                     file.close()
-                    print("C")
                     c = 1
                     try:
                         try:
@@ -125,12 +110,10 @@ def messageFunc(packages,distro,inputName,Complete):
                             msgdic[msg]["comments"][c] = comments[com]
                         c += 1
                     Done = True
-                    print("D")
                 except:
                     pass
                 
             elif(msg[-8:] == "Response"):
-                print("2")
                 try:
                     system("rossrv info "+msg[:-8]+" > temptext.txt")
                     file = open("temptext.txt")
@@ -187,7 +170,6 @@ def messageFunc(packages,distro,inputName,Complete):
                 except:
                     pass
             if Done == False:
-                print("3")
                 system("rosmsg info "+msg+" > temptext.txt")
                 file = open("temptext.txt")
                 msginfo = file.readlines()
