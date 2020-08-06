@@ -251,7 +251,7 @@ for pack in range(len(packages)):
                             "type" : toptype }
                         ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
                         bs = ss.find("/", 1, ob)
-                        topicname = ss[:ob-1]
+                        topicname = ss[1:ob-1]
                         datatype = ss[ob+1:-1]
                         try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
                             Topics[topicname]["publishers"][node] = {
@@ -263,7 +263,7 @@ for pack in range(len(packages)):
                             Topics[topicname] = {
                             "elementType": "topic",
                             "name": topicname,
-                            "type": "",
+                            "type": "unknown type",
                             "data": "TBD",
                             "publishers": {node:{
                                 "elementType": "node",
@@ -271,7 +271,7 @@ for pack in range(len(packages)):
                                 "package": pack}},
                             "subscribers": {}
                             }
-                        if(datatype != "unknown type" and Topics[topicname]["type"] == ""):     
+                        if(datatype != "unknown type" and Topics[topicname]["type"] == "unknown type"):     
                             Topics[topicname]["type"] = datatype
 
                     elif (n>sub and n<serv-1):
@@ -286,30 +286,30 @@ for pack in range(len(packages)):
                         Complete[packages[pack]]["nodes"][node]["subscriptions"][title[1:]] = {
                             "elementType" : "topic",
                             "name" : title[1:],
-                            "type" : Type
+                            "type" : ""
                             }
                         ob = ss.find("[")      ##for formatting purposes, extraneous symbols are removed
                         bs = ss.find("/", 1, ob-1)
-                        topicname = ss[:ob-1]
+                        topicname = ss[1:ob-1]
                         try:        ##checks to see if the topic has already been filled with its information, and if so, only adds on the publisher/subscriber info
-                            Topics[topicname]["publishers"][node] = {
+                            Topics[topicname]["subscribers"][node] = {
                                 "elementType": "node",
                                 "name": node,
-                                "package": pack
+                                "package": packages[pack]
                                 }
                         except:     ##adds a dictionary to each topic and fills it with information, each publisher and subscriber is also assigned an empty dictionary
                             Topics[topicname] = {
                             "elementType": "topic",
                             "name": topicname,
-                            "type": "",
+                            "type": "unknown type",
                             "data": "TBD",
                             "publishers": {},
                             "subscribers": {node:{
                                 "elementType": "node",
                                 "name": node,
-                                "package": pack}},
+                                "package": packages[pack]}},
                             }
-                        if(Type != "unknown type" and Topics[topicname]["type"] == ""):     
+                        if(Type != "unknown type" and Topics[topicname]["type"] == "unknown type"):     
                             Topics[topicname]["type"] = Type
 
                     elif (n>serv and n<len(lines)-1):
@@ -326,7 +326,7 @@ for pack in range(len(packages)):
 
                     Complete[packages[pack]]["nodes"][node]["services provided"][title] = {
                     "elementType" : "service",
-                    "name" : servs,
+                    "name" : node + "/" + title,
                     "type" : servtype,
                     "args" : args}
 
@@ -373,6 +373,390 @@ for pack in range(len(packages)):
                     try:
                         Complete[packages[pack]]["nodes"][node]["services provided"]["set_camera_info"]["type"] = "sensor_msgs/SetCameraInfo"
                         Complete[packages[pack]]["nodes"][node]["services provided"]["set_camera_info"]["args"] = "camera_info"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["local_xy_origin"]["type"] = "gps_common/GPSFix"
+                        Topics["local_xy_origin"]["type"] = "gps_common/GPSFix"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_name"]["type"] = "std_msgs/String"
+                        Topics["vehicle_name"]["type"] = "std_msgs/String"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["world_model/segmentation_data"]["type"] = "sumet_perception_msgs/GroundSegmentationData"
+                        Topics["world_model/segmentation_data"]["type"] = "sumet_perception_msgs/GroundSegmentationData"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["lidar/vh_twm_costmap"]["type"] = "sumet_nav_msgs/Costmap"
+                        Topics["lidar/vh_twm_costmap"]["type"] = "sumet_nav_msgs/Costmap"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["lidar/vs_costmap_surf"]["type"] = "sumet_nav_msgs/Costmap"
+                        Topics["lidar/vs_costmap_surf"]["type"] = "sumet_nav_msgs/Costmap"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["lidar/vl_raw"]["type"] = "velodyne_ll/Raw"
+                        Topics["lidar/vl_raw"]["type"] = "velodyne_ll/Raw"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["localization/yaw_rate"]["type"] = "marti_sensor_msgs/Gyro"
+                        Topics["localization/yaw_rate"]["type"] = "marti_sensor_msgs/Gyro"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/path_following_debug_info"]["type"] = "path_following_controller/PathFollowingDebugInfo"
+                        Topics["navigation/path_following_debug_info"]["type"] = "path_following_controller/PathFollowingDebugInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/path_following_plot_data"]["type"] = "path_following_controller/PathFollowingPlotData"
+                        Topics["navigation/path_following_plot_data"]["type"] = "path_following_controller/PathFollowingPlotData"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/planned_path"]["type"] = "swri_nav_msgs/PathStamped"
+                        Topics["navigation/planned_path"]["type"] = "swri_nav_msgs/PathStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/planned_stop"]["type"] = "marti_common_msgs/BoolStamped"
+                        Topics["navigation/planned_stop"]["type"] = "marti_common_msgs/BoolStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/predicted_path_footprint"]["type"] = "visualization_msgs/MarkerArray"
+                        Topics["navigation/predicted_path_footprint"]["type"] = "visualization_msgs/MarkerArray"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/predicted_path"]["type"] = "swri_nav_msgs/PathStamped"
+                        Topics["navigation/predicted_path"]["type"] = "swri_nav_msgs/PathStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/predicted_path_footprint_margin"]["type"] = "visualization_msgs/MarkerArray"
+                        Topics["navigation/predicted_path_footprint_margin"]["type"] = "visualization_msgs/MarkerArray"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/pursuit_anchor_target"]["type"] = "swri_nav_msgs/PathSegmentStamped"
+                        Topics["navigation/pursuit_anchor_target"]["type"] = "swri_nav_msgs/PathSegmentStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/pursuit_arc"]["type"] = "swri_nav_msgs/PathSegmentStamped"
+                        Topics["navigation/pursuit_arc"]["type"] = "swri_nav_msgs/PathSegmentStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/classified_image"]["type"] = "sumet_perception_msgs/ClassifiedImage"
+                        Topics["vision/front/classified_image"]["type"] = "sumet_perception_msgs/ClassifiedImage"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/disparity"]["type"] = "stereo_msgs/DisparityImage"
+                        Topics["vision/front/disparity"]["type"] = "stereo_msgs/DisparityImage"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/imperx_stereo_pipeline/camera_/binned/image_rect_color"]["type"] = "sensor_msgs/Image"
+                        Topics["vision/front/imperx_stereo_pipeline/camera_/binned/image_rect_color"]["type"] = "sensor_msgs/Image"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/imperx_stereo_pipeline/camera_/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                        Topics["vision/front/imperx_stereo_pipeline/camera_/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/steering_target_path"]["type"] = "swri_nav_msgs/PathSegmentStamped"
+                        Topics["navigation/steering_target_path"]["type"] = "swri_nav_msgs/PathSegmentStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/stopped_for_obstacle"]["type"] = "marti_common_msgs/BoolStamped"
+                        Topics["navigation/stopped_for_obstacle"]["type"] = "marti_common_msgs/BoolStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/vs_costmap_surf"]["type"] = "sumet_nav_msgs/Costmap"
+                        Topics["navigation/vs_costmap_surf"]["type"] = "sumet_nav_msgs/Costmap"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/waypoint_following_parameters"]["type"] = "sumet_nav_msgs/WaypointFollowingParameters"
+                        Topics["navigation/waypoint_following_parameters"]["type"] = "sumet_nav_msgs/WaypointFollowingParameters"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/auto_gear_in_reverse"]["type"] = "marti_common_msgs/BoolStamped"
+                        Topics["vehicle_interface/auto_gear_in_reverse"]["type"] = "marti_common_msgs/BoolStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["world_model/heartbeat/front_stereo"]["type"] = "sumet_common_msgs/Heartbeat"
+                        Topics["world_model/heartbeat/front_stereo"]["type"] = "sumet_common_msgs/Heartbeat"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["world_model/heartbeat/rear_stereo"]["type"] = "sumet_common_msgs/Heartbeat"
+                        Topics["world_model/heartbeat/rear_stereo"]["type"] = "sumet_common_msgs/Heartbeat"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/brake_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics["vehicle_interface/brake_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/brake_sense"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics["vehicle_interface/brake_sense"]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/curvature_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics["vehicle_interface/curvature_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/curvature_sense"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics["vehicle_interface/curvature_sense"]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/curvature_setpoint"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics["vehicle_interface/curvature_setpoint"]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/drive_by_wire_state"]["type"] = "sumet_nav_msgs/DriveByWireState"
+                        Topics["vehicle_interface/drive_by_wire_state"]["type"] = "sumet_nav_msgs/DriveByWireState"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/engine_running"]["type"] = "marti_common_msgs/BoolStamped"
+                        Topics["vehicle_interface/engine_running"]["type"] = "marti_common_msgs/BoolStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/ignition_on"]["type"] = "marti_common_msgs/BoolStamped"
+                        Topics["vehicle_interface/ignition_on"]["type"] = "marti_common_msgs/BoolStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/robotic_mode"]["type"] = "marti_common_msgs/BoolStamped"
+                        Topics["vehicle_interface/robotic_mode"]["type"] = "marti_common_msgs/BoolStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/run_engine"]["type"] = "marti_common_msgs/BoolStamped"
+                        Topics["vehicle_interface/run_engine"]["type"] = "marti_common_msgs/BoolStamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/speed_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics["vehicle_interface/speed_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/speed_setpoint"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics[""]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["localization/imu/raw"]["type"] = "sensor_msgs/Imu"
+                        Topics["localization/imu/raw"]["type"] = "sensor_msgs/Imu"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["localization/imu/is_calibrated"]["type"] = "std_msgs/Bool"
+                        Topics["localization/imu/is_calibrated"]["type"] = "std_msgs/Bool"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["localization/gps_sync"]["type"] = "std_msgs/Time"
+                        Topics["localization/gps_sync"]["type"] = "std_msgs/Time"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vehicle_interface/steering_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                        Topics["vehicle_interface/steering_input"]["type"] = "marti_common_msgs/Float32Stamped"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["localization/rr_nav_data"]["type"] = "rr_nav_msgs/NavData"
+                        Topics["localization/rr_nav_data"]["type"] = "rr_nav_msgs/NavData"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/active_segment"]["type"] = "sumet_nav_msgs/MissionRoute"
+                        Topics["navigation/active_segment"]["type"] = "sumet_nav_msgs/MissionRoute"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["front/multisense/left/image_rect_color"]["type"] = "sensor_msgs/Image"
+                        Topics["front/multisense/left/image_rect_color"]["type"] = "sensor_msgs/Image"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["front/multisense/left/image_rect_color/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                        Topics["front/multisense/left/image_rect_color/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["front/multisense/right/image_rect"]["type"] = "sensor_msgs/Image"
+                        Topics["front/multisense/right/image_rect"]["type"] = "sensor_msgs/Image"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["navigation/behavior_debug"]["type"] = "sumet_nav_msgs/BehaviorDebugInfo"
+                        Topics["navigation/behavior_debug"]["type"] = "sumet_nav_msgs/BehaviorDebugInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["front/multisense/right/image_rect/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                        Topics["front/multisense/right/image_rect/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/left/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                        Topics["vision/front/left/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/left/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                        Topics["vision/front/left/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/left/image_raw"]["type"] = "sensor_msgs/Image"
+                        Topics["vision/front/left/image_raw"]["type"] = "sensor_msgs/Image"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/right/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                        Topics["vision/front/right/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/right/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                        Topics["vision/front/right/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/front/right/image_raw"]["type"] = "sensor_msgs/Image"
+                        Topics["vision/front/right/image_raw"]["type"] = "sensor_msgs/Image"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/rear/left/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                        Topics["vision/rear/left/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/rear/left/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                        Topics["vision/rear/left/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/rear/left/image_raw"]["type"] = "sensor_msgs/Image"
+                        Topics["vision/rear/left/image_raw"]["type"] = "sensor_msgs/Image"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/rear/right/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                        Topics["vision/rear/right/exposure"]["type"] = "marti_sensor_msgs/Exposure"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/rear/right/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                        Topics["vision/rear/right/camera_info"]["type"] = "sensor_msgs/CameraInfo"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["vision/rear/right/image_raw"]["type"] = "sensor_msgs/Image"
+                        Topics["vision/rear/right/image_raw"]["type"] = "sensor_msgs/Image"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["local_path"]["type"] = "sumet_nav_msgs/LocalPath"
+                        Topics["local_path"]["type"] = "sumet_nav_msgs/LocalPath"
+                    except:
+                        pass
+
+                    try:
+                        Complete[packages[pack]]["nodes"][node]["subscriptions"]["localization/encoder_frequency"]["type"] = "marti_sensor_msgs/WheelEncoderSet"
+                        Topics["localization/encoder_frequency"]["type"] = "marti_sensor_msgs/WheelEncoderSet"
                     except:
                         pass
 
@@ -899,7 +1283,17 @@ print("SERVICES COMPLETED\n")
 ###############################################################################################
 ###############################################################################################
 
+for pack in Complete:
+    if pack != "Distribution" and pack != "Date":
+        for node in Complete[pack]["nodes"]:
+                for sub in Complete[pack]["nodes"][node]["subscriptions"]:
+                    if Topics[sub]["type"] == "":
+                        Complete[pack]["nodes"][node]["subscriptions"][sub]["type"] = "unknown type"
+                    else:
+                        Complete[pack]["nodes"][node]["subscriptions"][sub]["type"] = Topics[sub]["type"]
+                        
 print("")
+
 if not messagescheck:
     messageFunc(packages,distro,inputName,Complete)
     SavedRun["messagescheck"] = True
