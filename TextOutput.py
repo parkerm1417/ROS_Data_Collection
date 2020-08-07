@@ -8,10 +8,10 @@ primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","in
 ##Gets input from the user of what dictionaries they want to get
 ##information from. Both the packages and messages dictionaries are
 ##necessary. Those dictionaries get read and loaded from the json form
-##that they are put into from RTKpackages.py.
+##that they are put into from packages.py.
 ########################################################################
 me = sp.getoutput("whoami")
-print("The file names you are about to enter should\nall come from the same run of RTKpackages.py")
+print("The file names you are about to enter should\nall come from the same run of packages.py")
 packagedict = input("Enter the exact file path of the package dictionary .json\nfile you wish to get output from.\nExample: /home/mie/Desktop/packages.json\n")
 print()
 file = open(packagedict)
