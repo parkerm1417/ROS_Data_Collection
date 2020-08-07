@@ -8,21 +8,7 @@ from datetime import date
 def serviceFunc(packages,distro,inputName,Complete):
     primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
 
-    ##msglist = input("Please type all services you would like information on. Separate services with commas.\nServices:")
-    ##if msglist == "ALL":
-    ##    file = subprocess.getoutput("rossrv list")
-    ##    messages = file.split("\n")
-    ##else:
-    ##    messages = [x for x in msglist.split(",")]
-
-##    file = subprocess.getoutput("rossrv list")
-##    messages = file.split("\n")
     edits = []
-
-##    for message in messages:
-##            bs = message.find("/")
-##            if message[:bs] in packages:
-##                edits.append(message)
 
     try:
         file = open("tempServices.json")
