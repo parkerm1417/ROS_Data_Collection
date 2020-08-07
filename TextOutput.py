@@ -28,7 +28,6 @@ system("mkdir /home/" + me + "/Desktop/Architecture_Documents/RTK")
 c = 0
 for pack in bigdict:
     if pack == "Distribution" or pack == "Date":
-        print("skipped")
         continue
     if (bigdict[pack]["distribution"][:3] == "ROS"):
         system("mkdir /home/" + me + "/Desktop/Architecture_Documents/ROS/" + pack)
@@ -65,7 +64,7 @@ for pack in bigdict:
                     
             file.write("            Message Types:\n")
             for msg in full:
-                if msg not in used:
+                if (msg not in used) and (msg[:8] != " Unknown") and (msg[:8] != "Unknown"):
                     file.write("                  Message Type: " + msg + "\n")
                     file.write("                        Fields:\n")
                     for field in messages[msg]["fields"]:    
@@ -117,7 +116,7 @@ for pack in bigdict:
                     
             file.write("            Message Types:\n")
             for msg in full:
-                if msg not in used:
+                if (msg not in used) and (msg[:8] != " Unknown") and (msg[:7] != "Unknown"):
                     file.write("                  Message Type: " + msg + "\n")
                     file.write("                        Fields:\n")
                     for field in messages[msg]["fields"]:    
