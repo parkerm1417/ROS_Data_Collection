@@ -7,19 +7,7 @@ from datetime import date
 
 def messageFunc(packages,distro,inputName,Complete):
     primitives = ["unknown type","char","byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
-
-##    file = subprocess.getoutput("rosmsg list")
-##    messages = file.split("\n")
-##    file = subprocess.getoutput("rossrv list")
-##    servs = file.split("\n")
-##    for srv in servs:
-##        messages.append(srv+"Request")
-##        messages.append(srv+"Response")
     edits = []
-##    for message in messages:
-##        bs = message.find("/")
-##        if message[:bs] in packages:
-##            edits.append(message)
             
     for pack in Complete:
         if pack != "Distribution" and pack != "Date":
@@ -48,7 +36,7 @@ def messageFunc(packages,distro,inputName,Complete):
 
     p = 1
     for msg in edits:
-        if (msg not in msgdic) and msg != "unknown type":
+        if (msg not in msgdic) and (msg != "unknown type") and (msg[:7] != "Unknown") and (msg[:8] != " Unknown"):
             Done = False
             bs = msg.find("/")
             msgdic[msg] = {
@@ -213,21 +201,6 @@ def messageFunc(packages,distro,inputName,Complete):
             file.close()
 
         p += 1
-
-##    filename =  inputName + "_msgs_" + date.today().strftime("%m_%d_%Y") + ".txt"
-##    filename.replace("/","_")
-##    msgs = open(filename,"w")
-##    msgs.write("            Message Types:\n")
-##    for msg in msgdic:
-##        msgs.write("                  Message Type: "+msg+"\n")
-##        msgs.write("                        Fields:\n")
-##        for field in msgdic[msg]["fields"]:
-##            msgs.write("                              "+field+" : "+msgdic[msg]["fields"][field]+"\n")
-##        msgs.write("                        Comments:\n")
-##        for com in msgdic[msg]["comments"]:
-##            msgs.write("                              "+msgdic[msg]["comments"][com]+"\n")
-##    msgs.close()
-
 
     filename =  inputName + "_msgs_" + date.today().strftime("%m_%d_%Y") + ".json"
     filename.replace("/","_")
