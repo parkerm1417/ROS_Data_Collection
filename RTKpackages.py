@@ -13,11 +13,11 @@ primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","in
 ##Ensures that a new roscore is running
 ########################################
 system("killall -9 rosmaster")
-try:
-    subprocess.Popen("roscore")
-    time.sleep(2.5)
-except:
-    pass
+##try:
+    ##subprocess.Popen("roscore")
+    ##time.sleep(2.5)
+##except:
+    ##pass
 
 system("rospack list > ~/Desktop/packageslist.txt")
 packs = open("packageslist.txt")
@@ -32,7 +32,8 @@ for pack in packslist:
     packs.write(pack[:sp] + "\n")
     allpacks[pack[:sp]] = pack[sp+1:]
 packs.close()
-packs = open("packageslist.txt")
+me = subprocess.getoutput("whoami")
+packs = open("/home/" + me + "/Desktop/packageslist.txt")
 packslist = packs.readlines()
 packs.close()
 for pl in range(len(packslist)):
@@ -147,11 +148,10 @@ Topics["Date"] = today.strftime("%x")
 SavedRun["date"] = today.strftime("%x")
 
 for pack in range(len(packages)):
-
-    subprocess.Popen("roscore")
-    time.sleep(2.5)
     
     if packages[pack] not in Complete:
+        subprocess.Popen("roscore")
+        time.sleep(2.5)
         Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
         "elementType" : "package",
         "name" : packages[pack],
