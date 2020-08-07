@@ -12,19 +12,22 @@ primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","in
 ########################################
 ##Ensures that a new roscore is running
 ########################################
+
 system("killall -9 rosmaster")
-##try:
-    ##subprocess.Popen("roscore")
-    ##time.sleep(2.5)
-##except:
-    ##pass
+try:
+    subprocess.Popen("roscore")
+    time.sleep(2.5)
+except:
+    pass
+
+########################################################################################################################
+##Finds all available packages and inserts them into a file located on the Desktop
+########################################################################################################################
 
 system("rospack list > ~/Desktop/packageslist.txt")
 packs = open("packageslist.txt")
 packslist = packs.readlines()
 packs.close()
-
-allpacks = {}
 
 packs = open("packageslist.txt","w")
 for pack in packslist:
@@ -39,6 +42,10 @@ packs.close()
 for pl in range(len(packslist)):
     packslist[pl] = packslist[pl][:-1]
 print("Packages list updated, please see 'packageslist.txt' on Desktop for full list\n")
+
+########################################################################################################################
+##Tries to load a previous run, if a run does not exist, new dictionaries are created
+#####################################################################################################################
 
 try:
     file = open("PreviousRun.json")
@@ -68,6 +75,10 @@ except:
     continueRun = "N"
     
     print("No previous run found, new files created\n")
+
+####################################################################################################################
+##Gets the distribution and if the distribution has changed since the previous run, a new run is automatically started
+####################################################################################################################
     
 distro = subprocess.getoutput("rosversion -d")
 try:
@@ -76,11 +87,13 @@ try:
         Topics = {}
         alreadydoneMSGS = []
         alreadydoneSERV = []
+        continueRun = "N"
         print("Distribution has changed since last run, new files must be created")
 except:
     pass
 
 #######################################################################################################
+##If a new run is starting, a dictionary is created to save all information as the program runs
 #######################################################################################################
 if(continueRun == "n" or continueRun == "N"):
 
@@ -100,6 +113,10 @@ if(continueRun == "n" or continueRun == "N"):
     packages = []
     messagescheck = False
     servicescheck = False
+
+########################################################################################################################
+##Prompts the user for which packages are to be run. Packages can be given as a list, individually, or in a .txt file
+#####################################################################################################################
 
     while ((not set(packages).issubset(set(packslist))) or (packages == [])):
         if packages != []:
@@ -129,6 +146,10 @@ if(continueRun == "n" or continueRun == "N"):
         else:
             packages = [x for x in packstorun.split(",")]
 
+########################################################################################################################
+##Prompts user for the desired file name of the outputted files. Saves information to continue run later if need be.
+#####################################################################################################################
+            
     SavedRun["packages"] = packages    
     inputName = input("what would you like to name the outputted files?\nFile names will be of the format:\n'YOUR INPUT'_msgs_Date.json\nFile Name: ")
     SavedRun["inputName"] = inputName
@@ -137,6 +158,10 @@ if(continueRun == "n" or continueRun == "N"):
     file.write(json.dumps(SavedRun))
     file.close()
 
+###################################################################################################################
+##Fills all dictionaries with the distribution and the date
+###################################################################################################################
+    
 Complete["Distribution"] = distro
 
 Topics["Distribution"] = distro
@@ -147,12 +172,16 @@ Topics["Date"] = today.strftime("%x")
 
 SavedRun["date"] = today.strftime("%x")
 
+###################################################################################################################
+##Loops through each package. Runs every node in each package to gather all the information.
+###################################################################################################################
+
 for pack in range(len(packages)):
     
     if packages[pack] not in Complete:
         subprocess.Popen("roscore")
         time.sleep(2.5)
-        Complete[packages[pack]] = {    ##creates a dictionary for each package that then holds a node dictionary
+        Complete[packages[pack]] = {    ##creates a dictionary entry for each package that then holds a node dictionary
         "elementType" : "package",
         "name" : packages[pack],
         "distribution" : "",
@@ -162,6 +191,8 @@ for pack in range(len(packages)):
         }
 
         temp = []
+
+        ##Finds the location of the package folder. Adds data to the package entry about if package is ROS or RTK
         try:
             temp = [f for f in listdir('/opt/ros/'+distro+'/lib/' + packages[pack])]  ##each package directory is accessed
             Complete[packages[pack]]["distribution"] = "ROS/"+distro
@@ -178,7 +209,8 @@ for pack in range(len(packages)):
         file = open("temptext.txt")
         oldlines = file.readlines()
         file.close()
-
+        
+        ##Goes through each node in the package and runs it. Gets data on the node, then kills it.
         for node in temp:
 
                 Complete[packages[pack]]["nodes"][node] = {
@@ -234,7 +266,7 @@ for pack in range(len(packages)):
                 servtemp=[]
                 nodeinfotemp = []
 
-                ##adds the publication, subscription, and service info to temporary lists
+                ##adds the publication, subscription, and service info to Complete dictionary and topic dictionary
                 for n in range(len(lines)):
                     if (n>pub and n<sub-1):
                         ss = lines[n][3:-1]
@@ -271,9 +303,10 @@ for pack in range(len(packages)):
                                 "package": pack}},
                             "subscribers": {}
                             }
+                        ##Adds type if the type is known and has not already been specified
                         if(datatype != "unknown type" and Topics[topicname]["type"] == "unknown type"):     
                             Topics[topicname]["type"] = datatype
-
+                    ##Repeats the same steps as above but now for the subscriptions.
                     elif (n>sub and n<serv-1):
                         ss = lines[n][3:-1]
                         f = ss.find("[")
@@ -314,7 +347,7 @@ for pack in range(len(packages)):
 
                     elif (n>serv and n<len(lines)-1):
                         servtemp.append(lines[n][3:-1])
-
+                ##Service information is gathered using rosservice commands in the terminal. Info is added to Complete Dictionary
                 for servs in servtemp:
                     args = subprocess.getoutput("rosservice args "+servs)
                     servtype = subprocess.getoutput("rosservice type "+servs)
@@ -330,6 +363,7 @@ for pack in range(len(packages)):
                     "type" : servtype,
                     "args" : args}
 
+                ##Node is killed using multiple commands to try to exit any GUI that may have appeared
                 killname = "rosnode kill -a"
                 killer = subprocess.Popen(killname,shell=True)
                 kill2 = subprocess.Popen(kill,shell=True)
@@ -345,6 +379,8 @@ for pack in range(len(packages)):
                 killer.terminate()
                 kill2.terminate()
 
+                ##Checks for known nodes that have issues running. This code specifies message and service types
+                ##to make the dictionary more complete which will in turn make later data modeling more accurate.
                 if pack != "Distribution" and pack != "Date":
                     try:
                         Complete[packages[pack]]["nodes"][node]["services provided"]["get_loggers"]["type"] = "roscpp/GetLoggers"
@@ -760,6 +796,8 @@ for pack in range(len(packages)):
                     except:
                         pass
 
+        ##Saves everything after each package to make sure that the information can be recovered if something were
+        ##to stop the program
         SavedRun["Complete"] = Complete
         SavedRun["Topics"] = Topics
         file = open("PreviousRun.json","w")
@@ -774,13 +812,15 @@ system("rosnode kill -a")
 print("PACKAGES COMPLETED\n")
 
 ########################################################################################
+##Loops through all of the messages and creates a full hierarchy for each package
 ########################################################################################
 
 system("rosmsg list > temptext.txt")
 msgfile = open("temptext.txt")
 msglistlines = msgfile.readlines()
 msgfile.close()
-##fills the messages dictionary
+
+##Creates an empty list and then adds messages to it that are relevant to the desired packages
 edits = []
 for msg in msglistlines:
     bs = msg.find("/")
@@ -804,7 +844,7 @@ for msg in range(len(edits)):
         comments = com.readlines()
         com.close()
 
-
+        ## Finds location of messages in the hierarchy and goes through each message in hierarchy
         msginfo = open("temptext.txt")
         msginfolines = msginfo.readlines()
         msginfo.close()
@@ -950,6 +990,7 @@ for msg in range(len(edits)):
 print("MESSAGES COMPLETED\n")
 
 ##############################################################################################
+##Goes through every service to gather information about the service and the Request and Response messages
 ##############################################################################################
 
 system("rossrv list > temptext.txt")
@@ -957,6 +998,7 @@ s = open("temptext.txt")
 srvlist = s.readlines()
 s.close()
 
+##Creates an empty list that is populated with services only relating the the desired packages
 edits = []
 for srv in srvlist:
     bs = srv.find("/")
@@ -980,6 +1022,8 @@ for srv in edits:
         except:
             com = open("/opt/rtk/" + distro + "/share/" + package + "/srv/" + file)
         comments = com.readlines()
+
+        ##Finds the location of where the comments split from the request message to the response message
         try:
             try:
                 comsplit = comments.index("---\n")
@@ -1281,6 +1325,8 @@ for srv in edits:
 print("SERVICES COMPLETED\n")
 
 ###############################################################################################
+##Finds the message type for subscriptions that did not have a type. Runs programs to create message and
+##service dictionary
 ###############################################################################################
 
 for pack in Complete:
@@ -1309,6 +1355,10 @@ if not servicescheck:
     file.close()
     print("")
 
+###################################################################################################################
+##Creates files for the various dictionaries and then dumpts the dictionaries into the files.
+###################################################################################################################
+
 top = open(inputName + "_TopicsDictionary_" + date.today().strftime("%m_%d_%Y") + ".json", "w")
 top.write(json.dumps(Topics, indent=8))
 top.close()
@@ -1317,11 +1367,14 @@ comp = open(inputName + "_PackageDictionary_" + date.today().strftime("%m_%d_%Y"
 comp.write(json.dumps(Complete, indent=8))
 comp.close()
 
+##Removes the save file for the run
 remove("PreviousRun.json")
 
+##Kills the rosmaster to hopefully kill all the nodes and the ros core
 print("total time elapsed: " + str(time.time()-start) + " seconds\n")
 system("killall -9 rosmaster")
 
+##Repeatedly outputs the message below to let user know the program is finished running
 while(True):
     print("PROGRAM IS DONE RUNNING PLEASE KILL ANY PROGRAMS STILL RUNNING")
     time.sleep(0.1)
