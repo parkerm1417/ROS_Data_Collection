@@ -8,7 +8,7 @@ from datetime import date
 ##This function gets all of the services that are provided by the packages in
 ##the complete dictionary and then adds those services to a separate dictionary
 ##of its own. This dictionary holds all of the services for the packages that
-##were asked for by the user. This function is called in RTKpackages.py.
+##were asked for by the user. This function is called in packages.py.
 ################################################################################
 def serviceFunc(packages,distro,inputName,Complete):
     primitives = ["byte","bool","int8","uint8","int16","uint16","int32","uint32","int64","uint64","float32","float64","string","time","duration","bool[]","int8[]","uint8[]","int16[]","uint16[]","int32[]","uint32[]","int64[]","uint64[]","float32[]","float64[]","string[]","time[]","duration[]", "float64[4]", "float64[9]", "float64[12]","float64[36]"]
